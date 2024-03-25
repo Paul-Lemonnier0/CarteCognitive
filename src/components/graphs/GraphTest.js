@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -16,17 +16,44 @@ const initialNodes = [
 ];
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
  
-export default function App() {
+
+
+
+export default function GraphTest() {
+  const [nodeID, setNodeID] = useState(3);
+
+  //..
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
  
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
+    [nodeID],
   );
+
+  
+
+  function createNewNodeKeyEvent(event) {
+    if (event.key === 'n') {
+        const node = { id: String(nodeID), position: { x: 0, y: nodeID * 100 }, data: { label: String(nodeID) }}
+        
+        console.log("new")
+
+
+        setNodes((previousNodes) => (
+            [
+                ...previousNodes,
+                node
+            ]
+        ))
+
+        setNodeID(nodeID + 1)
+    }
+  }
  
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100vw', height: '100vh' }} tabIndex={0} onKeyDown={createNewNodeKeyEvent}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -35,7 +62,7 @@ export default function App() {
         onConnect={onConnect}
       >
         <Controls />
-        <MiniMap />
+       {/* <MiniMap />         */}
         <Background variant="dots" gap={12} size={1} />
       </ReactFlow>
     </div>
