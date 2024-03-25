@@ -1,70 +1,77 @@
-import React, { useCallback, useState } from 'react';
-import ReactFlow, {
-  MiniMap,
-  Controls,
-  Background,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-} from 'reactflow';
- 
+import React, { useCallback, useMemo, useState } from 'react';
+import ReactFlow, { Background, MarkerType, addEdge, useEdgesState, useNodesState } from 'reactflow';
 import 'reactflow/dist/style.css';
- 
-const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-  { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
+import { CustomNode } from './Nodes/CustomNode';
+
+const defaultNodes = [
+  {
+    id: '0',
+    type: 'customNode',
+    position: { x: 20, y: 20 },
+    data: { label: 'A' },
+  }
 ];
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
- 
 
+const defaultEdges = [];
 
+function createNewNode(nodeID) {
+    const node = { 
+        id: String(nodeID), 
+        position: { x: 50*nodeID, y: nodeID * 100 },
+        type: 'customNode', 
+        data: { 
+            label: String(nodeID) 
+        }
+    }
+
+    return node
+}
 
 export default function GraphTest() {
-  const [nodeID, setNodeID] = useState(3);
 
-  //..
+    const [nodeID, setNodeID] = useState(1)
+    const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
  
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [nodeID],
-  );
+    const onConnect = useCallback(
+      (params) => setEdges((eds) => addEdge(params, eds)),
+      [nodeID],
+    );
 
-  
+    const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
 
-  function createNewNodeKeyEvent(event) {
-    if (event.key === 'n') {
-        const node = { id: String(nodeID), position: { x: 0, y: nodeID * 100 }, data: { label: String(nodeID) }}
-        
-        console.log("new")
+    const handleKeyDown = (e) => {
+        if (e.key === 'n') {
+            console.log("hello")
+            const node = createNewNode(nodeID)
 
+            setNodes((previousNodes) => (
+                [
+                    ...previousNodes,
+                    node
+                ]
+            ))
 
-        setNodes((previousNodes) => (
-            [
-                ...previousNodes,
-                node
-            ]
-        ))
-
-        setNodeID(nodeID + 1)
+            setNodeID(nodeID + 1)
+        }        
     }
-  }
- 
-  return (
-    <div style={{ width: '100vw', height: '100vh' }} tabIndex={0} onKeyDown={createNewNodeKeyEvent}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-      >
-        <Controls />
-       {/* <MiniMap />         */}
-        <Background variant="dots" gap={12} size={1} />
-      </ReactFlow>
-    </div>
-  );
+
+    return (
+        <div style={{ width: '100vw', height: '100vh' }} 
+            tabIndex={0}
+            onKeyDown={handleKeyDown}>
+            <ReactFlow 
+                nodes={nodes} 
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange} 
+                nodeTypes={nodeTypes}
+                onConnect={onConnect}
+            >
+
+                <Background variant='dots' gap={12} size={1}/>
+            </ReactFlow>
+        </div>
+    );
 }
