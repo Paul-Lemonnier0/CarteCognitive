@@ -3,9 +3,13 @@ import './App.css';
 import GraphTest from './components/graphs/GraphTest';
 import theme from './constantes/Colors';
 import { AppContextProvider } from './context/AppContext';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function App() {
+  useEffect(()=>{
+    document.title = "CarteCognitive"
+    }
+  )
   return (
     <AppContextProvider>
       <ReactFlowProvider>
