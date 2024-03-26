@@ -1,13 +1,15 @@
 import { CSSProperties } from "react"
 import theme from "../../constantes/Colors"
 
-export const nodeStyle = (): CSSProperties => {
+export const nodeStyle = (isSelected: boolean): CSSProperties => {
     const colors = theme.light
 
+    const bgColor = isSelected ? colors.SelectedNodeColor : colors.NodeColor
+
     return {
-        backgroundColor: colors.NodeColor, 
+        backgroundColor: bgColor, 
         strokeWidth: 2,
-        border: "2px solid ${colors.NodeColor}",
+        border: "2px solid ${bgColor}",
         borderWidth: 2,
         stroke: "green",
         width: 70,

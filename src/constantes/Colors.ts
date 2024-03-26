@@ -1,9 +1,13 @@
 export interface ThemeType {
     NodeColor: string,
+    SelectedNodeColor: string,
     NodeBorderColor: string,
+    SelectedNodeBorderColor: string,
     EdgeColor: string,
     Primary: string,
     Secondary: string,
+    Font: string,
+    NodeFont: string,
 }
 
 export interface ThemeObjectType {
@@ -13,19 +17,27 @@ export interface ThemeObjectType {
 
 const theme: ThemeObjectType = {
     light: {
-        NodeColor: "#f8b13f",
-        NodeBorderColor: "#f8b13f",
+        NodeColor: "rgba(0, 0, 0, 0.35)",
+        NodeBorderColor: "#12161b",
+        SelectedNodeColor: "#000000",
+        SelectedNodeBorderColor: "#000000",
         EdgeColor: "##E5E9EC",
-        Primary: "#202938",
-        Secondary: "#39434f"
+        Primary: "#FFFFFF",
+        Secondary: "#39434f",
+        Font: "#000000",
+        NodeFont: "#FFFFFF",
     },
 
     dark: {
-        NodeColor: "#f8b13f",
-        NodeBorderColor: "#f8b13f",
+        NodeColor: "rgba(0, 0, 0, 0.35)",
+        NodeBorderColor: "#12161b",
+        SelectedNodeColor: "#000000",
+        SelectedNodeBorderColor: "#000000",
         EdgeColor: "##E5E9EC",
         Primary: "#202938",
-        Secondary: "#39434f"
+        Secondary: "#39434f",
+        Font: "#000000",
+        NodeFont: "#FFFFFF",
     }
 }
 

@@ -12,7 +12,7 @@ export const edgeBase = (data: Edge): Edge => {
     }
 
     return {
-        type: "smoothstep",
+        // type: "smoothstep",
         markerEnd: markerParams,
         style : {
             stroke: colors.Secondary

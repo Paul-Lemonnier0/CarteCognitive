@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useCallback, useMemo, useState } from 'react';
-import ReactFlow, { Edge, Node, OnConnect, addEdge, useEdgesState, useNodesState } from 'reactflow';
+import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { edgeBase } from '../../styles/Graphes/Edge';
 import { CustomNode } from './Nodes/CustomNode';
@@ -70,6 +70,37 @@ export default function GraphTest() {
         }        
     }
 
+    interface onSelectionChangeProps {
+        nodes: Node[],
+        edges: Edge[]
+    }
+
+    useOnSelectionChange({
+        onChange: ({ nodes, edges }: onSelectionChangeProps) => {
+            const nodeIDs = nodes.map((node) => node.id)
+
+            setNodes((previousNodes) => (previousNodes.map((node) => { 
+
+                if(nodeIDs.includes(node.id)) {
+                    console.log("selected")
+                    return {...node, selected: true}
+                }
+
+                return {...node, selected: false}
+            })));
+
+            const edgeIDs = edges.map((edge) => edge.id)
+
+            setEdges((previousEdges) => (previousEdges.map((edge) => { 
+                if(edgeIDs.includes(edge.id)) {
+                    return {...edge, selected: true}
+                }
+
+                return {...edge, selected: false}
+            })));
+        },
+      });
+
     return (
         <div style={{ width: '100vw', height: '100vh' }} 
             tabIndex={0}
@@ -82,6 +113,7 @@ export default function GraphTest() {
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 onConnect={onConnect}>
+                <Background variant={BackgroundVariant.Dots} size={1} gap={20}/>
             </ReactFlow>
         </div>
     );
