@@ -67,7 +67,18 @@ export default function GraphTest() {
             ))
 
             setNodeID(nodeID + 1)
-        }        
+        }   
+        else if(e.key === 's') {
+            const liste = ['']
+            nodes.map((currentNode) => {if(currentNode.selected === true) liste.push(currentNode.id);})
+            const previousNodes = nodes.filter((currentNode) => (currentNode.selected !== true))
+            const previousEdges = edges.filter((currentEdge) => ((!liste.includes(currentEdge.source)) && (!liste.includes(currentEdge.target))))
+
+            setNodes([...previousNodes])
+            setEdges([...previousEdges])
+
+        }
+
     }
 
     interface onSelectionChangeProps {
