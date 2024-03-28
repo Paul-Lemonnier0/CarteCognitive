@@ -1,5 +1,5 @@
-import React, { KeyboardEvent, useCallback, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
+import React, { KeyboardEvent, useCallback, useMemo, useRef, useState, MouseEvent, CSSProperties } from 'react';
+import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, Position, ReactFlowInstance, ReactFlowRefType, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { edgeBase } from '../../styles/Graphes/Edge';
 import { CustomNode } from './Nodes/CustomNode';
@@ -42,10 +42,11 @@ let id = 2;
 const getId = () => `${id++}`;
 
 export default function GraphTest() {
-
-    const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
+    const [isWhrite, setIsWhrite] = useState(false)
+    const nodeTypes = useMemo(() => ({ customNode:  CustomNode  }), []);
     const edgeTypes = useMemo(() => ({ customStraightEdge: CustomEdge }), []);
 
+    
     const [nodeID, setNodeID] = useState(2)
     const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
@@ -92,6 +93,7 @@ export default function GraphTest() {
         edges: Edge[]
     }
 
+
     useOnSelectionChange({
         onChange: ({ nodes, edges }: onSelectionChangeProps) => {
             const nodeIDs = nodes.map((node) => node.id)
@@ -125,6 +127,7 @@ export default function GraphTest() {
         event.dataTransfer.dropEffect = 'move';
     }, []);
     
+
     const onDrop = useCallback(
         (event: React.DragEvent) => {
         event.preventDefault();
@@ -155,6 +158,18 @@ export default function GraphTest() {
         },
         [reactFlowInstance],
     );
+
+    const DoubleCkick =  (event: MouseEvent<any>, node : Node) => {
+        console.log("node : " , node);
+        const inputStyle: CSSProperties = {
+            position: 'absolute',
+            top: `${node.position.x}px`, 
+            left: `${node.position.y}px`,
+            zIndex: 999999,
+          };
+        <div><input type="text" value={node.data} style={inputStyle} /> </div>
+
+    }
     
 
     return (
@@ -167,6 +182,7 @@ export default function GraphTest() {
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange} 
+                onNodeDoubleClick={DoubleCkick}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 onConnect={onConnect}
