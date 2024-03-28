@@ -70,9 +70,11 @@ export default function GraphTest() {
         }   
         else if(e.key === 's') {
             const liste = ['']
-            nodes.map((currentNode) => {if(currentNode.selected === true) liste.push(currentNode.id);})
-            const previousNodes = nodes.filter((currentNode) => (currentNode.selected !== true))
-            const previousEdges = edges.filter((currentEdge) => ((!liste.includes(currentEdge.source)) && (!liste.includes(currentEdge.target))))
+            nodes.map((currentNode) => {if(currentNode.selected === true) liste.push(currentNode.id);}) //TODO: instaurer un state qui suit en runtime l'evolution des noeuds séléctionnés (voir la doc)
+            const previousNodes = nodes.filter((currentNode) => (currentNode.selected !== true)) //Nickel je pense
+            const premierFiltreEdges = edges.filter((currentEdge) => (!liste.includes(currentEdge.source) && !liste.includes(currentEdge.target))) // Idem
+
+            const previousEdges = premierFiltreEdges.filter((prevEdge) => (prevEdge.selected !== true))
 
             setNodes([...previousNodes])
             setEdges([...previousEdges])
@@ -104,6 +106,8 @@ export default function GraphTest() {
 
             setEdges((previousEdges) => (previousEdges.map((edge) => { 
                 if(edgeIDs.includes(edge.id)) {
+                    console.log("hello")
+
                     return {...edge, selected: true}
                 }
 

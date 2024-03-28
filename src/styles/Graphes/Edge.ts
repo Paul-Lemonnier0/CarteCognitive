@@ -11,12 +11,14 @@ export const edgeBase = (data: Edge): Edge => {
         color: colors.EdgeColor
     }
 
+    console.log("updated")
+
     return {
-        // type: "smoothstep",
         markerEnd: markerParams,
-        style : {
-            stroke: colors.Secondary
-        },
         ...data
     }
 }
+
+// style : {
+//     stroke: data.selected ? "red" : "blue"
+// },
