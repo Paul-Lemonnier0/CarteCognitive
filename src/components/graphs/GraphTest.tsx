@@ -1,5 +1,5 @@
-import React, { KeyboardEvent, useCallback, useMemo, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
+import React, { KeyboardEvent, useCallback, useMemo, useRef, useState } from 'react';
+import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { edgeBase } from '../../styles/Graphes/Edge';
 import { CustomNode } from './Nodes/CustomNode';
@@ -37,6 +37,10 @@ function createNewNode(nodeID: number): Node {
     return node
 }
 
+
+let id = 2;
+const getId = () => `${id++}`;
+
 export default function GraphTest() {
 
     const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
@@ -45,7 +49,7 @@ export default function GraphTest() {
     const [nodeID, setNodeID] = useState(2)
     const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
- 
+
 
     const onConnect: OnConnect = useCallback((params) => {
         setEdges((eds) => {
@@ -95,7 +99,6 @@ export default function GraphTest() {
             setNodes((previousNodes) => (previousNodes.map((node) => { 
 
                 if(nodeIDs.includes(node.id)) {
-                    console.log("selected")
                     return {...node, selected: true}
                 }
 
@@ -106,8 +109,6 @@ export default function GraphTest() {
 
             setEdges((previousEdges) => (previousEdges.map((edge) => { 
                 if(edgeIDs.includes(edge.id)) {
-                    console.log("hello")
-
                     return {...edge, selected: true}
                 }
 
@@ -116,10 +117,51 @@ export default function GraphTest() {
         },
       });
 
+    const reactFlowWrapper = useRef<ReactFlowRefType>(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+    
+    const onDragOver = useCallback((event: React.DragEvent) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+    }, []);
+    
+    const onDrop = useCallback(
+        (event: React.DragEvent) => {
+        event.preventDefault();
+    
+        const type = event.dataTransfer.getData('application/reactflow');
+    
+        // check if the dropped element is valid
+        if (typeof type === 'undefined' || !type || !reactFlowInstance) {
+            return;
+        }
+    
+        // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
+        // and you don't need to subtract the reactFlowBounds.left/top anymore
+        // details: https://reactflow.dev/whats-new/2023-11-10
+        const position = reactFlowInstance?.screenToFlowPosition({
+            x: event.clientX,
+            y: event.clientY,
+        });
+
+        const newNode = {
+            id: getId(),
+            type,
+            position,
+            data: { label: `A` },
+        };
+    
+        setNodes((nds) => nds.concat(newNode));
+        },
+        [reactFlowInstance],
+    );
+    
+
     return (
         <div style={{ width: '100vw', height: '100vh' }} 
             tabIndex={0}
-            onKeyDown={handleKeyDown}>
+            onKeyDown={handleKeyDown}
+            ref={reactFlowWrapper}>
             <ReactFlow 
                 nodes={nodes} 
                 edges={edges}
@@ -127,7 +169,10 @@ export default function GraphTest() {
                 onEdgesChange={onEdgesChange} 
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
-                onConnect={onConnect}>
+                onConnect={onConnect}
+                onInit={setReactFlowInstance}
+                onDrop={onDrop}
+                onDragOver={onDragOver}>
                 <Background variant={BackgroundVariant.Dots} size={1} gap={20}/>
             </ReactFlow>
         </div>
