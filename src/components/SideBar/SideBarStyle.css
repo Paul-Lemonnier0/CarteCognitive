@@ -1,11 +1,5 @@
-.card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+.sideBar {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
     transition: 0.3s;
-    padding: 16px;    
-    border-radius: 50%;
-    position: absolute;
-    margin: 20;
-    right: 30px;
-    top: 30px;
     z-index: 1000;
 }

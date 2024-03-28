@@ -173,7 +173,7 @@ export default function GraphTest() {
                 onInit={setReactFlowInstance}
                 onDrop={onDrop}
                 onDragOver={onDragOver}>
-                <Background variant={BackgroundVariant.Dots} size={1} gap={20}/>
+                <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10}/>
             </ReactFlow>
         </div>
     );
