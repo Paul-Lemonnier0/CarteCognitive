@@ -9,7 +9,7 @@ import TopBar from './components/TopBar/TopBar';
 
 function App() {
   useEffect(()=>{
-    document.title = "V2CarteCognitive"
+    document.title = "CarteCognitive"
     }
   )
   return (
