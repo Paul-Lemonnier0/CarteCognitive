@@ -11,7 +11,7 @@ const TopBar = () => {
             paddingTop: 0,
             flexDirection: "column",
         }}>
-            <h2>test3</h2>
+            <h2>Titre du graphe</h2>
         </div>
     )
 }
