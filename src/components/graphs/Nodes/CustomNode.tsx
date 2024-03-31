@@ -1,18 +1,21 @@
-import { FC } from "react";
-import { Handle, NodeProps, Position, useKeyPress } from "reactflow";
+import { FC,useState, KeyboardEvent  } from "react";
+import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
 import React from 'react'
 import { nodeStyle } from "../../../styles/Graphes/NodeStyle";
 import {useStore } from 'reactflow';
 import "./CustomNodeStyle.css"
 import theme from "../../../constantes/Colors";
 
+
+
+
 interface CustomNodeProps extends NodeProps {
-  data: { label: string },
+  data: { label: string };
 }
 
 const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
-export const CustomNode: FC<CustomNodeProps> = ({ data, selected }) => {
+export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const ctrlKeyPressed = useKeyPress("Control")
 
@@ -22,12 +25,13 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected }) => {
 
   return (
     <>
-      <div style={node_style}>
+      <div style={node_style} >
         {!ctrlKeyPressed && !selected ?
             <>
               {!isConnecting &&
-                <Handle className="customHandle" position={Position.Bottom} type="source" />
+                <Handle className="customHandle" position={Position.Bottom} type="source" /> 
               }
+              
 
               <Handle
                 className="customHandle"
