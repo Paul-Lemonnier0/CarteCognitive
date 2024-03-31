@@ -19,6 +19,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected }) => {
   const isConnecting = !!connectionNodeId;
 
   const node_style = nodeStyle(selected)
+
   return (
     <>
       <div style={node_style}>
@@ -42,7 +43,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected }) => {
 
         }
 
-        <p style={{color: selected ? theme.light.NodeFont : theme.light.Font}}>{data.label}</p>
+        <p style={{color: theme.light.Font}}>{data.label}</p>
       </div>
     </>
   );

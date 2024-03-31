@@ -9,6 +9,7 @@ const TopBar = () => {
             backgroundColor: "#FFFFFF",
             padding: 0,
             paddingTop: 0,
+            zIndex: 100000,
             flexDirection: "column",
         }}>
             <h2>Titre du graphe</h2>

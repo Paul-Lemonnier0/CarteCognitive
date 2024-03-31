@@ -4,12 +4,12 @@ import theme from "../../constantes/Colors"
 export const nodeStyle = (isSelected: boolean): CSSProperties => {
     const colors = theme.light
 
-    const bgColor = isSelected ? colors.SelectedNodeColor : colors.NodeColor
+    const bgColor = isSelected ? "#444c57" : "#eff0f4"
 
     return {
-        backgroundColor: bgColor, 
+        backgroundColor: "#ffffff", 
         strokeWidth: 2,
-        border: "2px solid ${bgColor}",
+        border: `2px solid ${bgColor}`,
         borderWidth: 2,
         stroke: "green",
         width: 70,

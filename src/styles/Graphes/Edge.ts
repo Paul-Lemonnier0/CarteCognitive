@@ -14,7 +14,14 @@ export const edgeBase = (data: Edge): Edge => {
     console.log("updated")
 
     return {
+        type: "smoothstep",
         markerEnd: markerParams,
+        style: {
+            backgroundColor: "red",
+            borderColor: "red",
+            stroke: "#000000"
+        },
+        
         ...data
     }
 }

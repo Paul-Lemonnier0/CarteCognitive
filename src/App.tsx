@@ -16,14 +16,14 @@ function App() {
     <AppContextProvider>
       <ReactFlowProvider>
         <div className="App" style={{
-          backgroundColor: "#ebedee",
+          backgroundColor: "#ffffff",
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
           }}>
             <TopBar/>
             <div style={{          
               display: "flex",
-              flexDirection: "row"}}>
+              flexDirection: "row", flex: 1}}>
               <SideBar/>
               <GraphTest/>
             </div>

@@ -1,9 +1,11 @@
 import React, { KeyboardEvent, useCallback, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
+import ReactFlow, { Background, BackgroundVariant, Edge, MarkerType, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { edgeBase } from '../../styles/Graphes/Edge';
 import { CustomNode } from './Nodes/CustomNode';
 import CustomEdge from './Edges/CustomEdge';
+import CustomConnectionLine from './Edges/CustomConnectionLine';
+import FloatingEdge from './Edges/FloatingEdge';
 
 
 const defaultNodes: Node[] = [
@@ -21,8 +23,6 @@ const defaultNodes: Node[] = [
     data: { label: 'B' },
   }
 ];
-
-const defaultEdges = [edgeBase({ id: 'e0-1', source: '0', target: '1'})];
 
 function createNewNode(nodeID: number): Node {
     const node = { 
@@ -43,18 +43,21 @@ const getId = () => `${id++}`;
 
 export default function GraphTest() {
 
+    const connectionLineStyle = {
+        strokeWidth: 3,
+        stroke: 'black',
+      };
+
     const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
-    const edgeTypes = useMemo(() => ({ customStraightEdge: CustomEdge }), []);
 
     const [nodeID, setNodeID] = useState(2)
     const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
 
     const onConnect: OnConnect = useCallback((params) => {
         setEdges((eds) => {
-            const edge = edgeBase(params as Edge)
-            return addEdge(edge, eds)
+            return addEdge(params, eds)
       })
     }, [nodeID]);
 
@@ -157,8 +160,26 @@ export default function GraphTest() {
     );
     
 
+    const onNodeDoubleClick = (event: React.MouseEvent, node: Node) => {
+        console.log("double click")
+    }
+
+    const edgeTypes = {
+        floating: FloatingEdge,
+      };
+
+    const defaultEdgeOptions = {
+        style: { strokeWidth: 1, stroke: 'black' },
+        type: 'floating',
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: 'black',
+        },
+      };
+
+
     return (
-        <div style={{ width: '100vw', height: '100vh' }} 
+        <div style={{ flex:  1 }} 
             tabIndex={0}
             onKeyDown={handleKeyDown}
             ref={reactFlowWrapper}>
@@ -172,7 +193,11 @@ export default function GraphTest() {
                 onConnect={onConnect}
                 onInit={setReactFlowInstance}
                 onDrop={onDrop}
-                onDragOver={onDragOver}>
+                onDragOver={onDragOver}
+                onNodeDoubleClick={onNodeDoubleClick}
+                defaultEdgeOptions={defaultEdgeOptions}
+                connectionLineComponent={CustomConnectionLine}
+                connectionLineStyle={connectionLineStyle}>
                 <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10}/>
             </ReactFlow>
         </div>

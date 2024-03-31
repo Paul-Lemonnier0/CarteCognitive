@@ -1,4 +1,4 @@
-div.customHandle {
+/* div.customHandle {
   width: 100%;
   border-radius: 100%;
   height: 100%;
@@ -6,6 +6,19 @@ div.customHandle {
   position: absolute;
   top: 0;
   left: 0;
+  transform: none;
+  border: none;
+  opacity: 0;
+} */
+
+div.customHandle {
+  width: 100%;
+  height: 100%;
+  background: blue;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0;
   transform: none;
   border: none;
   opacity: 0;
