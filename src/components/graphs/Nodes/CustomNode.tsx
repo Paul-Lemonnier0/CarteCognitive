@@ -1,4 +1,4 @@
-import { FC,useState, KeyboardEvent  } from "react";
+import { FC,useState, KeyboardEvent, useContext  } from "react";
 import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
 import React from 'react'
 import { nodeStyle } from "../../../styles/Graphes/NodeStyle";
@@ -6,6 +6,7 @@ import {useStore } from 'reactflow';
 import "./CustomNodeStyle.css"
 import theme from "../../../constantes/Colors";
 import { FiCopy, FiEdit3, FiLink, FiTrash2 } from "react-icons/fi";
+import { AppContext } from "../../../context/AppContext";
 
 interface CustomNodeProps extends NodeProps {
   data: { label: string };
@@ -17,6 +18,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const ctrlKeyPressed = useKeyPress("Control")
 
+  const {setIsWriting} = useContext(AppContext)
+
   const isConnecting = !!connectionNodeId;
 
   const node_style = nodeStyle(selected)
@@ -27,6 +30,14 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     console.log("clicked")
+  }
+
+  const handleStartWriting = () => {
+    setIsWriting(true)
+  }
+
+  const handleEndWriting = () => {
+    setIsWriting(false)
   }
 
   return (
@@ -91,12 +102,15 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
           !selected ?
           <p className="customNodeText">{data.label}</p>
           :
-          <input disabled={!selected} 
-          type="text" 
-          className={`inputCustomNode ${selected ? '' : 'inputCustomNodeDisabled'}`}
-          defaultValue={data.label} 
-          style={{color: theme.light.Font}}
-        />
+          <input 
+            disabled={!selected} 
+            onFocus={handleStartWriting}
+            onBlur={handleEndWriting}
+            type="text" 
+            className={`inputCustomNode ${selected ? '' : 'inputCustomNodeDisabled'}`}
+            defaultValue={data.label} 
+            style={{color: theme.light.Font}}
+          />
         }
 
 

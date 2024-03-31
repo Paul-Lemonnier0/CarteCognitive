@@ -2,12 +2,16 @@ import React, { Dispatch, ReactNode, createContext, useState } from "react";
 
 interface AppContextType {
     isDarkMode: boolean,
+    isWriting: boolean,
     setIsDarkMode: Dispatch<React.SetStateAction<boolean>>,
+    setIsWriting: Dispatch<React.SetStateAction<boolean>>,
 }
 
 const AppContext = createContext<AppContextType>({
     isDarkMode: false,
-    setIsDarkMode: () => {}
+    isWriting: false,
+    setIsDarkMode: () => {},
+    setIsWriting: () => {},
 })
 
 interface AppContextProviderProps {
@@ -17,9 +21,10 @@ interface AppContextProviderProps {
 const AppContextProvider = ({children}: AppContextProviderProps) => {
 
     const [isDarkMode, setIsDarkMode] = useState(false)
+    const [isWriting, setIsWriting] = useState(false)
 
     return(
-        <AppContext.Provider value={{isDarkMode, setIsDarkMode}}>
+        <AppContext.Provider value={{isDarkMode, isWriting, setIsDarkMode, setIsWriting}}>
             {children}
         </AppContext.Provider>
     )

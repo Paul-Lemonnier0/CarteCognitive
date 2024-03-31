@@ -1,4 +1,4 @@
-import React, { CSSProperties, KeyboardEvent, MouseEvent, useCallback, useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, KeyboardEvent, MouseEvent, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, BackgroundVariant, Edge, MarkerType, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { edgeBase } from '../../styles/Graphes/Edge';
@@ -6,6 +6,7 @@ import { CustomNode } from './Nodes/CustomNode';
 import CustomEdge from './Edges/CustomEdge';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
 import FloatingEdge from './Edges/FloatingEdge';
+import { AppContext } from '../../context/AppContext';
 
 
 const defaultNodes: Node[] = [
@@ -49,13 +50,12 @@ const nodeTypes = { customNode:  CustomNode  }
 
 export default function GraphTest() {
 
+    const {isWriting} = useContext(AppContext)
+
     const connectionLineStyle = {
         strokeWidth: 3,
         stroke: 'black',
       };
-
-    const [isWhrite, setIsWhrite] = useState(false)
-
     
     const [nodeID, setNodeID] = useState(2)
     const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
@@ -70,7 +70,7 @@ export default function GraphTest() {
 
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'n') {
+        if (e.key === 'n' && !isWriting) {
             const node = createNewNode(nodeID)
 
             setNodes((previousNodes) => (
@@ -82,7 +82,7 @@ export default function GraphTest() {
 
             setNodeID(nodeID + 1)
         }   
-        else if(e.key === 's') {
+        else if(e.key === 's' && !isWriting) {
             const liste = ['']
             nodes.map((currentNode) => {if(currentNode.selected === true) liste.push(currentNode.id);}) //TODO: instaurer un state qui suit en runtime l'evolution des noeuds séléctionnés (voir la doc)
             const previousNodes = nodes.filter((currentNode) => (currentNode.selected !== true)) //Nickel je pense
