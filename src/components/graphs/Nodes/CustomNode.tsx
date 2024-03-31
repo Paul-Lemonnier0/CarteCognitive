@@ -5,9 +5,7 @@ import { nodeStyle } from "../../../styles/Graphes/NodeStyle";
 import {useStore } from 'reactflow';
 import "./CustomNodeStyle.css"
 import theme from "../../../constantes/Colors";
-
-
-
+import { FiCopy, FiEdit3, FiLink, FiTrash2 } from "react-icons/fi";
 
 interface CustomNodeProps extends NodeProps {
   data: { label: string };
@@ -23,18 +21,60 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
 
   const node_style = nodeStyle(selected)
 
+  const handleDoubleClick = () => {
+    // console.log("double-clicked")
+  }
+
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    console.log("clicked")
+  }
+
   return (
-    <>
-      <div style={node_style} >
+    <div className="customNodeContainer" onDoubleClick={handleDoubleClick}>
+      
+      {
+        <div className={`customNodeToolbar ${selected ? '' : 'customNodeToolbarHidden'}`}>
+          <div className="customNodeIconContainer">
+            <FiLink />
+          </div>
+          <div className="customNodeIconContainer">
+            <FiCopy />
+          </div>
+          <div className="customNodeIconContainer">
+            <FiEdit3 />
+          </div>
+          <div className="customNodeIconContainer">
+            <FiTrash2 />
+          </div>
+{/* 
+          <div className="separator">
+          </div> */}
+
+          <div className="customNodeIconContainer">
+            <div style={{
+                backgroundColor: "lightseagreen", 
+                borderRadius: 5, 
+                height: 15, 
+                aspectRatio: 1}}>
+            </div>
+          </div>
+
+        </div>
+      }
+
+      <div style={node_style} className="customNode">
         {!ctrlKeyPressed && !selected ?
             <>
+            {//La position des handles ici ne change rien, c'est juste pour ne pas avoir l'erreur de paramètres
+            }
+
               {!isConnecting &&
                 <Handle className="customHandle" position={Position.Bottom} type="source" /> 
               }
               
 
               <Handle
-                className="customHandle"
+                className="customHandle" 
                 position={Position.Left}
                 type="target"
                 isConnectableStart={false}
@@ -47,8 +87,20 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
 
         }
 
-        <p style={{color: theme.light.Font}}>{data.label}</p>
+        {
+          !selected ?
+          <p className="customNodeText">{data.label}</p>
+          :
+          <input disabled={!selected} 
+          type="text" 
+          className={`inputCustomNode ${selected ? '' : 'inputCustomNodeDisabled'}`}
+          defaultValue={data.label} 
+          style={{color: theme.light.Font}}
+        />
+        }
+
+
       </div>
-    </>
+    </div>
   );
 }

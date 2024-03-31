@@ -41,6 +41,12 @@ function createNewNode(nodeID: number): Node {
 let id = 2;
 const getId = () => `${id++}`;
 
+const edgeTypes = {
+    floating: FloatingEdge,
+  };
+
+const nodeTypes = { customNode:  CustomNode  }
+
 export default function GraphTest() {
 
     const connectionLineStyle = {
@@ -49,10 +55,7 @@ export default function GraphTest() {
       };
 
     const [isWhrite, setIsWhrite] = useState(false)
-    const nodeTypes = useMemo(() => ({ customNode:  CustomNode  }), []);
-    const edgeTypes = {
-        floating: FloatingEdge,
-      };
+
     
     const [nodeID, setNodeID] = useState(2)
     const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
@@ -145,9 +148,6 @@ export default function GraphTest() {
             return;
         }
     
-        // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
-        // and you don't need to subtract the reactFlowBounds.left/top anymore
-        // details: https://reactflow.dev/whats-new/2023-11-10
         const position = reactFlowInstance?.screenToFlowPosition({
             x: event.clientX,
             y: event.clientY,
@@ -174,7 +174,6 @@ export default function GraphTest() {
             zIndex: 999999,
           };
         <div><input type="text" value={node.data} style={inputStyle} /> </div>
-
     }
     
     

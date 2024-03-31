@@ -9,8 +9,6 @@ const CustomConnectionLine: React.FC<ConnectionLineComponentProps> = ({ fromX, f
     targetY: toY,
   });
 
-  console.log(connectionLineStyle)
-
   return (
     <g>
       <path style={{stroke: "black", strokeWidth: 1}} fill="none" d={edgePath} />

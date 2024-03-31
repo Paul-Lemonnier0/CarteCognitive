@@ -21,18 +21,15 @@ const SideBar = () => {
             <div className="sideBarItem">
                 <div onDragStart={(event) => onDragStart(event, 'customNode')} 
                     draggable style={{
-                        backgroundColor: "#858585", 
-                        strokeWidth: 2,
-                        border: "2px solid ${bgColor}",
-                        borderWidth: 2,
-                        stroke: "green",
-                        cursor: "pointer",
+                        backgroundColor: "#ffffff", 
+                        border: `1px solid black`,
                         width: 40,
                         height: 40,
-                        borderRadius: "100%",
+                        borderRadius: "50%",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        userSelect: "none"
                     }}>
                     <p style={{fontSize: 11}}>A</p>
                 </div>
