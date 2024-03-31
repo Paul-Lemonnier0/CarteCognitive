@@ -6,6 +6,8 @@ import { AppContextProvider } from './context/AppContext';
 import React, { useEffect } from 'react';
 import SideBar from './components/SideBar/SibeBar';
 import TopBar from './components/TopBar/TopBar';
+import { GraphContextProvider } from './context/GraphContext';
+import { DEFAULT_EDGES, DEFAULT_NODES } from './data/Graphes/DefaultGraph';
 
 function App() {
   useEffect(()=>{
@@ -25,7 +27,9 @@ function App() {
               display: "flex",
               flexDirection: "row", flex: 1}}>
               <SideBar/>
-              <GraphTest/>
+              <GraphContextProvider defaultNodes={DEFAULT_NODES} defaultEdges={DEFAULT_EDGES}>
+                <GraphTest/>
+              </GraphContextProvider>
             </div>
         </div>
       </ReactFlowProvider>

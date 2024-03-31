@@ -1,107 +1,58 @@
-import React, { CSSProperties, KeyboardEvent, MouseEvent, useCallback, useContext, useMemo, useRef, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Edge, MarkerType, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useEdgesState, useNodesState, useOnSelectionChange } from 'reactflow';
+import React, { KeyboardEvent, useCallback, useContext, useRef, useState } from 'react';
+import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { edgeBase } from '../../styles/Graphes/Edge';
-import { CustomNode } from './Nodes/CustomNode';
-import CustomEdge from './Edges/CustomEdge';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
-import FloatingEdge from './Edges/FloatingEdge';
-import { AppContext } from '../../context/AppContext';
-
-
-const defaultNodes: Node[] = [
-  {
-    id: '0',
-    type: 'customNode',
-    position: { x: 20, y: 20 },
-    data: { label: 'A' },
-  },
-
-  {
-    id: '1',
-    type: 'customNode',
-    position: { x: 100, y: 200 },
-    data: { label: 'B' },
-  }
-];
-
-function createNewNode(nodeID: number): Node {
-    const node = { 
-        id: String(nodeID), 
-        position: { x: 50*nodeID, y: nodeID * 100 },
-        type: 'customNode', 
-        data: { 
-            label: String(nodeID) 
-        }
-    }
-
-    return node
-}
-
+import { AppContext, PositionType } from '../../context/AppContext';
+import { GraphContext } from '../../context/GraphContext';
+import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
+import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 
 let id = 2;
 const getId = () => `${id++}`;
 
-const edgeTypes = {
-    floating: FloatingEdge,
-  };
-
-const nodeTypes = { customNode:  CustomNode  }
-
 export default function GraphTest() {
+    const {
+        nodeID,
+        nodes, setNodes, onNodesChange,
+        edges, setEdges, onEdgesChange,
+        nodeTypes, edgeTypes,
+        addNode, deleteSelectedNodes
+    } = useContext(GraphContext)
+
+    //Data
 
     const {isWriting} = useContext(AppContext)
 
-    const connectionLineStyle = {
-        strokeWidth: 3,
-        stroke: 'black',
-      };
-    
-    const [nodeID, setNodeID] = useState(2)
-    const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [mousePosition, setMousePosition] = useState<PositionType>({x: 0, y:0})
 
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+    const reactFlowRef = useRef<ReactFlowRefType>(null)
+    const reactFlowWrapper = useRef<ReactFlowRefType>(null);
+
+    //Connection methods
 
     const onConnect: OnConnect = useCallback((params) => {
-        setEdges((eds) => {
-            return addEdge(params, eds)
-      })
+        setEdges((eds) => addEdge(params, eds))
     }, [nodeID]);
 
+    //Shortcut
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'n' && !isWriting) {
-            const node = createNewNode(nodeID)
-
-            setNodes((previousNodes) => (
-                [
-                    ...previousNodes,
-                    node
-                ]
-            ))
-
-            setNodeID(nodeID + 1)
+            addNode("...", mousePosition)
         }   
+        
         else if(e.key === 's' && !isWriting) {
-            const liste = ['']
-            nodes.map((currentNode) => {if(currentNode.selected === true) liste.push(currentNode.id);}) //TODO: instaurer un state qui suit en runtime l'evolution des noeuds séléctionnés (voir la doc)
-            const previousNodes = nodes.filter((currentNode) => (currentNode.selected !== true)) //Nickel je pense
-            const premierFiltreEdges = edges.filter((currentEdge) => (!liste.includes(currentEdge.source) && !liste.includes(currentEdge.target))) // Idem
-
-            const previousEdges = premierFiltreEdges.filter((prevEdge) => (prevEdge.selected !== true))
-
-            setNodes([...previousNodes])
-            setEdges([...previousEdges])
-
+            deleteSelectedNodes()
         }
-
     }
+
+    //Selection methods
 
     interface onSelectionChangeProps {
         nodes: Node[],
         edges: Edge[]
     }
-
 
     useOnSelectionChange({
         onChange: ({ nodes, edges }: onSelectionChangeProps) => {
@@ -127,77 +78,46 @@ export default function GraphTest() {
             })));
         },
       });
-
-    const reactFlowWrapper = useRef<ReactFlowRefType>(null);
-    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
     
+    //Drags methods
+
     const onDragOver = useCallback((event: React.DragEvent) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     }, []);
-    
 
     const onDrop = useCallback(
         (event: React.DragEvent) => {
-        event.preventDefault();
-    
-        const type = event.dataTransfer.getData('application/reactflow');
-    
-        // check if the dropped element is valid
-        if (typeof type === 'undefined' || !type || !reactFlowInstance) {
-            return;
-        }
-    
-        const position = reactFlowInstance?.screenToFlowPosition({
-            x: event.clientX,
-            y: event.clientY,
-        });
+            event.preventDefault();
+        
+            const type = event.dataTransfer.getData('application/reactflow');
+        
+            if (typeof type === 'undefined' || !type || !reactFlowInstance) {
+                return;
+            }
+        
+            const position = reactFlowInstance?.screenToFlowPosition({x: event.clientX, y: event.clientY});
 
-        const newNode = {
-            id: getId(),
-            type,
-            position,
-            data: { label: `A` },
-        };
-    
-        setNodes((nds) => nds.concat(newNode));
+            addNode("...", position)
         },
         [reactFlowInstance],
     );
 
-    const DoubleCkick =  (event: MouseEvent<any>, node : Node) => {
-        console.log("node : " , node);
-        const inputStyle: CSSProperties = {
-            position: 'absolute',
-            top: `${node.position.x}px`, 
-            left: `${node.position.y}px`,
-            zIndex: 999999,
-          };
-        <div><input type="text" value={node.data} style={inputStyle} /> </div>
+    //Mouse movements methods
+
+    const handleMouseMove: React.MouseEventHandler<HTMLDivElement>  = (event) => {
+        if(reactFlowRef.current && reactFlowInstance) {
+            const rect = reactFlowRef.current.getBoundingClientRect()
+            const pos = reactFlowInstance.screenToFlowPosition({ x: event.clientX - rect.x + 50, y: event.clientY - rect.y + 50})
+        
+            setMousePosition(pos)
+        }
     }
-    
-    
-
-    const onNodeDoubleClick = (event: React.MouseEvent, node: Node) => {
-        console.log("double click")
-    }
-
-    const defaultEdgeOptions = {
-        style: { strokeWidth: 1, stroke: 'black' },
-        type: 'floating',
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          color: 'black',
-        },
-      };
-
 
     return (
-        <div style={{ flex:  1 }} 
-            tabIndex={0}
-            onKeyDown={handleKeyDown}
-            ref={reactFlowWrapper}>
+        <div style={{flex: 1}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper}>
             <ReactFlow 
+                ref={reactFlowRef}
                 nodes={nodes} 
                 edges={edges}
                 onNodesChange={onNodesChange}
@@ -208,6 +128,7 @@ export default function GraphTest() {
                 onInit={setReactFlowInstance}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
+                onMouseMove={handleMouseMove}
                 defaultEdgeOptions={defaultEdgeOptions}
                 connectionLineComponent={CustomConnectionLine}
                 connectionLineStyle={connectionLineStyle}>

@@ -7,41 +7,50 @@ import "./CustomNodeStyle.css"
 import theme from "../../../constantes/Colors";
 import { FiCopy, FiEdit3, FiLink, FiTrash2 } from "react-icons/fi";
 import { AppContext } from "../../../context/AppContext";
+import { GraphContext } from "../../../context/GraphContext";
 
-interface CustomNodeProps extends NodeProps {
-  data: { label: string };
+export type CustomNodeData = {
+  label: string;
+};
+
+export interface CustomNodeProps extends NodeProps {
+  data: CustomNodeData;
 }
 
 const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
-export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
+export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
+  const {setIsWriting} = useContext(AppContext)
+  const {updateNodeData} = useContext(GraphContext)
+
+  const [nodeData, setNodeData] = useState<CustomNodeData>(data)
+
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const ctrlKeyPressed = useKeyPress("Control")
 
-  const {setIsWriting} = useContext(AppContext)
 
   const isConnecting = !!connectionNodeId;
 
   const node_style = nodeStyle(selected)
-
-  const handleDoubleClick = () => {
-    // console.log("double-clicked")
-  }
-
-  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    console.log("clicked")
-  }
 
   const handleStartWriting = () => {
     setIsWriting(true)
   }
 
   const handleEndWriting = () => {
+    if(nodeData != data) {
+      updateNodeData(id, nodeData)
+    }
+
     setIsWriting(false)
   }
 
+  const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNodeData((prevData) => ({...prevData, label: e.target.value}))
+  }
+
   return (
-    <div className="customNodeContainer" onDoubleClick={handleDoubleClick}>
+    <div className="customNodeContainer">
       
       {
         <div className={`customNodeToolbar ${selected ? '' : 'customNodeToolbarHidden'}`}>
@@ -62,11 +71,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
           </div> */}
 
           <div className="customNodeIconContainer">
-            <div style={{
-                backgroundColor: "lightseagreen", 
-                borderRadius: 5, 
-                height: 15, 
-                aspectRatio: 1}}>
+            <div style={{ backgroundColor: "lightseagreen", borderRadius: 5, height: 15, aspectRatio: 1 }}>
             </div>
           </div>
 
@@ -76,7 +81,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
       <div style={node_style} className="customNode">
         {!ctrlKeyPressed && !selected ?
             <>
-            {//La position des handles ici ne change rien, c'est juste pour ne pas avoir l'erreur de paramètres
+            {
+            //La position des handles ici ne change rien, c'est juste pour ne pas avoir l'erreur de paramètres
             }
 
               {!isConnecting &&
@@ -91,26 +97,24 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected}) => {
                 isConnectableStart={false}
               />
             </>
-
             :
-
             undefined
-
         }
 
         {
           !selected ?
-          <p className="customNodeText">{data.label}</p>
-          :
-          <input 
-            disabled={!selected} 
-            onFocus={handleStartWriting}
-            onBlur={handleEndWriting}
-            type="text" 
-            className={`inputCustomNode ${selected ? '' : 'inputCustomNodeDisabled'}`}
-            defaultValue={data.label} 
-            style={{color: theme.light.Font}}
-          />
+            <p className="customNodeText">{nodeData.label}</p>
+            :
+            <input 
+              onChange={handleWritting}
+              disabled={!selected} 
+              onFocus={handleStartWriting}
+              onBlur={handleEndWriting}
+              type="text" 
+              value={nodeData.label}
+              className={`inputCustomNode ${selected ? '' : 'inputCustomNodeDisabled'}`}
+              style={{color: theme.light.Font}}
+            />
         }
 
 

@@ -31,7 +31,7 @@ const SideBar = () => {
                         alignItems: "center",
                         userSelect: "none"
                     }}>
-                    <p style={{fontSize: 11}}>A</p>
+                    <p style={{fontSize: 11}}>...</p>
                 </div>
 
                 <p style={{fontSize: 11, marginTop: 5}}>Node</p>
