@@ -18,7 +18,7 @@ function App() {
     <AppContextProvider>
       <ReactFlowProvider>
         <div className="App" style={{
-          backgroundColor: "#ffffff",
+          backgroundColor: "#ebedee",
           display: "flex",
           flexDirection: "column",
           }}>

@@ -4,7 +4,7 @@ import theme from "../../constantes/Colors"
 export const nodeStyle = (isSelected: boolean): CSSProperties => {
     const colors = theme.light
 
-    const bgColor = isSelected ? "#444c57" : "#eff0f4"
+    const bgColor = isSelected ? "#000000" : "#ffffff"
 
     return {
         backgroundColor: "#ffffff", 
@@ -15,6 +15,6 @@ export const nodeStyle = (isSelected: boolean): CSSProperties => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        userSelect: "none"
+        userSelect: "none",
     }
 }
