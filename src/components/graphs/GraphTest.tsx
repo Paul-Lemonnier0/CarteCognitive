@@ -13,6 +13,8 @@ const getId = () => `${id++}`;
 export default function GraphTest() {
     const {
         nodeID,
+        lastSelectedNodeID, setLastSelectedNodeID,
+        selectedNodesIDs, setSelectedNodesIDs,
         nodes, setNodes, onNodesChange,
         edges, setEdges, onEdgesChange,
         nodeTypes, edgeTypes,
@@ -20,6 +22,8 @@ export default function GraphTest() {
     } = useContext(GraphContext)
 
     //Data
+
+    const nodes_test = nodes
 
     const {isWriting} = useContext(AppContext)
 
@@ -55,8 +59,24 @@ export default function GraphTest() {
     }
 
     useOnSelectionChange({
-        onChange: ({ nodes, edges }: onSelectionChangeProps) => {
-            const nodeIDs = nodes.map((node) => node.id)
+        onChange: ({ nodes: nds, edges }: onSelectionChangeProps) => {
+            const nodeIDs = nds.map((node) => node.id)
+
+            const newSelectedNodeIds = nds.filter(node => node.selected).map(node => node.id)
+            
+            const lastSelectedNodeArray = newSelectedNodeIds.filter(node => !selectedNodesIDs.includes(node))
+
+            if(lastSelectedNodeID && !newSelectedNodeIds.includes(lastSelectedNodeID)) {
+                setLastSelectedNodeID(null)
+            }
+
+            if(lastSelectedNodeArray.length > 0) {
+                setLastSelectedNodeID(lastSelectedNodeArray[0])
+            } 
+
+            else if (newSelectedNodeIds.length === 0) setLastSelectedNodeID(null)
+
+            setSelectedNodesIDs(newSelectedNodeIds)
 
             setNodes((previousNodes) => (previousNodes.map((node) => { 
 

@@ -19,7 +19,11 @@ interface GraphContextType {
     edgeTypes: Record<string, React.ComponentType<EdgeProps>>
     addNode: (label: string, position: PositionType) => void,
     deleteSelectedNodes: () => void,
-    updateNodeData: (nodeID: string, newNodeData: CustomNodeData) => void
+    updateNodeData: (nodeID: string, newNodeData: CustomNodeData) => void,
+    selectedNodesIDs: string[],
+    setSelectedNodesIDs: Dispatch<React.SetStateAction<string[]>>,
+    lastSelectedNodeID: string | null,
+    setLastSelectedNodeID: Dispatch<React.SetStateAction<string | null>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -35,7 +39,11 @@ const GraphContext = createContext<GraphContextType>({
     edgeTypes: {floating: FloatingEdge},
     addNode: () => {},
     deleteSelectedNodes: () => {},
-    updateNodeData: () => {}
+    updateNodeData: () => {},
+    selectedNodesIDs: [],
+    setSelectedNodesIDs: () => {},
+    lastSelectedNodeID: null,
+    setLastSelectedNodeID: () => {},
 })
 
 interface GraphContextProviderType {
@@ -52,6 +60,9 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, children}: GraphConte
     const [nodeID, setNodeID] = useState(0)
     const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(defaultNodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(defaultEdges)
+
+    const [selectedNodesIDs, setSelectedNodesIDs] = useState<string[]>([])
+    const [lastSelectedNodeID, setLastSelectedNodeID] = useState<string | null>(null)
 
     const addNode = (label: string, position: PositionType) => {
         const node = createNewNodeObject(nodeID, label, position)
@@ -79,6 +90,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, children}: GraphConte
     return(
         <GraphContext.Provider value={{
             nodeID, setNodeID,
+            selectedNodesIDs, setSelectedNodesIDs,
+            lastSelectedNodeID, setLastSelectedNodeID,
             nodes, setNodes, onNodesChange,
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,

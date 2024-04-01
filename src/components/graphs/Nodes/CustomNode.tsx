@@ -21,8 +21,7 @@ const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const {setIsWriting} = useContext(AppContext)
-  const {updateNodeData} = useContext(GraphContext)
-
+  const {updateNodeData, lastSelectedNodeID} = useContext(GraphContext)
 
   const [colorToolBar, updateColorToolBar] = useState("white")
 
@@ -32,20 +31,9 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const ctrlKeyPressed = useKeyPress("Control")
 
-  const borderStyle: React.CSSProperties = {
-    backgroundColor: 'transparent', 
-    border: '4px solid black', 
-    width: "90px", 
-    height: '90px', 
-    borderRadius: '50%', 
-    position: 'absolute', 
-    top: '-12px', 
-    left: '-12px', 
-  };
-
   const isConnecting = !!connectionNodeId;
 
-  const [node_style,updateNodeStyle] = useState(nodeStyle(selected))
+  const [node_style, setNodeStyle] = useState(nodeStyle(selected))
 
   const handleStartWriting = () => {
     setIsWriting(true)
@@ -65,29 +53,32 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
   const chooseColorNode = (color = "white") => {
     updateColorToolBar(color)
-    updateNodeStyle(nodeStyle(selected,color))
+    setNodeStyle(nodeStyle(selected, color))
   }
-  const icone = (color = "white") => {
+
+  const ColorIcon = ({color = "white"}) => {
     return (
     <div className="customNodeIconContainer">
-        <div style={{ backgroundColor: color, borderRadius: 5, height: 15, aspectRatio: 1, border:"1px solid black"}} onClick={() => chooseColorNode(color)}>           
+        <div style={{ 
+          backgroundColor: color, 
+          borderRadius: 5, 
+          height: 15, 
+          aspectRatio: 1, 
+          border:"1px solid black"
+        }} 
+        onClick={() => chooseColorNode(color)}>           
         </div>
     </div>
     )
   }
   const clickColorNode = () => {
-    selectColor ? setSelectColor(false) : setSelectColor(true);
-
+    setSelectColor(!selectColor);
   }
   
-
-  
-
   return (
-    <div className="customNodeContainer">
-      
+    <div className="customNodeContainer">  
       {
-        <div className={`customNodeToolbar ${selected ? '' : 'customNodeToolbarHidden'}`}>
+        <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`}>
           <div className="customNodeIconContainer">
             <FiLink />
           </div>
@@ -107,64 +98,61 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           </div>
           
           <div className={`customNodeToolbar ${selectColor ? '' : 'customNodeToolbarHidden'}`}>
-              {icone("white")}
-              {icone("green")}
-              {icone("blue")}
-              {icone("yellow")}
-              {icone("red")}
-              {icone("pink")}
+              <ColorIcon color="white"/>
+              <ColorIcon color="green"/>
+              <ColorIcon color="blue"/>
+              <ColorIcon color="yellow"/>
+              <ColorIcon color="red"/>
+              <ColorIcon color="pink"/>
             </div>
 
         </div>
       }
 
-      <div style={node_style} className="customNode">
-        {!ctrlKeyPressed && !selected ?
-            <>
-            {
-            //La position des handles ici ne change rien, c'est juste pour ne pas avoir l'erreur de paramètres
-            }
+      <div style={{
+                  border: selected ? "2px solid black" : "2px solid transparent",
+                  padding: 4,
+                  borderRadius: 500,
+                  opacity: 1
+                }}>
+        <div style={node_style} className="customNode">
+          {!ctrlKeyPressed && !selected ?
+              <>
+                {
+                  !isConnecting &&
+                  <Handle className="customHandle" position={Position.Bottom} type="source" /> 
+                }
 
-              {!isConnecting &&
-                <Handle className="customHandle" position={Position.Bottom} type="source" /> 
-              }
+                <Handle
+                  className="customHandle" 
+                  position={Position.Left}
+                  type="target"
+                  isConnectableStart={false}
+                />
+              </>
+              :
+              undefined
+          }
+
+          {
+            !selected ?
+              <p className="customNodeText">{nodeData.label}</p>
+              :
               
-
-              <Handle
-                className="customHandle" 
-                position={Position.Left}
-                type="target"
-                isConnectableStart={false}
-              />
-            </>
-            :
-            undefined
-        }
-
-        {
-          !selected ?
-            <p className="customNodeText">{nodeData.label}</p>
-            :
-            
-            <div>
-              <div style={{...borderStyle}} />
-              <input 
-                onChange={handleWritting}
-                disabled={!selected} 
-                onFocus={handleStartWriting}
-                onBlur={handleEndWriting}
-                type="text" 
-                value={nodeData.label}
-              
-                className={`inputCustomNode`}
-                style={{color: theme.light.Font, backgroundColor: colorToolBar,}}
-    
-              />
-            </div>
-            
-        }
-
-
+              <div>
+                <input 
+                  onChange={handleWritting}
+                  disabled={!selected} 
+                  onFocus={handleStartWriting}
+                  onBlur={handleEndWriting}
+                  type="text" 
+                  value={nodeData.label}
+                  className={`inputCustomNode`}
+                  style={{color: theme.light.Font, backgroundColor: colorToolBar}}
+                />
+              </div>
+          }
+        </div>
       </div>
     </div>
   );
