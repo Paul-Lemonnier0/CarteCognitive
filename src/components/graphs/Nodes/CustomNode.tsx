@@ -1,4 +1,4 @@
-import { FC,useState, KeyboardEvent, useContext  } from "react";
+import { FC,useState, KeyboardEvent, useContext, MouseEventHandler  } from "react";
 import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
 import React from 'react'
 import { nodeStyle } from "../../../styles/Graphes/NodeStyle";
@@ -23,15 +23,29 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const {setIsWriting} = useContext(AppContext)
   const {updateNodeData} = useContext(GraphContext)
 
+
+  const [colorToolBar, updateColorToolBar] = useState("white")
+
   const [nodeData, setNodeData] = useState<CustomNodeData>(data)
+  const [selectColor, setSelectColor] = useState(false)
 
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const ctrlKeyPressed = useKeyPress("Control")
 
+  const borderStyle: React.CSSProperties = {
+    backgroundColor: 'transparent', 
+    border: '4px solid black', 
+    width: "90px", 
+    height: '90px', 
+    borderRadius: '50%', 
+    position: 'absolute', 
+    top: '-12px', 
+    left: '-12px', 
+  };
 
   const isConnecting = !!connectionNodeId;
 
-  const node_style = nodeStyle(selected)
+  const [node_style,updateNodeStyle] = useState(nodeStyle(selected))
 
   const handleStartWriting = () => {
     setIsWriting(true)
@@ -49,6 +63,26 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     setNodeData((prevData) => ({...prevData, label: e.target.value}))
   }
 
+  const chooseColorNode = (color = "white") => {
+    updateColorToolBar(color)
+    updateNodeStyle(nodeStyle(selected,color))
+  }
+  const icone = (color = "white") => {
+    return (
+    <div className="customNodeIconContainer">
+        <div style={{ backgroundColor: color, borderRadius: 5, height: 15, aspectRatio: 1, border:"1px solid black"}} onClick={() => chooseColorNode(color)}>           
+        </div>
+    </div>
+    )
+  }
+  const clickColorNode = () => {
+    selectColor ? setSelectColor(false) : setSelectColor(true);
+
+  }
+  
+
+  
+
   return (
     <div className="customNodeContainer">
       
@@ -61,19 +95,25 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
             <FiCopy />
           </div>
           <div className="customNodeIconContainer">
-            <FiEdit3 />
-          </div>
-          <div className="customNodeIconContainer">
             <FiTrash2 />
           </div>
-{/* 
+
           <div className="separator">
-          </div> */}
+          </div> 
 
           <div className="customNodeIconContainer">
-            <div style={{ backgroundColor: "lightseagreen", borderRadius: 5, height: 15, aspectRatio: 1 }}>
+            <div style={{ backgroundColor: colorToolBar, borderRadius: 5, height: 15, aspectRatio: 1, border:"2px solid black" }} onClick={clickColorNode}>
             </div>
           </div>
+          
+          <div className={`customNodeToolbar ${selectColor ? '' : 'customNodeToolbarHidden'}`}>
+              {icone("white")}
+              {icone("green")}
+              {icone("blue")}
+              {icone("yellow")}
+              {icone("red")}
+              {icone("pink")}
+            </div>
 
         </div>
       }
@@ -105,20 +145,29 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           !selected ?
             <p className="customNodeText">{nodeData.label}</p>
             :
-            <input 
-              onChange={handleWritting}
-              disabled={!selected} 
-              onFocus={handleStartWriting}
-              onBlur={handleEndWriting}
-              type="text" 
-              value={nodeData.label}
-              className={`inputCustomNode ${selected ? '' : 'inputCustomNodeDisabled'}`}
-              style={{color: theme.light.Font}}
-            />
+            
+            <div>
+              <div style={{...borderStyle}} />
+              <input 
+                onChange={handleWritting}
+                disabled={!selected} 
+                onFocus={handleStartWriting}
+                onBlur={handleEndWriting}
+                type="text" 
+                value={nodeData.label}
+              
+                className={`inputCustomNode`}
+                style={{color: theme.light.Font, backgroundColor: colorToolBar,}}
+    
+              />
+            </div>
+            
         }
 
 
       </div>
     </div>
   );
+
+  
 }

@@ -1,13 +1,13 @@
 import { CSSProperties } from "react"
 import theme from "../../constantes/Colors"
 
-export const nodeStyle = (isSelected: boolean): CSSProperties => {
+export const nodeStyle = (isSelected: boolean,color = "white"): CSSProperties => {
     const colors = theme.light
 
     const bgColor = isSelected ? "#000000" : "#ffffff"
 
     return {
-        backgroundColor: "#ffffff", 
+        backgroundColor: color, 
         border: `2px solid ${bgColor}`,
         width: 70,
         height: 70,
