@@ -18,7 +18,7 @@ export default function Graph() {
         nodes, setNodes, onNodesChange,
         edges, setEdges, onEdgesChange,
         nodeTypes, edgeTypes,
-        addNode, deleteSelectedNodes
+        addNode, deleteSelectedNodes,
     } = useContext(GraphContext)
 
     //Data
@@ -49,6 +49,7 @@ export default function Graph() {
         else if(e.key === 's' && !isWriting) {
             deleteSelectedNodes()
         }
+
     }
 
     //Selection methods
@@ -134,8 +135,9 @@ export default function Graph() {
         }
     }
 
+
     return (
-        <div style={{flex: 1}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper}>
+        <div style={{flex: 1}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >
             <ReactFlow 
                 ref={reactFlowRef}
                 nodes={nodes} 

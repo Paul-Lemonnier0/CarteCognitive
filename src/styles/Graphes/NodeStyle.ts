@@ -17,3 +17,4 @@ export const nodeStyle = (isSelected: boolean, color = "white"): CSSProperties =
         userSelect: "none",
     }
 }
+

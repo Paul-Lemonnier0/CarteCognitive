@@ -65,6 +65,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     const nodeTypes = useMemo(() => ({customNode: CustomNode, fieldsetNode: FieldsetNode}), []);
     const edgeTypes = useMemo(() => ({floating: FloatingEdge}), []);
 
+
     const [nodeID, setNodeID] = useState(0)
     const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(defaultNodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(defaultEdges)
@@ -83,14 +84,15 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     }
     
     const deleteSelectedNodes = () => {
+        const updateEdgesFirst = edges.filter(edge => !edge.selected)
         const selectedNodeIDs = nodes.filter(node => node.selected).map(node => node.id)
         const updatedNodes = nodes.filter(node => !node.selected)
-        const updatedEdges = edges.filter(edge => 
+        const updatedEdgesSecond = updateEdgesFirst.filter(edge => 
                 !selectedNodeIDs.includes(edge.source) && 
                 !selectedNodeIDs.includes(edge.target))
 
         setNodes(updatedNodes)
-        setEdges(updatedEdges)
+        setEdges(updatedEdgesSecond)
     }   
 
     const updateNodeData = (nodeID: string, newNodeData: CustomNodeData) => {
@@ -106,7 +108,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
             nodes, setNodes, onNodesChange,
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,
-            addNode, deleteSelectedNodes, updateNodeData
+            addNode, deleteSelectedNodes, updateNodeData,
         }}>
             {children}
         </GraphContext.Provider>

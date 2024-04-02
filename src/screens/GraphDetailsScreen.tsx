@@ -20,8 +20,9 @@ const GraphDetailsScreen = () => {
         <GraphTopBar title={graph.title}/>
         <div style={{ display: "flex", flexDirection: "row", flex: 1 }}>
             <SideBar/>
+            
             <GraphContextProvider defaultNodes={graph.nodes} defaultEdges={graph.edges} graphName={graph.title}>
-                <Graph/>
+                <Graph/>        
             </GraphContextProvider>
         </div>
         </>
