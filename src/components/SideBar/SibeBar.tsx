@@ -7,7 +7,7 @@ const SideBar = () => {
     const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
             event.dataTransfer.setData('application/reactflow', nodeType);
             event.dataTransfer.effectAllowed = 'move';
-      };
+    };
 
     const node_style = nodeStyle(false)
 
@@ -35,6 +35,28 @@ const SideBar = () => {
                 </div>
 
                 <p style={{fontSize: 11, marginTop: 5}}>Node</p>
+            </div>
+
+            <div className="sideBarItem">
+                <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} 
+                    draggable style={{
+                        backgroundColor: "#ffffff", 
+                        border: `1px solid black`,
+                        width: 40,
+                        height: 40,
+                        borderRadius: 5,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        userSelect: "none"
+                    }}>
+                    <div style={{justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
+                        <p style={{fontSize: 11, margin: 0}}>---</p>
+                        <p style={{fontSize: 11, margin: 0}}>---</p>
+                    </div>
+                </div>
+
+                <p style={{fontSize: 11, marginTop: 5}}>Zone</p>
             </div>
         </div>
     )

@@ -2,10 +2,12 @@
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
     transition: 0.3s;
     z-index: 1000;
+    margin-top: -20px;
 }
 
 .sideBarItem {
     transition: 0.3s;
+    margin-top: 20px;
 }
 
 .sideBarItem:hover {

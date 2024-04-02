@@ -117,8 +117,8 @@ export default function Graph() {
             }
         
             const position = reactFlowInstance?.screenToFlowPosition({x: event.clientX, y: event.clientY});
-
-            addNode("...", position)
+            
+            addNode("...", position, type)
         },
         [reactFlowInstance],
     );

@@ -8,17 +8,11 @@ import SideBar from "../components/SideBar/SibeBar";
 import { GraphContextProvider } from "../context/GraphContext";
 import Graph from "../components/graphs/Graph";
 
-interface GraphDetailsScreenProps {
-    graph: GraphType
-}
-
 const GraphDetailsScreen = () => {
     const location = useLocation();
     const graph = location.state as GraphType;
 
     if(!graph) return null
-
-    console.log(graph)
 
     return(
         <>

@@ -5,6 +5,7 @@ import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNod
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
 import { PositionType } from "./AppContext";
 import { createNewNodeObject } from "../primitives/NodesMethods";
+import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 
 interface GraphContextType {
     graphTitle: string,
@@ -19,7 +20,7 @@ interface GraphContextType {
     setNodeID: Dispatch<React.SetStateAction<number>>,
     nodeTypes: Record<string, React.ComponentType<NodeProps>>,
     edgeTypes: Record<string, React.ComponentType<EdgeProps>>
-    addNode: (label: string, position: PositionType) => void,
+    addNode: (label: string, position: PositionType, type?: string) => void,
     deleteSelectedNodes: () => void,
     updateNodeData: (nodeID: string, newNodeData: CustomNodeData) => void,
     selectedNodesIDs: string[],
@@ -61,7 +62,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
 
-    const nodeTypes = useMemo(() => ({customNode: CustomNode}), []);
+    const nodeTypes = useMemo(() => ({customNode: CustomNode, fieldsetNode: FieldsetNode}), []);
     const edgeTypes = useMemo(() => ({floating: FloatingEdge}), []);
 
     const [nodeID, setNodeID] = useState(0)
@@ -71,12 +72,14 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     const [selectedNodesIDs, setSelectedNodesIDs] = useState<string[]>([])
     const [lastSelectedNodeID, setLastSelectedNodeID] = useState<string | null>(null)
 
-    const addNode = (label: string, position: PositionType) => {
-        const node = createNewNodeObject(nodeID, label, position)
-
-        setNodes((previousNodes) => ([...previousNodes, node]))
-
-        setNodeID(nodeID + 1)
+    const addNode = (label: string, position: PositionType, type = "customNode") => {
+        
+        const node = createNewNodeObject(nodeID, label, position, type)
+        console.log(node)
+        setNodes((previousNodes) => {
+            setNodeID(nodeID + 1);
+            return [...previousNodes, node];
+        });
     }
     
     const deleteSelectedNodes = () => {
