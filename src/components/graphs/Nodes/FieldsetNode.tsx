@@ -11,7 +11,8 @@ import { AppContext } from "../../../context/AppContext";
 export type FieldsetNodeData = {
   label: string;
   resizable: boolean;
-  rotatable: boolean
+  rotatable: boolean;
+  color?: string;
 };
 
 export interface FieldsetNodeProps extends NodeProps {
@@ -39,19 +40,17 @@ const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "black" }) => {
   );
 };
 
-
 export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id}) => {
-  const [title, setTitle] = useState("Titre Zone")
   const [resizable, setResizable] = useState(true)
   
-  const [wantWhrite, setWantWhrite] = useState(false)
   const {setIsWriting} = useContext(AppContext)
 
-  const {updateNodeData, lastSelectedNodeID} = useContext(GraphContext)
+  const {lastSelectedNodeID} = useContext(GraphContext)
+
+  const [fieldsetData, setFieldsetData] = useState<FieldsetNodeData>({...data, color: data.color ?? "#FFFFFF"})
 
   const [selectColor, setSelectColor] = useState(false)
-  const [colorFieldSetNode, setcolorFieldSetNode] = useState("3px solid black")
-  const [colorToolBar, updateColorToolBar] = useState("black")
+  const [colorToolBar, updateColorToolBar] = useState(fieldsetData.color)
 
   const handleStartWriting = () => {
     setIsWriting(true)
@@ -62,7 +61,7 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id}) => {
   }
 
   const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle( e.target.value)
+    setFieldsetData((prevData) => ({...prevData, label: e.target.value}))
   }
 
   useEffect(() => {
@@ -71,68 +70,91 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id}) => {
 
   }, [selected])
 
-  const chooseColorNode = (color = "black") => {
-    console.log(color)
+  const chooseColorNode = (color = "#FFFFFF") => {
     updateColorToolBar(color)
-    setcolorFieldSetNode(`3px solid ${color}`)
+    setFieldsetData((prevData) => ({...prevData, color}))
   }
 
   const clickColorNode = () => {
-    if(wantWhrite) setWantWhrite(false)
     setSelectColor(!selectColor);
   }
 
-  const clickInputNode = () => {
-    if(selectColor)  setSelectColor(false)
-    setWantWhrite(!wantWhrite);
+
+  interface RGBtype {
+    r: number,
+    g: number,
+    b: number,
   }
 
+  interface RGBAtype extends RGBtype {
+    a: number
+  }
+
+  function hexToRgba(hex: string, opacity: number): RGBAtype | null {
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+      a: opacity ?? 1
+    } : null;
+  }
+
+  const backgroundColor = hexToRgba(fieldsetData.color ?? "#FFFFFF", 0.2)
+  const backgroundColorRGBA = backgroundColor ? "rgba(" + 
+    backgroundColor.r + "," +
+    backgroundColor.g + "," +
+    backgroundColor.b + "," +
+    backgroundColor.a + ")" : "rgba(256,256,256,0.2)" 
+
+  const backgroundColorRGB = backgroundColor ? "rgba(" + 
+    backgroundColor.r + "," +
+    backgroundColor.g + "," +
+    backgroundColor.b + ")" : "rgb(256,256,256)" 
   return (
     
     <>
-      <div className="fieldset-container" style={{border: colorFieldSetNode}}>
-          <legend className="legend">{title}</legend>
-           <NodeResizer isVisible={resizable} minWidth={100} minHeight={100} />
+      <div className="fieldset-container" style={{backgroundColor: backgroundColorRGBA}}>
+          <NodeResizer isVisible={resizable} minWidth={150} minHeight={150}/>
+          {
+            !selected ?
 
-          <span style={{marginLeft : "100px"}}></span>
+            <div className="textLegendFieldsetNodeContainer" style={{backgroundColor: backgroundColorRGB}}>
+              <div style={{padding: 8}}>
+                <p className="customNodeText">{fieldsetData.label === "" ? " " : fieldsetData.label}</p>
+              </div>
+            </div>
+
+            :    
+
+            <div className="inputLegendFieldsetNodeContainer" style={{backgroundColor: backgroundColorRGB}}>
+              <input 
+                className="inputLegendFieldsetNode" 
+                onChange={handleWritting}
+                disabled={!selected} 
+                onFocus={handleStartWriting}
+                onBlur={handleEndWriting}
+                type="text" 
+                value={fieldsetData.label}
+              />
+            </div>
+          }
 
           {
             <div className={`customFieldToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`}>
-              <div className="customFieldIconContainer">
-                <FiEdit3 onClick={clickInputNode}/>
-              </div>
-              {
-                wantWhrite ?
-                  <div className={`InputFieldSetNode`}>
-                    <input 
-                      onChange={handleWritting}
-                      disabled={!selected} 
-                      onFocus={handleStartWriting}
-                      onBlur={handleEndWriting}
-                      type="text" 
-                      value={title}
-                      className={`inputCustomNode`}
-                      style={{width: "auto", backgroundColor: "transparent", borderRadius: "0%"}}
-                    />
-                  </div>
-                  :
-                  null
-              }
-
-              <div className="separator">
-              </div> 
-
               <div className="customFieldIconContainer">
                 <div style={{ backgroundColor: colorToolBar, borderRadius: 5, height: 15, aspectRatio: 1, border:"2px solid black" }} 
                     onClick={clickColorNode}>
                 </div>
               </div>
               
-              <div className={`customFieldToolbar ${selectColor ? '' : 'customFieldToolbarHidden'}`}>
-                <ColorIcon color="black" onPress={() => chooseColorNode("black")} />
-                <ColorIcon color="blue" onPress={() => chooseColorNode("blue")} />
-                <ColorIcon color="red" onPress={() => chooseColorNode("red")} />
-                <ColorIcon color="magenta" onPress={() => chooseColorNode("magenta")} />
+              <div className={`subCustomFieldToolbar ${selectColor ? '' : 'customFieldToolbarHidden'}`}>
+                <ColorIcon color="#FFFFFF" onPress={() => chooseColorNode("#FFFFFF")} />
+                <ColorIcon color="#C8E6C9" onPress={() => chooseColorNode("#C8E6C9")} />
+                <ColorIcon color="#F8BBD0" onPress={() => chooseColorNode("#F8BBD0")} />
+                <ColorIcon color="#FFF9C4" onPress={() => chooseColorNode("#FFF9C4")} />
+                <ColorIcon color="#B3E5FC" onPress={() => chooseColorNode("#B3E5FC")} />
               </div>
             </div>
           }

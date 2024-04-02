@@ -66,8 +66,15 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     const edgeTypes = useMemo(() => ({floating: FloatingEdge}), []);
 
 
+    const defaultNodes_zIndexed = defaultNodes.map(node => {
+        if(node.type === "customNode")
+            return {...node, zIndex: 1}
+
+        return {...node, zIndex: -2}
+    })
+
     const [nodeID, setNodeID] = useState(0)
-    const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(defaultNodes)
+    const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(defaultNodes_zIndexed)
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(defaultEdges)
 
     const [selectedNodesIDs, setSelectedNodesIDs] = useState<string[]>([])
@@ -76,7 +83,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     const addNode = (label: string, position: PositionType, type = "customNode") => {
         
         const node = createNewNodeObject(nodeID, label, position, type)
-        console.log(node)
+
         setNodes((previousNodes) => {
             setNodeID(nodeID + 1);
             return [...previousNodes, node];

@@ -62,3 +62,5 @@
     transform: rotate(360deg);
   }
 }
+
+iframe#webpack-dev-server-client-overlay{display:none!important}
