@@ -1,0 +1,58 @@
+{
+    "title": "GRAPH_TITLE",
+    "nbNodes": 0,
+    "nbEdges": 0,
+    "nodes": [
+        {
+            "id": "node_1_id",
+            "data": {
+                "label": "hello",
+                "couleur": "#FFFFFF"
+            },
+            "xPos": 0,
+            "yPos": 0,
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_2_id",
+            "data": {
+                "label": "hello",
+                "couleur": "#FFFFFF"
+            },
+            "xPos": 0,
+            "yPos": 0,
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_3_id",
+            "data": {
+                "label": "hello",
+                "couleur": "#FFFFFF"
+            },
+            "xPos": 0,
+            "yPos": 0,
+            "type": "customNode",
+            "isConnectable": true
+        }
+    ],
+
+    "edges": [
+        {
+            "id": "edge_1",
+            "sourceX": 0,
+            "sourceY": 0,
+            "targetX": 0,
+            "targetY": 0,
+            "markerStart": null,
+            "markerEnd": "arrowclosed",
+            "label": "hello",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "A",
+            "target": "B"
+        }
+    ]
+}
