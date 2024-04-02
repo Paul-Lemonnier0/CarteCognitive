@@ -106,18 +106,19 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           </div>
           
           <div className={`customNodeToolbar ${selectColor ? '' : 'customNodeToolbarHidden'}`}>
-            <ColorIcon color="white" onPress={() => console.log("hello")} />
-            <ColorIcon color="green" onPress={() => chooseColorNode("green")} />
-            <ColorIcon color="blue" onPress={() => chooseColorNode("blue")} />
-            <ColorIcon color="yellow" onPress={() => chooseColorNode("yellow")} />
-            <ColorIcon color="red" onPress={() => chooseColorNode("red")} />
-            <ColorIcon color="pink" onPress={() => chooseColorNode("pink")} />
+            <ColorIcon color="#FFFFFF" onPress={() => chooseColorNode("#FFFFFF")} />
+            <ColorIcon color="#F09EA7" onPress={() => chooseColorNode("#F09EA7")} />
+            <ColorIcon color="#F6CA94" onPress={() => chooseColorNode("#F6CA94")} />
+            <ColorIcon color="#FAFABE" onPress={() => chooseColorNode("#FAFABE")} />
+            <ColorIcon color="#C1EBC0" onPress={() => chooseColorNode("#C1EBC0")} />
+            <ColorIcon color="#C7CAFF" onPress={() => chooseColorNode("#C7CAFF")} />
+            <ColorIcon color="#CDABEB" onPress={() => chooseColorNode("#CDABEB")} />
+            <ColorIcon color="#F6C2F3" onPress={() => chooseColorNode("#F6C2F3")} />
           </div>
-
         </div>
       }
 
-      <div style={{
+      <div style={{ 
                   border: selected ? "2px solid black" : "2px solid transparent",
                   padding: 4,
                   borderRadius: 500,

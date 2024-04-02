@@ -8,7 +8,6 @@ export const nodeStyle = (isSelected: boolean, color = "white"): CSSProperties =
 
     return {
         backgroundColor: color, 
-        border: `2px solid ${bgColor}`,
         width: 70,
         height: 70,
         borderRadius: "50%",
