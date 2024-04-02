@@ -1,0 +1,26 @@
+.fieldset-container {
+    position: relative; /* Pour permettre le positionnement absolu de la légende */
+    margin-bottom: 20px;
+}
+
+.fieldset {
+    background-color: none;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    border-top-left-radius: 0px;
+    min-width: 150px;
+}
+
+.legend {
+    background-color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-bottom: 0px solid #ccc;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    position: absolute;
+    top: -32px; /* Décalage vers le haut */
+    left: 2px; /* Ajustez la position horizontale au besoin */
+}

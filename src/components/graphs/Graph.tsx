@@ -121,7 +121,7 @@ export default function Graph() {
             
             addNode("...", position, type)
         },
-        [reactFlowInstance],
+        [reactFlowInstance, nodeID],
     );
 
     //Mouse movements methods
