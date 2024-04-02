@@ -30,8 +30,10 @@ export const defaultEdgeOptions = {
     style: { strokeWidth: 1, stroke: 'black' },
     type: 'floating',
     markerEnd: {
-      type: MarkerType.ArrowClosed,
-      color: 'black',
+        type: MarkerType.ArrowClosed, 
+        width: 20, 
+        height: 20,
+        color: "black"
     },
   };
 

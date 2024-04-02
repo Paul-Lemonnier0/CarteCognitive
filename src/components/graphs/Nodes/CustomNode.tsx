@@ -1,4 +1,4 @@
-import { FC,useState, KeyboardEvent, useContext, MouseEventHandler  } from "react";
+import { FC,useState, KeyboardEvent, useContext, MouseEventHandler, Dispatch  } from "react";
 import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
 import React from 'react'
 import { nodeStyle } from "../../../styles/Graphes/NodeStyle";
@@ -16,6 +16,27 @@ export type CustomNodeData = {
 export interface CustomNodeProps extends NodeProps {
   data: CustomNodeData;
 }
+
+interface ColorIconProps {
+  onPress: () => void,
+  color: string
+}
+const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "white" }) => {
+  return (
+    <div className="customNodeIconContainer">
+      <div
+        style={{
+          backgroundColor: color,
+          borderRadius: 5,
+          height: 15,
+          aspectRatio: 1,
+          border: "1px solid black",
+        }}
+        onClick={onPress}
+      ></div>
+    </div>
+  );
+};
 
 const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
@@ -52,25 +73,11 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   }
 
   const chooseColorNode = (color = "white") => {
+    console.log(color)
     updateColorToolBar(color)
     setNodeStyle(nodeStyle(selected, color))
   }
 
-  const ColorIcon = ({color = "white"}) => {
-    return (
-    <div className="customNodeIconContainer">
-        <div style={{ 
-          backgroundColor: color, 
-          borderRadius: 5, 
-          height: 15, 
-          aspectRatio: 1, 
-          border:"1px solid black"
-        }} 
-        onClick={() => chooseColorNode(color)}>           
-        </div>
-    </div>
-    )
-  }
   const clickColorNode = () => {
     setSelectColor(!selectColor);
   }
@@ -93,18 +100,19 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           </div> 
 
           <div className="customNodeIconContainer">
-            <div style={{ backgroundColor: colorToolBar, borderRadius: 5, height: 15, aspectRatio: 1, border:"2px solid black" }} onClick={clickColorNode}>
+            <div style={{ backgroundColor: colorToolBar, borderRadius: 5, height: 15, aspectRatio: 1, border:"2px solid black" }} 
+                onClick={clickColorNode}>
             </div>
           </div>
           
           <div className={`customNodeToolbar ${selectColor ? '' : 'customNodeToolbarHidden'}`}>
-              <ColorIcon color="white"/>
-              <ColorIcon color="green"/>
-              <ColorIcon color="blue"/>
-              <ColorIcon color="yellow"/>
-              <ColorIcon color="red"/>
-              <ColorIcon color="pink"/>
-            </div>
+            <ColorIcon color="white" onPress={() => console.log("hello")} />
+            <ColorIcon color="green" onPress={() => chooseColorNode("green")} />
+            <ColorIcon color="blue" onPress={() => chooseColorNode("blue")} />
+            <ColorIcon color="yellow" onPress={() => chooseColorNode("yellow")} />
+            <ColorIcon color="red" onPress={() => chooseColorNode("red")} />
+            <ColorIcon color="pink" onPress={() => chooseColorNode("pink")} />
+          </div>
 
         </div>
       }
