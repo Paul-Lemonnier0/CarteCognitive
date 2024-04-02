@@ -1,16 +1,17 @@
-import { FC,useState, KeyboardEvent, useContext, MouseEventHandler, Dispatch  } from "react";
-import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
+import { FC, useEffect, useState, useRef, useContext} from "react";
+import {Handle, NodeProps, Position , useUpdateNodeInternals,
+  NodeResizer,} from "reactflow";
 import React from 'react'
-import { nodeStyle } from "../../../styles/Graphes/NodeStyle";
-import {useStore } from 'reactflow';
 import "./FieldsetNodeStyle.css"
-import theme from "../../../constantes/Colors";
-import { FiCopy, FiEdit3, FiLink, FiTrash2 } from "react-icons/fi";
-import { AppContext } from "../../../context/AppContext";
+import { FiEdit3 } from "react-icons/fi";
 import { GraphContext } from "../../../context/GraphContext";
+import { AppContext } from "../../../context/AppContext";
+
 
 export type FieldsetNodeData = {
   label: string;
+  resizable: boolean;
+  rotatable: boolean
 };
 
 export interface FieldsetNodeProps extends NodeProps {
@@ -21,9 +22,9 @@ interface ColorIconProps {
   onPress: () => void,
   color: string
 }
-const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "white" }) => {
+const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "black" }) => {
   return (
-    <div className="fieldsetNodeIconContainer">
+    <div className="customNodeIconContainer">
       <div
         style={{
           backgroundColor: color,
@@ -38,96 +39,105 @@ const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "white" }) => {
   );
 };
 
-const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
 export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id}) => {
+  const [title, setTitle] = useState("Titre Zone")
+  const [resizable, setResizable] = useState(true)
+  
+  const [wantWhrite, setWantWhrite] = useState(false)
   const {setIsWriting} = useContext(AppContext)
+
   const {updateNodeData, lastSelectedNodeID} = useContext(GraphContext)
 
-  const [colorToolBar, updateColorToolBar] = useState("white")
-
-  const [nodeData, setNodeData] = useState<FieldsetNodeData>(data)
   const [selectColor, setSelectColor] = useState(false)
-
-  const connectionNodeId = useStore(connectionNodeIdSelector);
-  const ctrlKeyPressed = useKeyPress("Control")
-
-  const isConnecting = !!connectionNodeId;
-
-  const [node_style, setNodeStyle] = useState(nodeStyle(selected))
+  const [colorFieldSetNode, setcolorFieldSetNode] = useState("3px solid black")
+  const [colorToolBar, updateColorToolBar] = useState("black")
 
   const handleStartWriting = () => {
     setIsWriting(true)
   }
 
   const handleEndWriting = () => {
-    if(nodeData != data) {
-      updateNodeData(id, nodeData)
-    }
-
     setIsWriting(false)
   }
 
   const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNodeData((prevData) => ({...prevData, label: e.target.value}))
+    setTitle( e.target.value)
   }
 
-  const chooseColorNode = (color = "white") => {
+  useEffect(() => {
+    if(selected) setResizable(true)
+    else setResizable(false)
+
+  }, [selected])
+
+  const chooseColorNode = (color = "black") => {
     console.log(color)
     updateColorToolBar(color)
-    setNodeStyle(nodeStyle(selected, color))
+    setcolorFieldSetNode(`3px solid ${color}`)
   }
 
   const clickColorNode = () => {
+    if(wantWhrite) setWantWhrite(false)
     setSelectColor(!selectColor);
   }
-  
+
+  const clickInputNode = () => {
+    if(selectColor)  setSelectColor(false)
+    setWantWhrite(!wantWhrite);
+  }
+
   return (
+    
     <>
-      {/* {
-        <div className={`fieldsetNodeToolbar ${lastSelectedNodeID === id ? '' : 'fieldsetNodeToolbarHidden'}`}>
+      <div className="fieldset-container" style={{border: colorFieldSetNode}}>
+          <legend className="legend">{title}</legend>
+           <NodeResizer isVisible={resizable} minWidth={100} minHeight={100} />
 
-          <div className="fieldsetNodeIconContainer">
-            <FiCopy />
-          </div>
-          <div className="fieldsetNodeIconContainer">
-            <FiTrash2 />
-          </div>
+          <span style={{marginLeft : "100px"}}></span>
 
-          <div className="separator">
-          </div> 
-
-          <div className="fieldsetNodeIconContainer">
-            <div style={{ backgroundColor: colorToolBar, borderRadius: 5, height: 15, aspectRatio: 1, border:"2px solid black" }} 
-                onClick={clickColorNode}>
-            </div>
-          </div>
-          
-          <div className={`fieldsetNodeToolbar ${selectColor ? '' : 'fieldsetNodeToolbarHidden'}`}>
-            <ColorIcon color="#FFFFFF" onPress={() => chooseColorNode("#FFFFFF")} />
-            <ColorIcon color="#F09EA7" onPress={() => chooseColorNode("#F09EA7")} />
-            <ColorIcon color="#F6CA94" onPress={() => chooseColorNode("#F6CA94")} />
-            <ColorIcon color="#FAFABE" onPress={() => chooseColorNode("#FAFABE")} />
-            <ColorIcon color="#C1EBC0" onPress={() => chooseColorNode("#C1EBC0")} />
-            <ColorIcon color="#C7CAFF" onPress={() => chooseColorNode("#C7CAFF")} />
-            <ColorIcon color="#CDABEB" onPress={() => chooseColorNode("#CDABEB")} />
-            <ColorIcon color="#F6C2F3" onPress={() => chooseColorNode("#F6C2F3")} />
-          </div>
-        </div>
-      } */}
-
-
-      <div className="fieldset-container">
-          <fieldset className="fieldset">
-              <legend className="legend">Titre zone</legend>
-              <div className="content">
-                  <br/> 
-                  <br/> 
+          {
+            <div className={`customFieldToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`}>
+              <div className="customFieldIconContainer">
+                <FiEdit3 onClick={clickInputNode}/>
               </div>
-          </fieldset>
+              {
+                wantWhrite ?
+                  <div className={`InputFieldSetNode`}>
+                    <input 
+                      onChange={handleWritting}
+                      disabled={!selected} 
+                      onFocus={handleStartWriting}
+                      onBlur={handleEndWriting}
+                      type="text" 
+                      value={title}
+                      className={`inputCustomNode`}
+                      style={{width: "auto", backgroundColor: "transparent", borderRadius: "0%"}}
+                    />
+                  </div>
+                  :
+                  null
+              }
+
+              <div className="separator">
+              </div> 
+
+              <div className="customFieldIconContainer">
+                <div style={{ backgroundColor: colorToolBar, borderRadius: 5, height: 15, aspectRatio: 1, border:"2px solid black" }} 
+                    onClick={clickColorNode}>
+                </div>
+              </div>
+              
+              <div className={`customFieldToolbar ${selectColor ? '' : 'customFieldToolbarHidden'}`}>
+                <ColorIcon color="black" onPress={() => chooseColorNode("black")} />
+                <ColorIcon color="blue" onPress={() => chooseColorNode("blue")} />
+                <ColorIcon color="red" onPress={() => chooseColorNode("red")} />
+                <ColorIcon color="magenta" onPress={() => chooseColorNode("magenta")} />
+              </div>
+            </div>
+          }
       </div>
     </>
   );
 
-  
 }

@@ -83,7 +83,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   }
   
   return (
-    <div className="customNodeContainer">  
+    <div className="customNodeContainer" >  
       {
         <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`}>
           <div className="customNodeIconContainer">

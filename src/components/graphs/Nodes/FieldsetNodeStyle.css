@@ -1,6 +1,11 @@
 .fieldset-container {
-    position: relative; /* Pour permettre le positionnement absolu de la légende */
-    margin-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    
+    background-color: "transparent";
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .fieldset {
@@ -24,3 +29,52 @@
     top: -32px; /* Décalage vers le haut */
     left: 2px; /* Ajustez la position horizontale au besoin */
 }
+
+div.FieldsetNodeToolbar {
+    position: absolute;
+    top: 108%;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 2px 5px;
+    margin: 10;
+    box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
+  }
+
+div.InputFieldSetNode {
+    position: absolute;
+    top: 105%;
+    width: auto;
+    border-radius: 10px;
+    border: 2px solid black;
+    margin: 10;
+    margin-left: auto;
+}
+
+div.customFieldToolbar {
+    position: absolute;
+    top: 101%;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 2px 5px;
+    margin: 10;
+    box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
+}
+
+div.customFieldToolbarHidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+
+div.customFieldIconContainer {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    padding: 5px;
+}
+
