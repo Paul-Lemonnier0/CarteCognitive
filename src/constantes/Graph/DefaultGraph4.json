@@ -1,0 +1,129 @@
+{
+    "title": "Graphe 4",
+    "nbNodes": 4,
+    "nbEdges": 4,
+    "nodes": [
+        {
+            "id": "node_P",
+            "data": {
+                "label": "P",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 100,
+                "y": 100
+            },
+            "positionAbsolute": {
+                "x": 100,
+                "y": 100
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_Q",
+            "data": {
+                "label": "Q",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 300,
+                "y": 100
+            },
+            "positionAbsolute": {
+                "x": 300,
+                "y": 100
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_R",
+            "data": {
+                "label": "R",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 100,
+                "y": 300
+            },
+            "positionAbsolute": {
+                "x": 100,
+                "y": 300
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_S",
+            "data": {
+                "label": "S",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 300,
+                "y": 300
+            },
+            "positionAbsolute": {
+                "x": 300,
+                "y": 300
+            },
+            "type": "customNode",
+            "isConnectable": true
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge_1",
+            "sourceX": 100,
+            "sourceY": 100,
+            "targetX": 300,
+            "targetY": 100,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_P",
+            "target": "node_Q"
+        },
+        {
+            "id": "edge_2",
+            "sourceX": 100,
+            "sourceY": 100,
+            "targetX": 100,
+            "targetY": 300,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_P",
+            "target": "node_R"
+        },
+        {
+            "id": "edge_3",
+            "sourceX": 300,
+            "sourceY": 100,
+            "targetX": 100,
+            "targetY": 300,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_Q",
+            "target": "node_R"
+        },
+        {
+            "id": "edge_4",
+            "sourceX": 300,
+            "sourceY": 300,
+            "targetX": 100,
+            "targetY": 300,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_S",
+            "target": "node_R"
+        }
+    ]
+}

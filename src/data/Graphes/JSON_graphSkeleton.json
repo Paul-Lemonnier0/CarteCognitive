@@ -9,8 +9,14 @@
                 "label": "hello",
                 "couleur": "#FFFFFF"
             },
-            "xPos": 0,
-            "yPos": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "positionAbsolute": {
+                "x": 0,
+                "y": 0
+            },
             "type": "customNode",
             "isConnectable": true
         },
@@ -20,8 +26,14 @@
                 "label": "hello",
                 "couleur": "#FFFFFF"
             },
-            "xPos": 0,
-            "yPos": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "positionAbsolute": {
+                "x": 0,
+                "y": 0
+            },
             "type": "customNode",
             "isConnectable": true
         },
@@ -31,8 +43,14 @@
                 "label": "hello",
                 "couleur": "#FFFFFF"
             },
-            "xPos": 0,
-            "yPos": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "positionAbsolute": {
+                "x": 0,
+                "y": 0
+            },
             "type": "customNode",
             "isConnectable": true
         }

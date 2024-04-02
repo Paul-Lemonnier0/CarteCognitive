@@ -7,6 +7,8 @@ import { PositionType } from "./AppContext";
 import { createNewNodeObject } from "../primitives/NodesMethods";
 
 interface GraphContextType {
+    graphTitle: string,
+    setGraphTitle: Dispatch<string>,
     nodes: Node[],
     edges: Edge[],
     setNodes: Dispatch<React.SetStateAction<Node[]>>,
@@ -27,6 +29,8 @@ interface GraphContextType {
 }
 
 const GraphContext = createContext<GraphContextType>({
+    graphTitle: "",
+    setGraphTitle: () => {},
     nodes: [],
     edges: [],
     nodeID: 0,
@@ -49,11 +53,14 @@ const GraphContext = createContext<GraphContextType>({
 interface GraphContextProviderType {
     defaultNodes: Node[],
     defaultEdges: Edge[],
+    graphName: string,
     children: ReactNode
 }
 
-const GraphContextProvider = ({defaultNodes, defaultEdges, children}: GraphContextProviderType) => {
+const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}: GraphContextProviderType) => {
     
+    const [graphTitle, setGraphTitle] = useState<string>(graphName)
+
     const nodeTypes = useMemo(() => ({customNode: CustomNode}), []);
     const edgeTypes = useMemo(() => ({floating: FloatingEdge}), []);
 
@@ -89,6 +96,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, children}: GraphConte
 
     return(
         <GraphContext.Provider value={{
+            graphTitle, setGraphTitle,
             nodeID, setNodeID,
             selectedNodesIDs, setSelectedNodesIDs,
             lastSelectedNodeID, setLastSelectedNodeID,

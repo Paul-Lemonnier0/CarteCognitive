@@ -1,0 +1,16 @@
+.graphPresentationContainer {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    display: inline-block;
+    flex-direction: column;
+    max-width: 200px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    color: "black";
+    transition: 0.3s;
+}
+
+.graphPresentationContainer:hover {
+    transform: translateY(-5px);
+    transition: 0.3s;
+  }

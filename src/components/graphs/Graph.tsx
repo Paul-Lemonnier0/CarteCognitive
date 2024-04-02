@@ -10,7 +10,7 @@ import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 let id = 2;
 const getId = () => `${id++}`;
 
-export default function GraphTest() {
+export default function Graph() {
     const {
         nodeID,
         lastSelectedNodeID, setLastSelectedNodeID,

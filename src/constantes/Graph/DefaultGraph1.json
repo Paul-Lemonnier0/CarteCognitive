@@ -1,0 +1,243 @@
+{
+    "title": "Graphe 1",
+    "nbNodes": 6,
+    "nbEdges": 10,
+    "nodes": [
+        {
+            "id": "node_1_id",
+            "data": {
+                "label": "7",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 229.86402226513496,
+                "y": 599.8866852209458
+            },
+            "positionAbsolute": {
+                "x": 229.86402226513496,
+                "y": 599.8866852209458
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_2_id",
+            "data": {
+                "label": "8",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 320.7798987400527,
+                "y": 890.537258582797
+            },
+            "positionAbsolute": {
+                "x": 320.7798987400527,
+                "y": 890.537258582797
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_3_id",
+            "data": {
+                "label": "9",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 768.6215061663812,
+                "y": 756.3591570561396
+            },
+            "positionAbsolute": {
+                "x": 768.6215061663812,
+                "y": 756.3591570561396
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_4_id",
+            "data": {
+                "label": "10",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 608.8188204120154,
+                "y": 628.7754760464506
+            },
+            "positionAbsolute": {
+                "x": 608.8188204120154,
+                "y": 628.7754760464506
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_5_id",
+            "data": {
+                "label": "11",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 877.3270117993425,
+                "y": 474.9446955533831
+            },
+            "positionAbsolute": {
+                "x": 877.3270117993425,
+                "y": 474.9446955533831
+            },
+            "type": "customNode",
+            "isConnectable": true
+        },
+        {
+            "id": "node_6_id",
+            "data": {
+                "label": "12",
+                "couleur": "#FFFFFF"
+            },
+            "position": {
+                "x": 594.7766966202233,
+                "y": 1076.3818200119501
+            },
+            "positionAbsolute": {
+                "x": 594.7766966202233,
+                "y": 1076.3818200119501
+            },
+            "type": "customNode",
+            "isConnectable": true
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge_1",
+            "sourceX": 594.7766966202233,
+            "sourceY": 1076.3818200119501,
+            "targetX": 320.7798987400527,
+            "targetY": 890.537258582797,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_6_id",
+            "target": "node_2_id"
+        },
+        {
+            "id": "edge_2",
+            "sourceX": 768.6215061663812,
+            "sourceY": 756.3591570561396,
+            "targetX": 594.7766966202233,
+            "targetY": 1076.3818200119501,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_3_id",
+            "target": "node_6_id"
+        },
+        {
+            "id": "edge_3",
+            "sourceX": 608.8188204120154,
+            "sourceY": 628.7754760464506,
+            "targetX": 594.7766966202233,
+            "targetY": 1076.3818200119501,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_4_id",
+            "target": "node_6_id"
+        },
+        {
+            "id": "edge_4",
+            "sourceX": 229.86402226513496,
+            "sourceY": 599.8866852209458,
+            "targetX": 320.7798987400527,
+            "targetY": 890.537258582797,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_1_id",
+            "target": "node_2_id"
+        },
+        {
+            "id": "edge_5",
+            "sourceX": 608.8188204120154,
+            "sourceY": 628.7754760464506,
+            "targetX": 320.7798987400527,
+            "targetY": 890.537258582797,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_4_id",
+            "target": "node_2_id"
+        },
+        {
+            "id": "edge_6",
+            "sourceX": 768.6215061663812,
+            "sourceY": 756.3591570561396,
+            "targetX": 320.7798987400527,
+            "targetY": 890.537258582797,
+            "markerEnd": "arrowclosed",
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_3_id",
+            "target": "node_2_id"
+        },
+        {
+            "id": "edge_7",
+            "sourceX": 768.6215061663812,
+            "sourceY": 756.3591570561396,
+            "targetX": 877.3270117993425,
+            "targetY": 474.9446955533831,
+            "markerEnd": "arrowclosed",
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_3_id",
+            "target": "node_5_id"
+        },
+        {
+            "id": "edge_8",
+            "sourceX": 608.8188204120154,
+            "sourceY": 628.7754760464506,
+            "targetX": 877.3270117993425,
+            "targetY": 474.9446955533831,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_4_id",
+            "target": "node_5_id"
+        },
+        {
+            "id": "edge_9",
+            "sourceX": 768.6215061663812,
+            "sourceY": 756.3591570561396,
+            "targetX": 608.8188204120154,
+            "targetY": 628.7754760464506,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_3_id",
+            "target": "node_4_id"
+        },
+        {
+            "id": "edge_10",
+            "sourceX": 608.8188204120154,
+            "sourceY": 628.7754760464506,
+            "targetX": 229.86402226513496,
+            "targetY": 599.8866852209458,
+            "label": "",
+            "data": {
+                "couleur": "#FFFFFF"
+            },
+            "source": "node_4_id",
+            "target": "node_1_id"
+        }
+    ]
+}

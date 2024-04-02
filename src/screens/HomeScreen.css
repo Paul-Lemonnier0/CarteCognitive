@@ -1,0 +1,9 @@
+.homeScreenContainer {
+    padding: 20px;
+}
+
+.graphPresentationListContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
