@@ -21,6 +21,6 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     position: absolute;
-    top: -32px; /* Décalage vers le haut */
-    left: 2px; /* Ajustez la position horizontale au besoin */
+    top: -32px;
+    left: 2px;
 }
