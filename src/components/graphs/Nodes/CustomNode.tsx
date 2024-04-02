@@ -1,7 +1,7 @@
 import { FC,useState, KeyboardEvent, useContext, MouseEventHandler, Dispatch  } from "react";
 import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
 import React from 'react'
-import { nodeStyle } from "../../../styles/Graphes/NodeStyle";
+import { nodeStyle  } from "../../../styles/Graphes/NodeStyle";
 import {useStore } from 'reactflow';
 import "./CustomNodeStyle.css"
 import theme from "../../../constantes/Colors";

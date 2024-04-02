@@ -16,13 +16,13 @@ function App() {
     document.title = "CarteCognitive"
     }, []
   )
+
   return (
     <AppContextProvider>
       <ReactFlowProvider>
         <div className="App" style={{backgroundColor: "#ebedee", display: "flex", flexDirection: "column"}}>
 
             <RouterProvider router={router}/>
-
             {/* <div style={{          
               display: "flex",
               flexDirection: "row", flex: 1}}>
