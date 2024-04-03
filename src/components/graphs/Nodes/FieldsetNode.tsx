@@ -1,6 +1,7 @@
 import { FC, useEffect, useState, useRef, useContext} from "react";
 import {Handle, NodeProps, Position , useUpdateNodeInternals,
-  NodeResizer,} from "reactflow";
+  NodeResizer,
+  useKeyPress,} from "reactflow";
 import React from 'react'
 import "./FieldsetNodeStyle.css"
 import { FiEdit3 } from "react-icons/fi";
@@ -40,12 +41,12 @@ const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "black" }) => {
   );
 };
 
-export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id}) => {
+export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, yPos}) => {
   const [resizable, setResizable] = useState(true)
   
   const {setIsWriting} = useContext(AppContext)
 
-  const {lastSelectedNodeID} = useContext(GraphContext)
+  const {lastSelectedNodeID, selectNodesInPositionRange} = useContext(GraphContext)
 
   const [fieldsetData, setFieldsetData] = useState<FieldsetNodeData>({...data, color: data.color ?? "#FFFFFF"})
 
@@ -112,13 +113,36 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id}) => {
     backgroundColor.r + "," +
     backgroundColor.g + "," +
     backgroundColor.b + ")" : "rgb(256,256,256)" 
+
+  const shiftKeyPressed = useKeyPress("Shift")
+
+  const handleHoleNodesSelection = () => {
+    if(shiftKeyPressed) {
+      const containerHeight = document.getElementById(`fieldsetNodeContainer_${id}`)?.clientHeight;
+      const containerWidth = document.getElementById(`fieldsetNodeContainer_${id}`)?.clientWidth;
+
+      if(containerHeight && containerWidth) { 
+        selectNodesInPositionRange(
+          xPos, 
+          xPos + containerWidth, 
+          yPos, 
+          yPos + containerHeight,
+        )
+      }
+    }
+  }
+
   return (
-    
     <>
-      <div className="fieldset-container" style={{backgroundColor: backgroundColorRGBA}}>
-          <NodeResizer isVisible={resizable} minWidth={150} minHeight={150}/>
+      <div onClick={handleHoleNodesSelection} className="fieldset-container" id={`fieldsetNodeContainer_${id}`} style={{backgroundColor: backgroundColorRGBA}}>
+          <NodeResizer 
+            isVisible={resizable} 
+            minWidth={150} 
+            minHeight={150}
+          />
+
           {
-            !selected ?
+            !selected || shiftKeyPressed ?
 
             <div className="textLegendFieldsetNodeContainer" style={{backgroundColor: backgroundColorRGB}}>
               <div style={{padding: 8}}>

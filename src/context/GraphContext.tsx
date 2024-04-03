@@ -27,6 +27,7 @@ interface GraphContextType {
     setSelectedNodesIDs: Dispatch<React.SetStateAction<string[]>>,
     lastSelectedNodeID: string | null,
     setLastSelectedNodeID: Dispatch<React.SetStateAction<string | null>>,
+    selectNodesInPositionRange: (x_left: number, x_right: number, y_top: number ,y_bottom: number) => void
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -49,6 +50,7 @@ const GraphContext = createContext<GraphContextType>({
     setSelectedNodesIDs: () => {},
     lastSelectedNodeID: null,
     setLastSelectedNodeID: () => {},
+    selectNodesInPositionRange: () => {}
 })
 
 interface GraphContextProviderType {
@@ -106,6 +108,25 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
         nodes.map(node => node.id === nodeID ? {...node, data: newNodeData} : node)
     }
 
+    const selectNodesInPositionRange = (x_left: number, x_right: number, y_top: number ,y_bottom: number): void => {
+        const selected_nodes_id: string[] = []
+        
+        setNodes((prevNodes) => prevNodes.map(node => {
+            if(node.type === "customNode") {
+                if(node.position.x >= x_left && node.position.x <= x_right) {
+                    if(node.position.y >= y_top && node.position.y <= y_bottom) {
+                        selected_nodes_id.push(node.id)
+                        return {...node, selected: true}
+                    }
+                }
+            }
+
+            return node
+        }))
+
+        setSelectedNodesIDs([...selected_nodes_id])
+    }
+
     return(
         <GraphContext.Provider value={{
             graphTitle, setGraphTitle,
@@ -116,6 +137,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,
             addNode, deleteSelectedNodes, updateNodeData,
+            selectNodesInPositionRange
         }}>
             {children}
         </GraphContext.Provider>

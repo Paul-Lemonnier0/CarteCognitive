@@ -1,5 +1,5 @@
-import React, { KeyboardEvent, useCallback, useContext, useRef, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useOnSelectionChange } from 'reactflow';
+import React, { KeyboardEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, NodeMouseHandler, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useKeyPress, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
 import { AppContext, PositionType } from '../../context/AppContext';
@@ -33,7 +33,13 @@ export default function Graph() {
     const reactFlowRef = useRef<ReactFlowRefType>(null)
     const reactFlowWrapper = useRef<ReactFlowRefType>(null);
 
+    const ctrlKeyPressed = useKeyPress("Control")
+
     //Connection methods
+
+    useEffect(() => {
+        console.log("ctrl key changed")
+    }, [ctrlKeyPressed])
 
     const onConnect: OnConnect = useCallback((params) => {
         setEdges((eds) => addEdge(params, eds))
@@ -49,7 +55,6 @@ export default function Graph() {
         else if(e.key === 's' && !isWriting) {
             deleteSelectedNodes()
         }
-
     }
 
     //Selection methods
@@ -75,7 +80,7 @@ export default function Graph() {
                 setLastSelectedNodeID(lastSelectedNodeArray[0])
             } 
 
-            else if (newSelectedNodeIds.length === 0) setLastSelectedNodeID(null)
+            else setLastSelectedNodeID(null)
 
             setSelectedNodesIDs(newSelectedNodeIds)
 
@@ -135,6 +140,11 @@ export default function Graph() {
         }
     }
 
+    const handleNodeSelection = (event: React.MouseEvent, node: Node) => {
+        // console.log("hello" , ctrlKeyPressed)
+        // alert("hello")
+        
+    }
 
     return (
         <div style={{flex: 1}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >
@@ -153,7 +163,8 @@ export default function Graph() {
                 onMouseMove={handleMouseMove}
                 defaultEdgeOptions={defaultEdgeOptions}
                 connectionLineComponent={CustomConnectionLine}
-                connectionLineStyle={connectionLineStyle}>
+                connectionLineStyle={connectionLineStyle}
+                onNodeClick={handleNodeSelection}>
                 <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10}/>
                 <MiniMap/>
                 <Controls/>

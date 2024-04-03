@@ -12,8 +12,6 @@ function createNewNodeObject(nodeID: number, label: string, position: PositionTy
         }
     }
 
-    console.log(node)
-
     return node
 }
 
