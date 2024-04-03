@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useCallback, useContext, useRef, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Edge, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useOnSelectionChange } from 'reactflow';
+import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
 import { AppContext, PositionType } from '../../context/AppContext';
@@ -155,6 +155,8 @@ export default function Graph() {
                 connectionLineComponent={CustomConnectionLine}
                 connectionLineStyle={connectionLineStyle}>
                 <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10}/>
+                <MiniMap/>
+                <Controls/>
             </ReactFlow>
         </div>
     );

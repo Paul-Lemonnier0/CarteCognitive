@@ -40,8 +40,8 @@
     margin: 0px;
     border: none;
     outline: none; 
-    padding: 8px;
     font-family: "PoppinsSemiBold";
+    width: 100%;
 }
 
 .textLegendFieldsetNodeContainer {
@@ -59,10 +59,9 @@
     border: none; 
     outline: none; 
     background-color: red;
+    min-width: 100% !important;
     width: 100%;
-    flex: 1;
-    margin: 0;
-    padding: 0;
+    padding: 8px !important;
     font-family: inherit;
 }
 
@@ -72,6 +71,7 @@
     padding: 0px;
     line-height: normal;
     font-family: "PoppinsSemiBold";
+    user-select: none;
 }
 
 div.FieldsetNodeToolbar {
