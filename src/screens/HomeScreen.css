@@ -1,9 +1,37 @@
 .homeScreenContainer {
+    /*background-image: url("../data/Images/BackgroundHomePage.png"); /* à changer car image moche*/
+    background-size: cover;
+    background-position: center;
     padding: 20px;
+    height: 100%;
 }
+
+
+
+
 
 .graphPresentationListContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
 }
+
+.ListGraph {
+    
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+
+
+    border: 2px solid black;
+    padding: 10px;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    height: auto;
+    overflow:auto;
+    scrollbar-width: none;
+    border-radius: 10px;
+
+}
+

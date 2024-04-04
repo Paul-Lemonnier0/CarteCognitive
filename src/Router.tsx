@@ -6,7 +6,7 @@ import HomeScreen from "./screens/HomeScreen";
 import React from "react";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import GraphDetailsScreen from "./screens/GraphDetailsScreen";
-
+import ProfileScreen from "./screens/ProfileScreen";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -16,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/graphDetails",
     element: <GraphDetailsScreen/>
+  },
+  {
+    path:"/Profile",
+    element : <ProfileScreen/>
   },
 
   {

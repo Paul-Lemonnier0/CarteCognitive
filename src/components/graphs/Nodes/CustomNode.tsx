@@ -41,8 +41,10 @@ const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "white" }) => {
 const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
+
   const {setIsWriting, colorNode, wantSelectColor } = useContext(AppContext)
-  const {updateNodeData, lastSelectedNodeID, changeColorWithField , nodeColorField, colorField} = useContext(GraphContext)
+  const {updateNodeData, lastSelectedNodeID, changeColorWithField , nodeColorField, colorField, deleteSelectedNodes} = useContext(GraphContext)
+
   const [colorToolBar, updateColorToolBar] = useState("white")
 
   const [nodeData, setNodeData] = useState<CustomNodeData>(data)
@@ -105,7 +107,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           <div className="customNodeIconContainer">
             <FiCopy />
           </div>
-          <div className="customNodeIconContainer">
+          <div className="customNodeIconContainer" onClick={deleteSelectedNodes}>
             <FiTrash2 />
           </div>
 
