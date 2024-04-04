@@ -4,42 +4,23 @@ import {Handle, NodeProps, Position , useUpdateNodeInternals,
   useKeyPress,} from "reactflow";
 import React from 'react'
 import "./FieldsetNodeStyle.css"
-import { FiEdit3 } from "react-icons/fi";
 import { GraphContext } from "../../../context/GraphContext";
 import { AppContext } from "../../../context/AppContext";
+import { baseColors } from "../../../constantes/Colors";
+import ColorIcon from "../../Other/ColorIcon";
+import { getStringRGBAFromHexa, getStringRGBFromHexa } from "../../../primitives/ColorMethods";
 
 
 export type FieldsetNodeData = {
   label: string;
   resizable: boolean;
   rotatable: boolean;
-  color?: string;
+  couleur?: string;
 };
 
 export interface FieldsetNodeProps extends NodeProps {
   data: FieldsetNodeData;
 }
-
-interface ColorIconProps {
-  onPress: () => void,
-  color: string
-}
-const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "black" }) => {
-  return (
-    <div className="customNodeIconContainer">
-      <div
-        style={{
-          backgroundColor: color,
-          borderRadius: 5,
-          height: 15,
-          aspectRatio: 1,
-          border: "1px solid black",
-        }}
-        onClick={onPress}
-      ></div>
-    </div>
-  );
-};
 
 export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, yPos}) => {
   const [resizable, setResizable] = useState(true)
@@ -48,12 +29,10 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
 
   const {lastSelectedNodeID, selectNodesInPositionRange} = useContext(GraphContext)
 
-  const [fieldsetData, setFieldsetData] = useState<FieldsetNodeData>({...data, color: data.color ?? "#FFFFFF"})
+  const [fieldsetData, setFieldsetData] = useState<FieldsetNodeData>({...data, couleur: data.couleur ?? "#FFFFFF"})
 
   const [selectColor, setSelectColor] = useState(false)
-  const [colorToolBar, updateColorToolBar] = useState(fieldsetData.color)
-
-
+  const [colorToolBar, updateColorToolBar] = useState(fieldsetData.couleur)
 
   const handleStartWriting = () => {
     setIsWriting(true)
@@ -75,46 +54,15 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
 
   const chooseColorNode = (color = "#FFFFFF") => {
     updateColorToolBar(color)
-    setFieldsetData((prevData) => ({...prevData, color}))
+    setFieldsetData((prevData) => ({...prevData, couleur: color}))
   }
 
   const clickColorNode = () => {
     setSelectColor(!selectColor);
   }
 
-
-  interface RGBtype {
-    r: number,
-    g: number,
-    b: number,
-  }
-
-  interface RGBAtype extends RGBtype {
-    a: number
-  }
-
-  function hexToRgba(hex: string, opacity: number): RGBAtype | null {
-
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16),
-      a: opacity ?? 1
-    } : null;
-  }
-
-  const backgroundColor = hexToRgba(fieldsetData.color ?? "#FFFFFF", 0.2)
-  const backgroundColorRGBA = backgroundColor ? "rgba(" + 
-    backgroundColor.r + "," +
-    backgroundColor.g + "," +
-    backgroundColor.b + "," +
-    backgroundColor.a + ")" : "rgba(256,256,256,0.2)" 
-
-  const backgroundColorRGB = backgroundColor ? "rgba(" + 
-    backgroundColor.r + "," +
-    backgroundColor.g + "," +
-    backgroundColor.b + ")" : "rgb(256,256,256)" 
+  const backgroundColorRGBA = getStringRGBAFromHexa(fieldsetData.couleur ?? "#FFFFFF", 0.2)
+  const backgroundColorRGB = getStringRGBFromHexa(fieldsetData.couleur ?? "#FFFFFF", 0.2)
 
   const shiftKeyPressed = useKeyPress("Shift")
 
@@ -179,17 +127,15 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
           {
             <div className={`customFieldToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`}>
               <div className="customFieldIconContainer">
-                <div style={{ backgroundColor: colorToolBar, borderRadius: 5, height: 15, aspectRatio: 1, border:"2px solid black" }} 
-                    onClick={clickColorNode}>
-                </div>
+                <ColorIcon small isSelected color={fieldsetData.couleur ?? "white"} onPress={clickColorNode}/>
               </div>
               
               <div className={`subCustomFieldToolbar ${selectColor ? '' : 'customFieldToolbarHidden'}`}>
-                <ColorIcon color="#FFFFFF" onPress={() => chooseColorNode("#FFFFFF")} />
-                <ColorIcon color="#C8E6C9" onPress={() => chooseColorNode("#C8E6C9")} />
-                <ColorIcon color="#F8BBD0" onPress={() => chooseColorNode("#F8BBD0")} />
-                <ColorIcon color="#FFF9C4" onPress={() => chooseColorNode("#FFF9C4")} />
-                <ColorIcon color="#B3E5FC" onPress={() => chooseColorNode("#B3E5FC")} />
+                {
+                  baseColors.map(baseColor =>
+                      <ColorIcon small isSelected={baseColor === fieldsetData.couleur} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                  )
+                }
               </div>
             </div>
           }

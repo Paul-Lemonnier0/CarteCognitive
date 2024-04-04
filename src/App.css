@@ -26,6 +26,7 @@
   text-align: center;
   width: 100vw;
   height: 100vh;
+  display: flex;
 }
 
 .App-logo {
@@ -64,3 +65,34 @@
 }
 
 iframe#webpack-dev-server-client-overlay{display:none!important}
+
+
+*::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-track:hover {
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-track:active {
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #9C9C9C;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #727272;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #727272;
+}

@@ -16,18 +16,16 @@ const GraphDetailsScreen = () => {
     if(!graph) return null
 
     return(
-        <>
-        <AppTopBar/>
-        <GraphTopBar title={graph.title}/>
-        <div style={{ display: "flex", flexDirection: "row", flex: 1 }}>
-            <SideBar/>
+        <div style={{ display: "flex", flexDirection: "row", flex: 1 }}
+            className="graphDetailsContainer">
             
             <GraphContextProvider defaultNodes={graph.nodes} defaultEdges={graph.edges} graphName={graph.title}>
+                <GraphDetailsSideBar/>   
                 <Graph/>    
-                <GraphDetailsSideBar/>    
+                <SideBar/>
+ 
             </GraphContextProvider>
         </div>
-        </>
     )
 }
 

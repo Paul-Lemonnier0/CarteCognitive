@@ -17,7 +17,6 @@ const HomeScreen = () => {
             <AppTopBar />
             <div className="homeScreenContainer">
                 <ListGraph graphs={graphs} title={"Graphes d'exemple"}/>
-                
             </div>
         </>
     )

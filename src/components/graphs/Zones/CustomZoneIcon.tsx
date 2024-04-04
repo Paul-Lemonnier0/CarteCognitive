@@ -10,17 +10,17 @@ interface CustomZoneIconProps {
 
 export const CustomZoneIcon: FC<CustomZoneIconProps> = ({size, color, isSelected}) => {  
     return (
-    <div style={{
-        backgroundColor: color ?? "white",
-        borderRadius: 8,
-        width: size ?? 40,
-        aspectRatio: 1/1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        border: isSelected ? "3px solid black" : undefined
-    }}>
-        <LuText size={25}/>
-    </div>
+        <div style={{
+            backgroundColor: color ?? "white",
+            borderRadius: 8,
+            width: size ?? 40,
+            aspectRatio: 1/1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            border: isSelected ? "3px solid black" : undefined
+        }}>
+            <LuText size={25}/>
+        </div>
   )
 }

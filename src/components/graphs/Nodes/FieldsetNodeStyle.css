@@ -59,7 +59,6 @@
 .inputLegendFieldsetNode {
     border: none; 
     outline: none; 
-    background-color: red;
     min-width: 100% !important;
     width: 100%;
     padding: 8px !important;

@@ -151,7 +151,7 @@ export default function Graph() {
     }, [fitViewNodes])
 
     return (
-        <div style={{flex: 1}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >
+        <div style={{flex: 1, flexWrap: 'wrap', display: 'flex', boxSizing:"border-box"}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >
             <ReactFlow 
                 ref={reactFlowRef}
                 nodes={nodes} 

@@ -1,15 +1,17 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import "./GraphDetailsSideBarStyle.css"
 import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
 import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem"
 import { GraphContext } from "../../context/GraphContext"
 import { Node } from "reactflow"
+import { GoBackButton } from "../Buttons/IconButtons"
+import { useNavigate } from "react-router-dom"
 
 const GraphDetailsSideBar = () => {
 
-    const {nodes, setFitViewNodes} = useContext(GraphContext)
-    const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
+    const {graphTitle, nodes, setFitViewNodes} = useContext(GraphContext)
+    const [filteredNodes, setFilteredNodes] = useState<Node[]>(nodes)
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
@@ -31,11 +33,16 @@ const GraphDetailsSideBar = () => {
     const handleDoublePressOnNode = () => {
         const selectedNode = nodes.filter(node => node.id === selectedNodeID)[0]
         setFitViewNodes([selectedNode])
-        // setViewport({x: selectedNode.position.x, y: selectedNode.position.y, zoom: 2})
     }
+
+    const navigate = useNavigate()
 
     return(
         <div className={"graphDetailsSideBarContainer"}>
+            <GoBackButton onPress={() => navigate(-1)}/>
+
+            <p className="graphDetailsSideBarContainerTitleText">{graphTitle}</p>
+
             <CustomSearchBar onChange={onChange}/>
             <CustomCard>
                 <div style={{

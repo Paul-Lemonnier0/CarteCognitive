@@ -3,27 +3,12 @@ import { nodeStyle } from "../../styles/Graphes/NodeStyle";
 import "./SideBarStyle.css"
 import { GraphContext } from "../../context/GraphContext";
 import { AppContext } from "../../context/AppContext";
+import { CustomZoneIcon } from "../graphs/Zones/CustomZoneIcon";
+import { CustomNodeIcon } from "../graphs/Nodes/CustomNodeIcon";
+import { FillColorSideBarIcon } from "./Icons/FillColorSideBarIcon";
+import ColorIcon from "../Other/ColorIcon";
+import { baseColors } from "../../constantes/Colors";
 
-interface ColorIconProps {
-    onPress: () => void,
-    color: string
-  }
-  const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "white" }) => {
-    return (
-      <div className="customNodeIconContainer">
-        <div
-          style={{
-            backgroundColor: color,
-            borderRadius: 5,
-            height: 15,
-            aspectRatio: 1,
-            border: "1px solid black",
-          }}
-          onClick={onPress}
-        ></div>
-      </div>
-    );
-  };
 
 
 const SideBar = () => {
@@ -54,72 +39,36 @@ const SideBar = () => {
             paddingBottom: 0,
             flexDirection: "column",
         }}>
-            <div className="sideBarItem">
-                <div onDragStart={(event) => onDragStart(event, 'customNode')} 
-                    draggable style={{
-                        backgroundColor: "#ffffff", 
-                        border: `1px solid black`,
-                        width: 40,
-                        height: 40,
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        userSelect: "none"
-                    }}>
-                    <p style={{fontSize: 11}}>...</p>
+             <div className="sideBarItem">
+                <div onDragStart={(event) => onDragStart(event, 'customNode')} draggable>
+                    <CustomNodeIcon/>
                 </div>
 
-                <p style={{fontSize: 11, marginTop: 5}}>Node</p>
+                <p>Node</p>
             </div>
 
             <div className="sideBarItem">
-                <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} 
-                    draggable style={{
-                        backgroundColor: "#ffffff", 
-                        border: `1px solid black`,
-                        width: 40,
-                        height: 40,
-                        borderRadius: 5,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        userSelect: "none"
-                    }}>
-                    <div style={{justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
-                        <p style={{fontSize: 11, margin: 0}}>---</p>
-                        <p style={{fontSize: 11, margin: 0}}>---</p>
-                    </div>
+                <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} draggable>
+                    <CustomZoneIcon/>
                 </div>
 
-                <p style={{fontSize: 11, marginTop: 5}}>Zone</p>
+                <p>Zone</p>
             </div>
 
-            <div className="sideBarItem" onClick={ChooseColor}>
-                <div style={{
-                    backgroundColor: colorSibeBar, 
-                    border: `1px solid black`,
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    userSelect: "none"
-                }} ></div>
-                <p style={{fontSize: 11, marginTop: 5}}>Couleur</p>
-            </div>
+            <div style={{display: "flex", flexDirection: "row"}}>
+                <div className="sideBarItem" onClick={ChooseColor}>
+                    <FillColorSideBarIcon color={colorNode}/>
+                    <p>Couleur</p>
+                </div>
 
-            <div className={`customSibeToolbar ${chooseColor ? '' : 'customSibeToolbarHidden'}`}>
-            <ColorIcon color="#FFFFFF" onPress={() => chooseColorNode("#FFFFFF")} />
-            <ColorIcon color="#F09EA7" onPress={() => chooseColorNode("#F09EA7")} />
-            <ColorIcon color="#F6CA94" onPress={() => chooseColorNode("#F6CA94")} />
-            <ColorIcon color="#FAFABE" onPress={() => chooseColorNode("#FAFABE")} />
-            <ColorIcon color="#C1EBC0" onPress={() => chooseColorNode("#C1EBC0")} />
-            <ColorIcon color="#C7CAFF" onPress={() => chooseColorNode("#C7CAFF")} />
-            <ColorIcon color="#CDABEB" onPress={() => chooseColorNode("#CDABEB")} />
-            <ColorIcon color="#F6C2F3" onPress={() => chooseColorNode("#F6C2F3")} />
-          </div>
+                <div className={`customSibeToolbar ${chooseColor ? '' : 'customSibeToolbarHidden'}`}>
+                    {
+                        baseColors.map(baseColor =>
+                            <ColorIcon isSelected={baseColor === colorNode} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                        )
+                    }
+                </div>
+            </div>
         </div>
     )
 }
