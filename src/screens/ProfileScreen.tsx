@@ -5,7 +5,7 @@ function ProfileScreen() {
     return(
         <div>
         <AppTopBar></AppTopBar>
-            
+            {/* mettre les information du profile*/}
         </div>
     )
 
