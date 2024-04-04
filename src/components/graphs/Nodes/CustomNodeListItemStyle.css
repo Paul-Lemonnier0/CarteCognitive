@@ -1,0 +1,16 @@
+.customNodeListItemContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.customNodeListItemContainer:hover {
+    transform: translateY(-5px);
+}
+
+.customNodeListItemContainer h3 {
+    font-family: "PoppinsLight";
+}

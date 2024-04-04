@@ -12,6 +12,7 @@ const getId = () => `${id++}`;
 
 export default function Graph() {
     const {
+        fitViewNodes,
         nodeID,
         lastSelectedNodeID, setLastSelectedNodeID,
         selectedNodesIDs, setSelectedNodesIDs,
@@ -144,6 +145,10 @@ export default function Graph() {
         // alert("hello")
         
     }
+
+    useEffect(() => {
+        reactFlowInstance?.fitView({nodes: fitViewNodes})
+    }, [fitViewNodes])
 
     return (
         <div style={{flex: 1}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >

@@ -1,5 +1,5 @@
 import { ComponentType, Dispatch, FC, ReactNode, createContext, useMemo, useState, useEffect, useContext } from "react";
-import { Background, Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState } from "reactflow";
+import { Background, Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, Viewport, useEdgesState, useNodesState } from "reactflow";
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
@@ -35,6 +35,8 @@ interface GraphContextType {
     setChangeColorWithField: Dispatch<React.SetStateAction<boolean>>,
     colorField: string,
     setColorField :  Dispatch<React.SetStateAction<string>>,
+    fitViewNodes: Node[],
+    setFitViewNodes: Dispatch<Node[]>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -64,6 +66,8 @@ const GraphContext = createContext<GraphContextType>({
     setChangeColorWithField: () => {},
     colorField: "",
     setColorField: () => {},
+    fitViewNodes: [],
+    setFitViewNodes: () => {}
 })
 
 interface GraphContextProviderType {
@@ -78,6 +82,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState(false)
 
+    const [fitViewNodes, setFitViewNodes] = useState<Node[]>([])
 
     const nodeTypes = useMemo(() => ({customNode: CustomNode, fieldsetNode: FieldsetNode}), []);
     const edgeTypes = useMemo(() => ({floating: FloatingEdge}), []);
@@ -122,7 +127,10 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     }   
 
     const updateNodeData = (nodeID: string, newNodeData: CustomNodeData) => {
-        nodes.map(node => node.id === nodeID ? {...node, data: newNodeData} : node)
+        setNodes((prevNodes) => prevNodes.map(node => 
+            node.id === nodeID ?
+                { ...node, data: newNodeData as any} : node
+        ))
     }
 
 
@@ -153,6 +161,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     return(
         <GraphContext.Provider value={{
             graphTitle, setGraphTitle,
+            fitViewNodes, setFitViewNodes,
             nodeID, setNodeID,
             selectedNodesIDs, setSelectedNodesIDs,
             lastSelectedNodeID, setLastSelectedNodeID,

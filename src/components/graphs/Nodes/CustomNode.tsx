@@ -43,7 +43,14 @@ const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
   const {setIsWriting, colorNode, wantSelectColor } = useContext(AppContext)
-  const {updateNodeData, lastSelectedNodeID, changeColorWithField , nodeColorField, colorField, deleteSelectedNodes} = useContext(GraphContext)
+  const {
+    updateNodeData, 
+    lastSelectedNodeID, 
+    changeColorWithField , 
+    nodeColorField, 
+    colorField, 
+    deleteSelectedNodes
+  } = useContext(GraphContext)
 
   const [colorToolBar, updateColorToolBar] = useState("white")
 
@@ -57,10 +64,14 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
   const [node_style, setNodeStyle] = useState(nodeStyle(selected))
 
+
+  useEffect(() => {
+    updateNodeData(id, nodeData)
+  }, [nodeData])
+
   const handleStartWriting = () => {
     setIsWriting(true)
   }
-
 
   const handleEndWriting = () => {
     if(nodeData != data) {
@@ -78,6 +89,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     console.log("test couleur : ", colorNode)
     updateColorToolBar(color)
     setNodeStyle(nodeStyle(selected, color))
+    setNodeData((prevData) => ({...prevData, couleur: color}))
   }
 
   const clickColorNode = () => {
@@ -85,7 +97,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   }
 
   const clickColorSibebar = () => {
-    wantSelectColor? chooseColorNode(colorNode) : undefined
+    chooseColorNode(colorNode)
   }
 
   useEffect(() => {
@@ -139,7 +151,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
                   borderRadius: 500,
                   opacity: 1
                 }}  >
-        <div style={node_style} className="customNode" onClick={clickColorSibebar}>
+        <div style={node_style} className="customNode" onClick={wantSelectColor ? clickColorSibebar : undefined}>
           {!ctrlKeyPressed && !selected && !wantSelectColor ?
               <>
                 {

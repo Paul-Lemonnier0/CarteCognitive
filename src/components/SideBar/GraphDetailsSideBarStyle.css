@@ -1,0 +1,9 @@
+.graphDetailsSideBarContainer {
+    background-color: white;
+    padding: 20px;
+    flex: 0.25;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

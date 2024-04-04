@@ -1,0 +1,10 @@
+.customSearchBarInput {
+    border: none;
+    outline: none;
+    margin-block: -10px;
+    flex: 1;
+    font-size: 16px;
+    background-color: transparent;
+    font-weight: bold;
+    font-family: "PoppinsLight";
+}
