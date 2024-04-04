@@ -6,39 +6,39 @@ import { GrUserSettings } from "react-icons/gr";
 //barre de navigation
 const AppTopBar = () => {
     return (
-            <div className="appTopBar" style={{
-                backgroundColor: "#FFFFFF",
-                display:'flex',
-                justifyContent: "space-between",
-                alignItems: 'center',
-                paddingLeft: 20,
-                paddingRight : 20,
-                paddingTop: 0,
-                height: 40,
-                zIndex: 100000
-            }}>
-                <Link to={"/"} style={{ fontFamily: "PoppinsSemiBold" }}>
-                    <p style={{
-                        fontSize: 14,
-                        textAlign: "left",
-                        fontFamily: "PoppinsMedium",
-                        color: "black",
-                    }}>
-                        Accueil
-                    </p>
-                </Link>
+        <div className="appTopBar" style={{
+            backgroundColor: "#FFFFFF",
+            display: 'flex',
+            justifyContent: "space-between",
+            alignItems: 'center',
+            paddingLeft: 20,
+            paddingRight: 20,
+            paddingTop: 0,
+            height: 40,
+            zIndex: 100000
+        }}>
             <Link to={"/"} style={{ fontFamily: "PoppinsSemiBold" }}>
+                <p style={{
+                    fontSize: 14,
+                    textAlign: "left",
+                    fontFamily: "PoppinsMedium",
+                    color: "black",
+                }}>
+                    Accueil
+                </p>
+            </Link>
+            <Link to={"/Profile"} style={{ fontFamily: "PoppinsSemiBold" }}>
                 <GrUserSettings style={
                     {
                         fontSize: 20,
                         fontFamily: "PoppinsMedium",
-                        color:"black"
+                        color: "black"
                     }
-                }/>
+                } />
 
-                </Link>
-                </div>
-        
+            </Link>
+        </div>
+
     )
 }
 
