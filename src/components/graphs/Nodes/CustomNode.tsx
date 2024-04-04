@@ -42,7 +42,7 @@ const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const {setIsWriting} = useContext(AppContext)
-  const {updateNodeData, lastSelectedNodeID} = useContext(GraphContext)
+  const {updateNodeData, lastSelectedNodeID, deleteSelectedNodes} = useContext(GraphContext)
 
   const [colorToolBar, updateColorToolBar] = useState("white")
 
@@ -92,7 +92,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           <div className="customNodeIconContainer">
             <FiCopy />
           </div>
-          <div className="customNodeIconContainer">
+          <div className="customNodeIconContainer" onClick={deleteSelectedNodes}>
             <FiTrash2 />
           </div>
 
