@@ -1,4 +1,4 @@
-import { FC,useState, KeyboardEvent, useContext, MouseEventHandler, Dispatch  } from "react";
+import { FC,useState, KeyboardEvent, useContext, MouseEventHandler, Dispatch, useEffect  } from "react";
 import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
 import React from 'react'
 import { nodeStyle  } from "../../../styles/Graphes/NodeStyle";
@@ -41,9 +41,8 @@ const ColorIcon: FC<ColorIconProps> = ({ onPress, color = "white" }) => {
 const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
-  const {setIsWriting} = useContext(AppContext)
-  const {updateNodeData, lastSelectedNodeID} = useContext(GraphContext)
-
+  const {setIsWriting, colorNode, wantSelectColor } = useContext(AppContext)
+  const {updateNodeData, lastSelectedNodeID, changeColorWithField , nodeColorField, colorField} = useContext(GraphContext)
   const [colorToolBar, updateColorToolBar] = useState("white")
 
   const [nodeData, setNodeData] = useState<CustomNodeData>(data)
@@ -60,6 +59,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     setIsWriting(true)
   }
 
+
   const handleEndWriting = () => {
     if(nodeData != data) {
       updateNodeData(id, nodeData)
@@ -73,7 +73,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   }
 
   const chooseColorNode = (color = "white") => {
-    console.log(color)
+    console.log("test couleur : ", colorNode)
     updateColorToolBar(color)
     setNodeStyle(nodeStyle(selected, color))
   }
@@ -81,11 +81,24 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const clickColorNode = () => {
     setSelectColor(!selectColor);
   }
-  
+
+  const clickColorSibebar = () => {
+    wantSelectColor? chooseColorNode(colorNode) : undefined
+  }
+
+  useEffect(() => {
+    console.log(nodeColorField)
+    nodeColorField.map((node,index) => {
+      console.log("ID : " , node)
+      if(node === id) chooseColorNode(colorField)
+
+    })
+  }, [changeColorWithField])
+
   return (
     <div className="customNodeContainer" >  
       {
-        <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`}>
+        <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
           <div className="customNodeIconContainer">
             <FiLink />
           </div>
@@ -123,9 +136,9 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
                   padding: 4,
                   borderRadius: 500,
                   opacity: 1
-                }}>
-        <div style={node_style} className="customNode">
-          {!ctrlKeyPressed && !selected ?
+                }}  >
+        <div style={node_style} className="customNode" onClick={clickColorSibebar}>
+          {!ctrlKeyPressed && !selected && !wantSelectColor ?
               <>
                 {
                   !isConnecting &&
@@ -137,6 +150,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
                   position={Position.Left}
                   type="target"
                   isConnectableStart={false}
+                  
+                  
                 />
               </>
               :

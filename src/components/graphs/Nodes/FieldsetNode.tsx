@@ -53,6 +53,8 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
   const [selectColor, setSelectColor] = useState(false)
   const [colorToolBar, updateColorToolBar] = useState(fieldsetData.color)
 
+
+
   const handleStartWriting = () => {
     setIsWriting(true)
   }
@@ -127,7 +129,16 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
           xPos + containerWidth, 
           yPos, 
           yPos + containerHeight,
+          colorToolBar,
         )
+        const temp = selectNodesInPositionRange(
+          xPos, 
+          xPos + containerWidth, 
+          yPos, 
+          yPos + containerHeight,
+          colorToolBar,
+        )
+
       }
     }
   }

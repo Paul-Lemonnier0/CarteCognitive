@@ -1,11 +1,12 @@
-import { ComponentType, Dispatch, FC, ReactNode, createContext, useMemo, useState } from "react";
-import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState } from "reactflow";
+import { ComponentType, Dispatch, FC, ReactNode, createContext, useMemo, useState, useEffect, useContext } from "react";
+import { Background, Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState } from "reactflow";
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
 import { PositionType } from "./AppContext";
 import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
+import { AppContext } from "./AppContext";
 
 interface GraphContextType {
     graphTitle: string,
@@ -27,7 +28,13 @@ interface GraphContextType {
     setSelectedNodesIDs: Dispatch<React.SetStateAction<string[]>>,
     lastSelectedNodeID: string | null,
     setLastSelectedNodeID: Dispatch<React.SetStateAction<string | null>>,
-    selectNodesInPositionRange: (x_left: number, x_right: number, y_top: number ,y_bottom: number) => void
+    selectNodesInPositionRange: (x_left: number, x_right: number, y_top: number ,y_bottom: number, color : string | undefined) => void,
+    nodeColorField: string[],
+    setNodeColorField: Dispatch<React.SetStateAction<string[]>>,
+    changeColorWithField: boolean,
+    setChangeColorWithField: Dispatch<React.SetStateAction<boolean>>,
+    colorField: string,
+    setColorField :  Dispatch<React.SetStateAction<string>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -50,7 +57,13 @@ const GraphContext = createContext<GraphContextType>({
     setSelectedNodesIDs: () => {},
     lastSelectedNodeID: null,
     setLastSelectedNodeID: () => {},
-    selectNodesInPositionRange: () => {}
+    selectNodesInPositionRange: () => {},
+    nodeColorField: [],
+    setNodeColorField: () => {},
+    changeColorWithField: false,
+    setChangeColorWithField: () => {},
+    colorField: "",
+    setColorField: () => {},
 })
 
 interface GraphContextProviderType {
@@ -61,8 +74,10 @@ interface GraphContextProviderType {
 }
 
 const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}: GraphContextProviderType) => {
-    
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
+    const [nodeColorField, setNodeColorField] = useState<string[]>([])
+    const [changeColorWithField, setChangeColorWithField] = useState(false)
+
 
     const nodeTypes = useMemo(() => ({customNode: CustomNode, fieldsetNode: FieldsetNode}), []);
     const edgeTypes = useMemo(() => ({floating: FloatingEdge}), []);
@@ -81,6 +96,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
 
     const [selectedNodesIDs, setSelectedNodesIDs] = useState<string[]>([])
     const [lastSelectedNodeID, setLastSelectedNodeID] = useState<string | null>(null)
+
+    const [colorField, setColorField] = useState("white")
 
     const addNode = (label: string, position: PositionType, type = "customNode") => {
         
@@ -108,22 +125,28 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
         nodes.map(node => node.id === nodeID ? {...node, data: newNodeData} : node)
     }
 
-    const selectNodesInPositionRange = (x_left: number, x_right: number, y_top: number ,y_bottom: number): void => {
+
+    const selectNodesInPositionRange = (x_left: number, x_right: number, y_top: number ,y_bottom: number, color = "white"): void => {
         const selected_nodes_id: string[] = []
-        
+        setColorField(color)
+        setNodeColorField([])
         setNodes((prevNodes) => prevNodes.map(node => {
             if(node.type === "customNode") {
                 if(node.position.x >= x_left && node.position.x <= x_right) {
                     if(node.position.y >= y_top && node.position.y <= y_bottom) {
                         selected_nodes_id.push(node.id)
+                        const temp = nodeColorField
+                        temp.push(node.id)
+                        setNodeColorField(temp)
                         return {...node, selected: true}
                     }
                 }
             }
-
+            
             return node
         }))
-
+        console.log(changeColorWithField)
+        setChangeColorWithField(!changeColorWithField)
         setSelectedNodesIDs([...selected_nodes_id])
     }
 
@@ -137,7 +160,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,
             addNode, deleteSelectedNodes, updateNodeData,
-            selectNodesInPositionRange
+            selectNodesInPositionRange,
+            nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField
         }}>
             {children}
         </GraphContext.Provider>

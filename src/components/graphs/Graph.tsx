@@ -141,7 +141,6 @@ export default function Graph() {
     }
 
     const handleNodeSelection = (event: React.MouseEvent, node: Node) => {
-        // console.log("hello" , ctrlKeyPressed)
         // alert("hello")
         
     }
