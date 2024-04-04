@@ -1,5 +1,5 @@
 .homeScreenContainer {
-    background-image: url("../data/Images/BackgroundHomePage.png");
+    background-image: url("../data/Images/BackgroundHomePage.png"); /* à changer car image moche*/
     background-size: cover;
     background-position: center;
     padding: 20px;
@@ -17,7 +17,10 @@
 }
 
 .ListGraph {
+    background-color: rgba(0,0,0,0.5);
+    border: 2px solid black;
     padding: 10px;
+    margin: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,5 +28,6 @@
     height: auto;
     overflow:auto;
     scrollbar-width: none;
+    border-radius: 10px;
 
 }
