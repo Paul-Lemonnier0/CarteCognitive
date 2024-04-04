@@ -5,13 +5,14 @@ import { GraphType } from "../../types/Graph/GraphType"
 
 interface GraphPresentationProps {
     graph: GraphType
+    style?: React.CSSProperties // rend la propriété style facultative
 }
 
-const GraphPresentation: FC<GraphPresentationProps> = ({graph}) => {
+const GraphPresentation: FC<GraphPresentationProps> = ({graph, style}) => {
     return(
         
         <Link to={'/graphDetails'} state={{...graph}}>
-            <div className="graphPresentationContainer">
+            <div className="graphPresentationContainer" style={style}>
                 <h2 style={{
                     textAlign: "left", 
                     color: "black",

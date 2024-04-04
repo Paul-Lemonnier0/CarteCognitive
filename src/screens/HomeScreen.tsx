@@ -4,6 +4,7 @@ import "./HomeScreen.css"
 import AppTopBar from "../components/TopBar/TopBar"
 import { GraphType } from "../types/Graph/GraphType"
 import { getGraphFromJSON } from "../primitives/GraphMethods"
+import ListGraph from "../components/graphs/ListGraph"
 
 const HomeScreen = () => {
     const graph1 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph1.json") as GraphType)
@@ -12,15 +13,13 @@ const HomeScreen = () => {
     const graph4 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph4.json") as GraphType)
     const graphs = [graph1, graph2, graph3, graph4]
 
-    return(
+    return (
         <>
             <AppTopBar />
             <div className="homeScreenContainer">
-                <div className="graphPresentationListContainer">
-                {
-                    graphs.map(graph => <GraphPresentation graph={graph}/>)
-                }
-                </div>  
+                <ListGraph graphs={graphs} title={"Graphes d'exemple"}/>
+                <ListGraph graphs={graphs}/>
+                <ListGraph graphs={graphs}/>
             </div>
         </>
     )
