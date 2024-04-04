@@ -1,5 +1,4 @@
 import React from "react"
-import GraphPresentation from "../components/graphs/GraphPresentation"
 import "./HomeScreen.css"
 import AppTopBar from "../components/TopBar/TopBar"
 import { GraphType } from "../types/Graph/GraphType"
@@ -18,8 +17,7 @@ const HomeScreen = () => {
             <AppTopBar />
             <div className="homeScreenContainer">
                 <ListGraph graphs={graphs} title={"Graphes d'exemple"}/>
-                <ListGraph graphs={graphs}/>
-                <ListGraph graphs={graphs}/>
+                
             </div>
         </>
     )
