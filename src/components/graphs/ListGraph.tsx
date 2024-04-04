@@ -1,4 +1,4 @@
-import React from "react"
+import React, { CSSProperties } from "react"
 import { GraphType } from "../../types/Graph/GraphType"
 import GraphPresentation from "./GraphPresentation"
 
@@ -6,11 +6,12 @@ import GraphPresentation from "./GraphPresentation"
 interface ListGraphInterface {
     graphs : GraphType[],
     title? : string,
+    style? : CSSProperties
 }
 
-const ListGraph = ({graphs, title} : ListGraphInterface) => {
+const ListGraph = ({graphs, title, style} : ListGraphInterface) => {
     return (
-    <div
+    <div style={style}
         className="graphPresentationListContainer">
         <h2>{title}</h2>
         <div className="ListGraph">
