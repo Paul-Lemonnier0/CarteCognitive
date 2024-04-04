@@ -1,6 +1,5 @@
 .homeScreenContainer {
     /*background-image: url("../data/Images/BackgroundHomePage.png"); /* à changer car image moche*/
-    background-color: rgba(184, 157, 248, 0.774);
     background-size: cover;
     background-position: center;
     padding: 20px;
