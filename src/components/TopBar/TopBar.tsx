@@ -1,7 +1,8 @@
 import React, { FC } from "react"
 import "./TopBarStyle.css"
 import { Link } from "react-router-dom"
-import { GrUserSettings } from "react-icons/gr";
+import { GrUserSettings} from "react-icons/gr";
+import { IoLogoFirebase } from "react-icons/io5";
 
 //barre de navigation
 const AppTopBar = () => {
@@ -27,6 +28,16 @@ const AppTopBar = () => {
                     Accueil
                 </p>
             </Link>
+            <Link to={"/FireBase"} style={{ fontFamily: "PoppinsSemiBold" }}>
+                <IoLogoFirebase style={
+                    {
+                        fontSize: 20,
+                        fontFamily: "PoppinsMedium",
+                        color: "black"
+                    }
+                } />
+            </Link>
+                
             <Link to={"/Profile"} style={{ fontFamily: "PoppinsSemiBold" }}>
                 <GrUserSettings style={
                     {

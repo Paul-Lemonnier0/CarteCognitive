@@ -7,6 +7,7 @@ import React from "react";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import GraphDetailsScreen from "./screens/GraphDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import FireBaseScreenTest from "./screens/FireBaseScreenTest";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFoundScreen/>
   },
+  {
+    path:"FireBase",
+    element: <FireBaseScreenTest/>
+  }
 ])
 
 export default router
