@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import "./GraphDetailsSideBarStyle.css"
 import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
@@ -11,18 +11,21 @@ import { useNavigate } from "react-router-dom"
 const GraphDetailsSideBar = () => {
 
     const {graphTitle, nodes, setFitViewNodes} = useContext(GraphContext)
-    const [filteredNodes, setFilteredNodes] = useState<Node[]>(nodes)
+    const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
+    const [searchValue, setSearchValue] = useState<string>("")
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
-        setFilteredNodes(nodes.filter(node => {
-            if("label" in node.data) {
-                return (node.data.label as string).toLowerCase().includes(newValue.toLowerCase())
-            } 
+    useEffect(() => {
+        // if(searchValue !== "") {
+            setFilteredNodes(nodes.filter(node => {
+                if("label" in node.data) {
+                    return (node.data.label as string).toLowerCase().includes(searchValue.toLowerCase())
+                } 
+    
+                return false
+            }))
+        // }
 
-            return false
-        }))
-    }
+    }, [nodes, searchValue])
 
     const [selectedNodeID, setSelectedNodeID] = useState<string | null>(null)
 
@@ -43,7 +46,7 @@ const GraphDetailsSideBar = () => {
 
             <p className="graphDetailsSideBarContainerTitleText">{graphTitle}</p>
 
-            <CustomSearchBar onChange={onChange}/>
+            <CustomSearchBar searchValue={searchValue} setSearchValue={setSearchValue}/>
             <CustomCard>
                 <div style={{
                     flexDirection: "column",
