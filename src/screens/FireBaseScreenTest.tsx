@@ -8,7 +8,7 @@ import { GraphType } from "../types/Graph/GraphType"
 const FireBaseScreenTest =() => {
 
     const graphTest = getGraphFromJSON(require("../constantes/Graph/DefaultGraph2.json"))
-    const [listGraph, setListGraph] = useState<{ [key: string]: any }[]>([]);
+    const [listGraph, setListGraph] = useState<GraphType[]>([])
 
 
     async function fetchGraphData(user : string) {

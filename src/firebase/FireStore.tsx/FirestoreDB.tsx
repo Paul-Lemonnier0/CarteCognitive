@@ -28,7 +28,7 @@ async function getCollection(user : string){
         ...d.data()
     }))
     console.log(data)
-    return data
+    return data as GraphType[]
 }
 
 
