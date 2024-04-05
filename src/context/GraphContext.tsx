@@ -138,6 +138,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
         const selected_nodes_id: string[] = []
         setColorField(color)
         setNodeColorField([])
+        console.log(nodeColorField)
         setNodes((prevNodes) => prevNodes.map(node => {
             if(node.type === "customNode") {
                 if(node.position.x >= x_left && node.position.x <= x_right) {
@@ -153,7 +154,6 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
             
             return node
         }))
-        console.log(changeColorWithField)
         setChangeColorWithField(!changeColorWithField)
         setSelectedNodesIDs([...selected_nodes_id])
     }

@@ -32,7 +32,7 @@ const GraphDetailsSideBar = () => {
     }
 
     const handleDoublePressOnNode = () => {
-        const selectedNode = nodes.filter(node => node.id === selectedNodeID)[0]
+        const selectedNode = nodes.filter(node => node.id === selectedNodesIDs[0])[0]
         setFitViewNodes([selectedNode])
     }
 
@@ -62,7 +62,7 @@ const GraphDetailsSideBar = () => {
                             node={node} 
                             onPress={() => handlePressOnNode(node.id)}
                             onDoublePress={handleDoublePressOnNode}
-                            isSelected={selectedNodeID === node.id}/>
+                            isSelected={selectedNodesIDs[0] === node.id}/>
                     ))
                 }
                 </div>

@@ -49,7 +49,7 @@ export const baseColors = [
     "#2ca02c", // Vert
     "#d62728", // Rouge
     "#9467bd", // Violet
-    "#8c564b", // Marron
+    "#FFFFFF", // Marron
     "#e377c2", // Rose
     "#7f7f7f", // Gris
 ];

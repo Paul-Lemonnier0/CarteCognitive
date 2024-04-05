@@ -29,6 +29,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     lastSelectedNodeID, 
     changeColorWithField , 
     nodeColorField, 
+    setNodeColorField,
     colorField, 
     deleteSelectedNodes
   } = useContext(GraphContext)
@@ -67,7 +68,6 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   }
 
   const chooseColorNode = (color = "white") => {
-    console.log("test couleur : ", colorNode)
     updateColorToolBar(color)
     setNodeStyle(nodeStyle(selected, color))
     setNodeData((prevData) => ({...prevData, couleur: color}))
@@ -82,9 +82,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   }
 
   useEffect(() => {
-    console.log(nodeColorField)
+    setNodeColorField([])
     nodeColorField.map((node,index) => {
-      console.log("ID : " , node)
       if(node === id) chooseColorNode(colorField)
 
     })

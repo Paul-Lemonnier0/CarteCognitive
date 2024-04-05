@@ -83,13 +83,6 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
           yPos + containerHeight,
           colorToolBar,
         )
-        const temp = selectNodesInPositionRange(
-          xPos, 
-          xPos + containerWidth, 
-          yPos, 
-          yPos + containerHeight,
-          colorToolBar,
-        )
 
       }
     }

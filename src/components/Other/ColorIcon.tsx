@@ -20,7 +20,7 @@ const ColorIcon: FC<ColorIconProps> = ({ onPress, isSelected, small, color = "wh
                 borderRadius: 500,
                 height: small ? 12 : 18,
                 aspectRatio: 1,
-                border: `${borderWidth}px solid ${borderColor}`,
+                border: `1px solid black`,
             }}
             onClick={onPress}
         ></div>
