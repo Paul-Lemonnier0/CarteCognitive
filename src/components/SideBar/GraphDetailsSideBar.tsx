@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom"
 
 const GraphDetailsSideBar = () => {
 
-    const {graphTitle, nodes, setFitViewNodes} = useContext(GraphContext)
+    const {graphTitle, nodes, setFitViewNodes, selectedNodesIDs, setSelectedNodesIDs} = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -27,10 +27,8 @@ const GraphDetailsSideBar = () => {
 
     }, [nodes, searchValue])
 
-    const [selectedNodeID, setSelectedNodeID] = useState<string | null>(null)
-
     const handlePressOnNode = (nodeID: string) => {
-        setSelectedNodeID(nodeID)
+        setSelectedNodesIDs([nodeID])
     }
 
     const handleDoublePressOnNode = () => {
@@ -45,7 +43,7 @@ const GraphDetailsSideBar = () => {
             <GoBackButton onPress={() => navigate(-1)}/>
 
             <p className="graphDetailsSideBarContainerTitleText">{graphTitle}</p>
-
+            
             <CustomSearchBar searchValue={searchValue} setSearchValue={setSearchValue}/>
             <CustomCard>
                 <div style={{

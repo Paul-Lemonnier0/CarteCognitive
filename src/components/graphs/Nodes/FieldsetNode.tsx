@@ -27,7 +27,7 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
   
   const {setIsWriting} = useContext(AppContext)
 
-  const {lastSelectedNodeID, selectNodesInPositionRange} = useContext(GraphContext)
+  const {lastSelectedNodeID, selectNodesInPositionRange, updateNodeData} = useContext(GraphContext)
 
   const [fieldsetData, setFieldsetData] = useState<FieldsetNodeData>({...data, couleur: data.couleur ?? "#FFFFFF"})
 
@@ -51,6 +51,10 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
     else setResizable(false)
 
   }, [selected])
+
+  useEffect(() => {
+    updateNodeData(id, fieldsetData)
+  }, [fieldsetData])
 
   const chooseColorNode = (color = "#FFFFFF") => {
     updateColorToolBar(color)

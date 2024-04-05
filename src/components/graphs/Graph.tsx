@@ -6,6 +6,7 @@ import { AppContext, PositionType } from '../../context/AppContext';
 import { GraphContext } from '../../context/GraphContext';
 import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
+import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
 
 let id = 2;
 const getId = () => `${id++}`;
@@ -170,7 +171,19 @@ export default function Graph() {
                 connectionLineStyle={connectionLineStyle}
                 onNodeClick={handleNodeSelection}>
                 <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10}/>
-                <MiniMap/>
+                <MiniMap 
+                    nodeColor={(node: Node) => {
+                        if(!node.data.couleur || node.data.couleur === "#FFFFFF") 
+                            return "#e2e2e2"
+                        if(node.type === "customNode")
+                            return node.data.couleur
+
+                        else {
+                            const colorRGBA = getStringRGBAFromHexa(node.data.couleur, 0.2)
+                            return colorRGBA
+                        }
+                    }}
+                />
                 <Controls/>
             </ReactFlow>
         </div>
