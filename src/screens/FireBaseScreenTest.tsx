@@ -16,7 +16,8 @@ const FireBaseScreenTest =() => {
         setListGraph(graphCollection);
     }
     useEffect(() => {
-        fetchGraphData;
+        //récupération des graph du User "Default" au chargement de la page
+        fetchGraphData("Default");
     }, []);
     
     return(
