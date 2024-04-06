@@ -106,7 +106,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
         >
           {id}
           {
-            //TODO: changer le id par label pour valuer les nodes
+            //TODO: changer le id par label pour valuer les nodes"
           }
         </div>
       </EdgeLabelRenderer>

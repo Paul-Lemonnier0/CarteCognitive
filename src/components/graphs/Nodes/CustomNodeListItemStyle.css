@@ -14,3 +14,25 @@
 .customNodeListItemContainer h3 {
     font-family: "PoppinsLight";
 }
+
+.nodeCreator {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: 10px;
+    cursor: pointer;
+    position: absolute;
+    background-color: white;
+    border-radius: 10%;
+    top: -180%;
+    
+}
+
+.nodeCreatorIcon {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 2px;
+    white-space: nowrap;
+
+}

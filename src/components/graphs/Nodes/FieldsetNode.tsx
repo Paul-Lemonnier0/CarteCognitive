@@ -16,6 +16,7 @@ export type FieldsetNodeData = {
   resizable: boolean;
   rotatable: boolean;
   couleur?: string;
+  date: string ;
 };
 
 export interface FieldsetNodeProps extends NodeProps {

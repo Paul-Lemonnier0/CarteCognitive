@@ -82,6 +82,10 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState(false)
 
+    const current = new Date();
+    const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`
+
+
     const [fitViewNodes, setFitViewNodes] = useState<Node[]>([])
 
     const nodeTypes = useMemo(() => ({customNode: CustomNode, fieldsetNode: FieldsetNode}), []);
@@ -105,8 +109,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
     const [colorField, setColorField] = useState("white")
 
     const addNode = (label: string, position: PositionType, type = "customNode") => {
-        
-        const node = createNewNodeObject(nodeID, label, position, type)
+        const node = createNewNodeObject(nodeID, label, position, type,date)
 
         setNodes((previousNodes) => {
             setNodeID(nodeID + 1);

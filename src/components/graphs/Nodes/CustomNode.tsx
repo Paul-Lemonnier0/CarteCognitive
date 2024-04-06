@@ -5,7 +5,7 @@ import { nodeStyle  } from "../../../styles/Graphes/NodeStyle";
 import {useStore } from 'reactflow';
 import "./CustomNodeStyle.css"
 import theme, { baseColors } from "../../../constantes/Colors";
-import { FiCopy, FiEdit3, FiLink, FiTrash2 } from "react-icons/fi";
+import { FiCopy, FiUser, FiLink, FiTrash2, FiClock } from "react-icons/fi";
 import { AppContext } from "../../../context/AppContext";
 import { GraphContext } from "../../../context/GraphContext";
 import ColorIcon from "../../Other/ColorIcon";
@@ -13,6 +13,7 @@ import ColorIcon from "../../Other/ColorIcon";
 export type CustomNodeData = {
   label: string;
   couleur?: string;
+  date?: string;
 };
 
 export interface CustomNodeProps extends NodeProps {
@@ -22,7 +23,6 @@ export interface CustomNodeProps extends NodeProps {
 const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
-
   const {setIsWriting, colorNode, wantSelectColor } = useContext(AppContext)
   const {
     updateNodeData, 
@@ -33,6 +33,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     colorField, 
     deleteSelectedNodes
   } = useContext(GraphContext)
+
+  if(!data.date) data.date = "Non Definis"
 
   const [colorToolBar, updateColorToolBar] = useState("white")
 
@@ -45,6 +47,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const isConnecting = !!connectionNodeId;
 
   const [node_style, setNodeStyle] = useState(nodeStyle(selected))
+
+  const [showCreator, setShoCreator] = useState(false)
 
 
   useEffect(() => {
@@ -89,6 +93,10 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     })
   }, [changeColorWithField])
 
+  const ShowCreator = () => {
+    setShoCreator(!showCreator)
+  }
+
   return (
     <div className="customNodeContainer" >  
       {
@@ -96,9 +104,24 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           <div className="customNodeIconContainer">
             <FiLink />
           </div>
-          <div className="customNodeIconContainer">
-            <FiCopy />
+          <div className="customNodeIconContainer" onClick={ShowCreator}>
+            <FiUser />
           </div>
+          {
+            showCreator ?
+            <div className="nodeCreator">
+              <div className="nodeCreatorIcon">
+                <FiUser />
+                <span>Nicolas Mdr</span>
+                
+              </div>
+              <div className="nodeCreatorIcon">
+                <FiClock />
+                {data.date}
+              </div>
+            </div>
+            : undefined
+          }
           <div className="customNodeIconContainer" onClick={deleteSelectedNodes}>
             <FiTrash2 />
           </div>
