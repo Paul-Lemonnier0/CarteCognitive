@@ -5,5 +5,6 @@ export interface GraphType {
     nbNodes?: number,
     nbEdges?: number,
     nodes: Node[],
-    edges: Edge[]
+    edges: Edge[],
+    id : string
 }
