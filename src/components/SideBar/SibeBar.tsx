@@ -1,4 +1,4 @@
-import React, { useState, FC, useContext, useEffect } from "react"
+import React, { useState, FC, useContext, useEffect, } from "react"
 import { nodeStyle } from "../../styles/Graphes/NodeStyle";
 import "./SideBarStyle.css"
 import { GraphContext } from "../../context/GraphContext";
@@ -8,11 +8,13 @@ import { CustomNodeIcon } from "../graphs/Nodes/CustomNodeIcon";
 import { FillColorSideBarIcon } from "./Icons/FillColorSideBarIcon";
 import ColorIcon from "../Other/ColorIcon";
 import { baseColors } from "../../constantes/Colors";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor } = useContext(AppContext)
+    const {showEdge,setShowEdge} = useContext(GraphContext)
     const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
             event.dataTransfer.setData('application/reactflow', nodeType);
             event.dataTransfer.effectAllowed = 'move';
@@ -30,6 +32,10 @@ const SideBar = () => {
     const chooseColorNode = (color = "white") => {
         setColorSibeBar(color);
         setColorNode(color);
+    }
+
+    const clickShowEdge = () => {
+        setShowEdge(!showEdge)
     }
 
     return(
@@ -56,7 +62,7 @@ const SideBar = () => {
             </div>
 
             <div style={{display: "flex", flexDirection: "row"}}>
-                <div className="sideBarItem" onClick={ChooseColor}>
+                <div className="sideBarItem" onClick={ChooseColor} style={{ margin:"auto"}}>
                     <FillColorSideBarIcon color={colorNode}/>
                     <p>Couleur</p>
                 </div>
@@ -68,6 +74,14 @@ const SideBar = () => {
                         )
                     }
                 </div>
+            </div>
+
+            <div className="sideBarItem" >
+                {
+                    showEdge ? <FiEye size={30}  onClick={clickShowEdge} style={{ margin:"auto"}}/> 
+                    : <FiEyeOff size={30} onClick={clickShowEdge} style={{ margin:"auto"}}/>
+                }
+                <p>Etiquettes</p>
             </div>
         </div>
     )
