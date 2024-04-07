@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import AppTopBar from "../components/TopBar/TopBar"
-import { CreateDoc, getCollection } from "../firebase/FireStore.tsx/FirestoreDB"
+import { CreateDoc, getCollection, setDocument } from "../firebase/FireStore.tsx/FirestoreDB"
 import { getGraphFromJSON } from "../primitives/GraphMethods"
 import ListGraph from "../components/graphs/ListGraph"
 import { GraphType } from "../types/Graph/GraphType"
@@ -28,7 +28,15 @@ const FireBaseScreenTest =() => {
         
         <button onClick={()=>(CreateDoc("Default", graphTest))}>Ajout Graphe</button>
         <button onClick={()=>(fetchGraphData("Default"))}>récupération Graphe</button>
-        <ListGraph graphs={listGraph} title={"Graphes d'exemple"}/>
+        <button onClick={()=>{
+            //btrKTBaNdpHC8fDwrgN4
+            const newGraph = listGraph[1]
+            newGraph.title = "toto"
+            listGraph[1] = newGraph
+            setDocument("Default", newGraph, "btrKTBaNdpHC8fDwrgN4")
+            console.log(listGraph[1].title)
+        }}>modifier Graphe</button>
+        <ListGraph graphs={listGraph} title={"Default"}/>
         </div>
     )
 }

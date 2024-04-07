@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import {getFirestore, addDoc, collection, getDocs, QuerySnapshot } from "firebase/firestore";
-import {firebaseConfig} from "../FireBaseConnexion"
+import { getFirestore, addDoc, collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
 
 // TODO: Replace the following with your app's Firebase project configuration
@@ -16,21 +16,53 @@ const db = getFirestore(app);
 
 
 
-async function CreateDoc(user : string, graph : GraphType) {
+async function CreateDoc(user: string, graph: GraphType) {
     const docRef = await addDoc(collection(db, user), graph)
     console.log("id du document : ", docRef.id)
 }
 
-async function getCollection(user : string){
+/**
+ * 
+ * @param user le nom de l'utilisateur pour récupérer tout ces graphes
+ * @returns 
+ */
+
+async function getCollection(user: string) {
     const doc = await (getDocs(collection(db, user)))
     //parcours de toute la collection pour la stocker dans un tableau data
-    const data = doc.docs.map(d=>({
-        ...d.data()
-    }))
+    const data = doc.docs.map(d => {
+        // Obtention des données du document Firestore
+        const documentData = d.data();
+
+        // Récupération de l'ID du document Firestore
+        const documentId = d.id;
+
+        // Création d'un nouvel objet avec l'ID actualisé
+        const modifiedData = {
+            ...documentData,
+            id: documentId
+        };
+
+        return modifiedData;
+    })
     console.log(data)
     return data as GraphType[]
 }
 
+/**
+ * 
+ * @param user l'utilisateur qui stock le graphe
+ * @param graph le nouveau graphe
+ * @param id id du document
+ */
+async function setDocument(user: string, graph: GraphType, id: string) {
+    const docRef = collection(db, user)
+    await setDoc(doc(docRef, id), graph, { merge: true })
+
+
+
+}
+
 
 export default db
-export {CreateDoc, getCollection}
+export { CreateDoc, getCollection, setDocument }
