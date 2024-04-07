@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import AppTopBar from "../components/TopBar/TopBar"
-import { CreateDoc, getCollection, setDocument } from "../firebase/FireStore.tsx/FirestoreDB"
+import { CreateDoc, deleteDocument, getCollection, setDocument } from "../firebase/FireStore.tsx/FirestoreDB"
 import { getGraphFromJSON } from "../primitives/GraphMethods"
 import ListGraph from "../components/graphs/ListGraph"
 import { GraphType } from "../types/Graph/GraphType"
@@ -36,6 +36,7 @@ const FireBaseScreenTest =() => {
             setDocument("Default", newGraph, "btrKTBaNdpHC8fDwrgN4")
             console.log(listGraph[1].title)
         }}>modifier Graphe</button>
+        <button onClick={()=>(deleteDocument("Default", "9eUNJQ39ZKpJ65XFvMRq"))}>Suppression Graphe</button>
         <ListGraph graphs={listGraph} title={"Default"}/>
         </div>
     )

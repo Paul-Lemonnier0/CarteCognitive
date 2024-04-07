@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, addDoc, collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc } from "firebase/firestore";
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
 
@@ -24,7 +24,7 @@ async function CreateDoc(user: string, graph: GraphType) {
 /**
  * 
  * @param user le nom de l'utilisateur pour récupérer tout ces graphes
- * @returns 
+ * @returns retourne la liste de tout les graphes de l'utilisateur
  */
 
 async function getCollection(user: string) {
@@ -59,10 +59,18 @@ async function setDocument(user: string, graph: GraphType, id: string) {
     const docRef = collection(db, user)
     await setDoc(doc(docRef, id), graph, { merge: true })
 
+}
 
-
+async function deleteDocument(user : string, documentId : string){
+    try{
+        const docRef = doc(db, user, documentId)
+        await deleteDoc(docRef);
+        console.log("Document supprimé")
+    } catch (error){
+        console.log("erreur Suppression : ", error)
+    }
 }
 
 
 export default db
-export { CreateDoc, getCollection, setDocument }
+export { CreateDoc, getCollection, setDocument, deleteDocument }
