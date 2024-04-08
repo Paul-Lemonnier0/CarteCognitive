@@ -30,7 +30,7 @@ async function CreateDoc(user: string, graph: GraphType) {
 async function getCollection(user: string) {
     const doc = await (getDocs(collection(db, user)))
     //parcours de toute la collection pour la stocker dans un tableau data
-    const data = doc.docs.map(d => {
+    const data = doc.docs.map((d: any) => {
         // Obtention des données du document Firestore
         const documentData = d.data();
 

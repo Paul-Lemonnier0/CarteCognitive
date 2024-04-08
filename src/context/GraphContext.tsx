@@ -9,6 +9,7 @@ import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 import { AppContext } from "./AppContext";
 
 interface GraphContextType {
+    id: string,
     graphTitle: string,
     setGraphTitle: Dispatch<string>,
     nodes: Node[],
@@ -42,6 +43,7 @@ interface GraphContextType {
 }
 
 const GraphContext = createContext<GraphContextType>({
+    id: "",
     graphTitle: "",
     setGraphTitle: () => {},
     nodes: [],
@@ -72,18 +74,17 @@ const GraphContext = createContext<GraphContextType>({
     setFitViewNodes: () => {},
     showEdge: true,
     setShowEdge: () => {},
-
-
 })
 
 interface GraphContextProviderType {
     defaultNodes: Node[],
     defaultEdges: Edge[],
     graphName: string,
+    id: string,
     children: ReactNode
 }
 
-const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}: GraphContextProviderType) => {
+const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, children}: GraphContextProviderType) => {
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState(false)
@@ -123,7 +124,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
             return [...previousNodes, node];
         });
     }
-    
+
     const deleteSelectedNodes = () => {
         const updateEdgesFirst = edges.filter(edge => !edge.selected)
         const selectedNodeIDs = nodes.filter(node => node.selected).map(node => node.id)
@@ -170,6 +171,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, children}:
 
     return(
         <GraphContext.Provider value={{
+            id,
             graphTitle, setGraphTitle,
             fitViewNodes, setFitViewNodes,
             nodeID, setNodeID,

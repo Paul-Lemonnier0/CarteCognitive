@@ -19,11 +19,10 @@ const GraphDetailsScreen = () => {
         <div style={{ display: "flex", flexDirection: "row", flex: 1 }}
             className="graphDetailsContainer">
             
-            <GraphContextProvider defaultNodes={graph.nodes} defaultEdges={graph.edges} graphName={graph.title}>
+            <GraphContextProvider defaultNodes={graph.nodes} defaultEdges={graph.edges} graphName={graph.title} id={graph.id}>
                 <GraphDetailsSideBar/>   
                 <Graph/>    
                 <SideBar/>
- 
             </GraphContextProvider>
         </div>
     )

@@ -7,10 +7,11 @@ import { GraphContext } from "../../context/GraphContext"
 import { Node } from "reactflow"
 import { GoBackButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
+import { GraphType } from "../../types/Graph/GraphType"
 
 const GraphDetailsSideBar = () => {
 
-    const {graphTitle, nodes, setFitViewNodes, selectedNodesIDs, setSelectedNodesIDs} = useContext(GraphContext)
+    const {graphTitle, nodes, edges, id, setFitViewNodes, selectedNodesIDs, setSelectedNodesIDs} = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -38,9 +39,22 @@ const GraphDetailsSideBar = () => {
 
     const navigate = useNavigate()
 
+    const handleGoBack = () => {
+
+        const newGraph: GraphType = {
+            nodes: nodes,
+            edges: edges,
+            id: id,
+            title: graphTitle
+        }
+
+        //firestore
+        navigate(-1)
+    }
+
     return(
         <div className={"graphDetailsSideBarContainer"}>
-            <GoBackButton onPress={() => navigate(-1)}/>
+            <GoBackButton onPress={handleGoBack}/>
 
             <p className="graphDetailsSideBarContainerTitleText">{graphTitle}</p>
             
