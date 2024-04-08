@@ -1,10 +1,30 @@
 .customSearchBarInput {
     border: none;
     outline: none;
-    margin-block: -10px;
+    margin-block: 10px;
     flex: 1;
     font-size: 16px;
     background-color: transparent;
     font-weight: bold;
-    font-family: "PoppinsLight";
+    font-family: "Poppins";
+    margin-left: 40px;
+}
+
+.searchBarSubContainer {
+    border-radius: 10px;
+    width: auto;
+    height: 45px;
+    margin: 0;
+    margin: 5px 15px;
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+    transition: 0.3s;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+}
+
+#searchIconContainer {
+    position: absolute;
 }

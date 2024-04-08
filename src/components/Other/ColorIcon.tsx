@@ -8,9 +8,7 @@ interface ColorIconProps {
     small?: boolean
 }
 
-const ColorIcon: FC<ColorIconProps> = ({ onPress, isSelected, small, color = "white" }) => {
-    const borderColor = isSelected ? "black" : color
-    const borderWidth = small ? 3 : 4
+const ColorIcon: FC<ColorIconProps> = ({ onPress, small, color = "white" }) => {
     return (
         <div className="customNodeIconContainer" style={{padding: small ? 3 : 5}}>
         <div

@@ -3,6 +3,7 @@ import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRe
 import { getEdgeParams } from '../../../utils/utils';
 import React from 'react';
 import { GraphContext } from '../../../context/GraphContext';
+import CustomEdgeLabel from './CustomEdgeLabel';
 
 export type GetSpecialPathParams = {
   sourceX: number;
@@ -35,7 +36,6 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const sourceNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(source), [source])) as Node;
   const targetNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(target), [target])) as Node;
 
-  if(source === target) return null
 
   const {showEdge} = useContext(GraphContext)
 
@@ -50,6 +50,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
     return edgeExists;
   });
 
+  if(source === target) return null
 
   if (!sourceNode || !targetNode) {
     return null;
@@ -88,39 +89,15 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const labelX = (sx + tx) / 2; // Position X du label (milieu de l'edge)
   const labelY = (sy + ty) / 2 + offset; // Position Y du label (milieu de l'edge)
 
-
   return (
     <>
-  <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
-  <EdgeLabelRenderer>
-  { showEdge ? 
-    <div
-      style={{
-        position: 'absolute',
-        transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-        background: '#FFFFFF',
-        border: "2px solid #b1b1b7",
-        paddingLeft: 12,
-        paddingRight: 12,
-        paddingBottom: 8,
-        paddingTop: 8,
-        borderRadius: 8,
-        fontSize: 12,
-        fontWeight: 700,
-      }}      
-       
-      className="nodrag nopan"
-      
-    >
-    
-      {id}
-      {
-        //TODO: changer le id par label pour valuer les nodes"
+      <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
+      {showEdge && 
+        <EdgeLabelRenderer>
+          <CustomEdgeLabel label={id} labelX={labelX} labelY={labelY}/>
+        </EdgeLabelRenderer>
       }
-    </div> : undefined }
-    
-  </EdgeLabelRenderer> 
-  </>
+    </>
   );
 }
 
