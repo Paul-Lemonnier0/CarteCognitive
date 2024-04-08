@@ -1,8 +1,6 @@
 .sideBar {
     background-color: white;
 
-    position: fixed;
-    right:0;
     height: 100%;
 
     display: flex;
@@ -53,7 +51,7 @@
 
 div.customSibeToolbar {
     position: absolute;
-    background-color: #ebedee;
+    background-color: white;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
