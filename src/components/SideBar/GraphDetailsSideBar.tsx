@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { FaPen } from "react-icons/fa6";
+import { FiEdit3 } from "react-icons/fi";
 import "./GraphDetailsSideBarStyle.css"
 import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
@@ -150,7 +150,7 @@ const GraphDetailsSideBar = () => {
         !isExpanded && setIsExpanded(true)
     }
 
-    const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3], baseColors[4]]
+    const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3]]
 
     return (
         <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
@@ -165,7 +165,7 @@ const GraphDetailsSideBar = () => {
                 }
 
                 <div>
-                    <FaPen/>
+                    <IconButton Icon={FiEdit3} onPress={() => {}}/>
                 </div>
             </div>
         
@@ -248,7 +248,7 @@ const GraphDetailsSideBar = () => {
             </div>
             
             
-            <div className={"graphSideBarUtils"}>
+            <div id="footer">
                 <li className="graphSideBarRow" onClick={handleChangeExpandState}>
                     <span style={{ marginLeft: -15 }}>
                         <IconButton onPress={handleChangeExpandState}>

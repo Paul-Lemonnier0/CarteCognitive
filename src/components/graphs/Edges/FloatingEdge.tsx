@@ -91,35 +91,12 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
   return (
     <>
-    <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
-    <EdgeLabelRenderer>
-    { showEdge ? 
-        <div
-        style={{position: 'absolute',
-        transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-        background: '#FFFFFF',
-        border: "2px solid #b1b1b7",
-        paddingLeft: 12,
-        paddingRight: 12,
-        paddingBottom: 8,
-        paddingTop: 8,
-        borderRadius: 8,
-        fontSize: 12,
-        fontWeight: 700,}} 
-        >
-        <p className="customEdgeText" >{id}</p> </div>
-         : undefined
-    }     
-
-    </EdgeLabelRenderer> 
-
       <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
       {showEdge && 
         <EdgeLabelRenderer>
           <CustomEdgeLabel label={id} labelX={labelX} labelY={labelY}/>
         </EdgeLabelRenderer>
       }
-
     </>
   );
 }
