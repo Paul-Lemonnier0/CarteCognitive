@@ -1,0 +1,19 @@
+.inputCustomEdge {
+    border: none; 
+    outline: none; 
+    width: 80%;
+    text-align: center;
+    height: 80%;
+    border-radius: 50%;
+    font-size: 14px;
+  }
+
+  .customEdgeText {
+    border: none; 
+    outline: none; 
+    width: 80%;
+    text-align: center;
+    height: 80%;
+    border-radius: 50%;
+    font-size: 14px;
+  }

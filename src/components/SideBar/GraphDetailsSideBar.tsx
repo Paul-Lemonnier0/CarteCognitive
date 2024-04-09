@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
+import { FaPen } from "react-icons/fa6";
 import "./GraphDetailsSideBarStyle.css"
 import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
@@ -15,14 +16,27 @@ import { RxText } from "react-icons/rx";
 import IconTextInput from "../TextInput/IconTextInput"
 import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
+import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
 
 const GraphDetailsSideBar = () => {
 
     const {graphTitle, nodes, setFitViewNodes, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData} = useContext(GraphContext)
+    const { graphTitle, nodes, edges, id, setFitViewNodes, selectedNodesIDs, setSelectedNodesIDs } = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
+    const [editedTitle, setEditedTitle] = useState(graphTitle)
+
     const [isExpanded, setIsExpanded] = useState<boolean>(true)
+
+    const [titleIsModif, setTitleIsModif] = useState(false)
+
+    const startGraph: GraphType = {
+        nodes: nodes,
+        edges: edges,
+        id: id,
+        title: editedTitle
+    }
 
     const [selectedNode, setSelectedNode] = useState<Node | undefined>(lastSelectedNodeID ? nodes.filter(node => node.id === lastSelectedNodeID)[0] : undefined)
     
@@ -45,7 +59,7 @@ const GraphDetailsSideBar = () => {
         setFilteredNodes(nodes.filter(node => {
             if("data" in node && "label" in node.data) {
                 return (node.data.label as string).toLowerCase().includes(searchValue.toLowerCase())
-            } 
+            }
 
             return false
         }))
@@ -68,7 +82,18 @@ const GraphDetailsSideBar = () => {
 
     const handleGoBack = () => {
 
-        //firestore
+        const newGraph: GraphType = {
+            nodes: nodes,
+            edges: edges,
+            id: id,
+            title: editedTitle
+        }
+        //compare les deux graph en chaine de caractère
+        console.log(`${startGraph.edges} \t ${newGraph.edges}`)
+        if (JSON.stringify(startGraph) == JSON.stringify(newGraph)) {
+            setDocument("Default", newGraph, newGraph.id)
+            console.log("graphe modifiée")
+        }
         navigate(-1)
     }
 
@@ -128,7 +153,60 @@ const GraphDetailsSideBar = () => {
     const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3], baseColors[4]]
 
 
-    return(        
+    const isSommetSelected = selectedNode && selectedNode.type && selectedNode.type === "customNode"
+
+    const selectedNodeTypeString = isSommetSelected ?
+        "Sommet" : "Zone"
+
+    const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedNodeData((prevData) => ({...prevData, label: e.target.value ?? ""}))
+    }
+
+    const handleUpdateNodeLabel = () => {
+        if(selectedNode) {
+            if(!selectedNode.data) {
+                updateNodeData(selectedNode.id, {...selectedNodeData})
+            }
+    
+            else {
+                if(selectedNode.data.label) {
+                    if(selectedNode.data.label !== selectedNodeData.label) {
+                        updateNodeData(selectedNode.id, {...selectedNodeData})
+                    }
+                }
+    
+                else updateNodeData(selectedNode.id, {...selectedNodeData})
+            }
+        }
+    }
+
+    const handleUpdateColor = (color: string) => {
+        if(selectedNode) {
+            if(!selectedNode.data) {
+                updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
+            }
+    
+            else {
+                if(selectedNode.data.couleur) {
+                    if(selectedNode.data.couleur !== color) {
+                        updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
+                    }
+                }
+    
+                else updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
+            }
+        }
+    }
+
+    const handleClickOnUnExpandedListItem = () => {
+        !isExpanded && setIsExpanded(true)
+    }
+
+    const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3], baseColors[4]]
+
+
+
+    return (
         <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
             <div id="header">
                 <div id="baseButton">
@@ -218,12 +296,12 @@ const GraphDetailsSideBar = () => {
             
             <div className={"graphSideBarUtils"}>
                 <li className="graphSideBarRow" onClick={handleChangeExpandState}>
-                    <span style={{marginLeft: -15}}> 
+                    <span style={{ marginLeft: -15 }}>
                         <IconButton onPress={handleChangeExpandState}>
-                            <IoChevronForward  id="developIcon"/>
+                            <IoChevronForward id="developIcon" />
                         </IconButton>
                     </span>
-                    <div id="title" style={{marginLeft: 15}}>
+                    <div id="title" style={{ marginLeft: 15 }}>
                         Réduire
                     </div>
                 </li>
