@@ -1,8 +1,7 @@
-import React, { FC, ReactElement, ReactNode } from 'react'
+import React, { FC, ReactNode } from 'react'
 import { IoChevronBack } from "react-icons/io5";
 import "./IconButtonsStyle.css"
 import { IconType } from 'react-icons';
-import { BiColorFill } from 'react-icons/bi';
 
 interface IconButtonProps {
     onPress: () => void,
@@ -42,7 +41,8 @@ interface BackgroundIconProps {
   size?: number,
   isSelected?: boolean,
   Icon: IconType,
-
+  hiddenIcon?: boolean,
+  iconHover?: boolean
 }
 
 export const BackgroundIcon: FC<BackgroundIconProps> = ({
@@ -51,21 +51,25 @@ export const BackgroundIcon: FC<BackgroundIconProps> = ({
   selectedBorderColor,
   size, 
   isSelected,
-  squared
+  squared,
+  hiddenIcon,
+  iconHover
 }) => {
   return(
     <div style={{
         backgroundColor: color ?? "#ebedee",
         width: size ?? 40,
         padding: 10,
-        borderRadius: squared ? 8 : 500,
+        borderRadius: squared ? 10 : 500,
         aspectRatio: 1/1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: isSelected ? `3px solid ${selectedBorderColor ?? "black"}` : `3px solid ${color}`
+        border: isSelected ? `3px solid ${selectedBorderColor ?? "black"}` : `3px solid ${color ?? "#ebedee"}`
       }}>
-        <Icon size={25}/>
+        <div style={{display: "flex"}} className={iconHover ? "iconHover" : ""}>
+          <Icon size={25} color={hiddenIcon ? "transparent" : "black"}/>
+        </div>
     </div>
   )
 }

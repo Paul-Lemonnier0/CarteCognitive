@@ -1,7 +1,9 @@
-import { FC, useEffect, useState, useRef, useContext} from "react";
-import {Handle, NodeProps, Position , useUpdateNodeInternals,
+import { FC, useEffect, useState, useContext} from "react";
+import {
+  NodeProps,
   NodeResizer,
-  useKeyPress,} from "reactflow";
+  useKeyPress
+} from "reactflow";
 import React from 'react'
 import "./FieldsetNodeStyle.css"
 import { GraphContext } from "../../../context/GraphContext";
@@ -24,28 +26,26 @@ export interface FieldsetNodeProps extends NodeProps {
 }
 
 export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, yPos}) => {
-  const [resizable, setResizable] = useState(true)
   
   const {setIsWriting} = useContext(AppContext)
 
   const {lastSelectedNodeID, selectNodesInPositionRange, updateNodeData} = useContext(GraphContext)
+  
+  const [isSelectingColor, setIsSelectingColor] = useState(false)
 
-  const [fieldsetData, setFieldsetData] = useState<FieldsetNodeData>({...data, couleur: data.couleur ?? "#FFFFFF"})
+  const [label, setLabel] = useState(data.label ?? "")
+  const [selectedColor, setSelectedColor] = useState(data.couleur ?? "white")
+  
+  const [resizable, setResizable] = useState(true)
 
-  const [selectColor, setSelectColor] = useState(false)
-  const [colorToolBar, updateColorToolBar] = useState(fieldsetData.couleur)
+  useEffect(() => {
+    setLabel(data.label)
+  }, [data.label])
 
-  const handleStartWriting = () => {
-    setIsWriting(true)
-  }
-
-  const handleEndWriting = () => {
-    setIsWriting(false)
-  }
-
-  const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldsetData((prevData) => ({...prevData, label: e.target.value}))
-  }
+  
+  useEffect(() => {
+    setSelectedColor(data.couleur ?? "white")
+  }, [data.couleur])
 
   useEffect(() => {
     if(selected) setResizable(true)
@@ -53,21 +53,36 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
 
   }, [selected])
 
-  useEffect(() => {
-    updateNodeData(id, fieldsetData)
-  }, [fieldsetData])
+  const handleStartWriting = () => {
+    setIsWriting(true)
+  }
 
-  const chooseColorNode = (color = "#FFFFFF") => {
-    updateColorToolBar(color)
-    setFieldsetData((prevData) => ({...prevData, couleur: color}))
+  const handleEndWriting = () => {
+    if(!data.label || label !== data.label) {
+      updateNodeData(id, {...data, label})
+    }
+    
+    setIsWriting(false)
+  }
+
+  const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLabel(e.target.value)
+  }
+
+  const chooseColorNode = (color = "white") => {
+    setSelectedColor(color)
+
+    if(!data.couleur || selectedColor !== data.couleur) {
+      updateNodeData(id, {...data, couleur: selectedColor})
+    }
   }
 
   const clickColorNode = () => {
-    setSelectColor(!selectColor);
+    setIsSelectingColor(!isSelectingColor);
   }
 
-  const backgroundColorRGBA = getStringRGBAFromHexa(fieldsetData.couleur ?? "#FFFFFF", 0.2)
-  const backgroundColorRGB = getStringRGBFromHexa(fieldsetData.couleur ?? "#FFFFFF", 0.2)
+  const backgroundColorRGBA = getStringRGBAFromHexa(selectedColor, 0.2)
+  const backgroundColorRGB = getStringRGBFromHexa(selectedColor, 0.2)
 
   const shiftKeyPressed = useKeyPress("Shift")
 
@@ -82,9 +97,8 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
           xPos + containerWidth, 
           yPos, 
           yPos + containerHeight,
-          colorToolBar,
+          selectedColor,
         )
-
       }
     }
   }
@@ -102,9 +116,7 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
             !selected || shiftKeyPressed ?
 
             <div className="textLegendFieldsetNodeContainer" style={{backgroundColor: backgroundColorRGB}}>
-              <div style={{padding: 8}}>
-                <p className="customNodeText">{fieldsetData.label === "" ? " " : fieldsetData.label}</p>
-              </div>
+                <p className="customNodeText">{label === "" ? " " : label}</p>
             </div>
 
             :    
@@ -117,7 +129,7 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
                 onFocus={handleStartWriting}
                 onBlur={handleEndWriting}
                 type="text" 
-                value={fieldsetData.label}
+                value={label}
               />
             </div>
           }
@@ -125,13 +137,13 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
           {
             <div className={`customFieldToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`}>
               <div className="customFieldIconContainer">
-                <ColorIcon small isSelected color={fieldsetData.couleur ?? "white"} onPress={clickColorNode}/>
+                <ColorIcon small isSelected color={selectedColor ?? "white"} onPress={clickColorNode}/>
               </div>
               
-              <div className={`subCustomFieldToolbar ${selectColor ? '' : 'customFieldToolbarHidden'}`}>
+              <div className={`subCustomFieldToolbar ${isSelectingColor ? '' : 'customFieldToolbarHidden'}`}>
                 {
                   baseColors.map(baseColor =>
-                      <ColorIcon small isSelected={baseColor === fieldsetData.couleur} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
                   )
                 }
               </div>

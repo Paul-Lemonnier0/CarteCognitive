@@ -1,7 +1,6 @@
 import React from "react"
 import { GraphType } from "../types/Graph/GraphType"
 import { useLocation } from "react-router-dom";
-import AppTopBar, { GraphTopBar } from "../components/TopBar/TopBar";
 
 import "./GraphDetailsScreen.css"
 import SideBar from "../components/SideBar/SibeBar";

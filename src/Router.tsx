@@ -1,6 +1,5 @@
 import {
     createBrowserRouter,
-    RouterProvider,
   } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
 import React from "react";
@@ -8,6 +7,7 @@ import NotFoundScreen from "./screens/NotFoundScreen";
 import GraphDetailsScreen from "./screens/GraphDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import FireBaseScreenTest from "./screens/FireBaseScreenTest";
+
 const router = createBrowserRouter([
   {
     path: "/",

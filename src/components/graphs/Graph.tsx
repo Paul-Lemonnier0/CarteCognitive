@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, NodeMouseHandler, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useKeyPress, useOnSelectionChange } from 'reactflow';
+import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
 import { AppContext, PositionType } from '../../context/AppContext';
@@ -8,13 +8,9 @@ import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
 
-let id = 2;
-const getId = () => `${id++}`;
-
 export default function Graph() {
     const {
         fitViewNodes,
-        nodeID,
         lastSelectedNodeID, setLastSelectedNodeID,
         selectedNodesIDs, setSelectedNodesIDs,
         nodes, setNodes, onNodesChange,
@@ -25,8 +21,6 @@ export default function Graph() {
 
     //Data
 
-    const nodes_test = nodes
-
     const {isWriting} = useContext(AppContext)
 
     const [mousePosition, setMousePosition] = useState<PositionType>({x: 0, y:0})
@@ -35,17 +29,11 @@ export default function Graph() {
     const reactFlowRef = useRef<ReactFlowRefType>(null)
     const reactFlowWrapper = useRef<ReactFlowRefType>(null);
 
-    const ctrlKeyPressed = useKeyPress("Control")
-
     //Connection methods
-
-    useEffect(() => {
-        console.log("ctrl key changed")
-    }, [ctrlKeyPressed])
 
     const onConnect: OnConnect = useCallback((params) => {
         setEdges((eds) => addEdge(params, eds))
-    }, [nodeID]);
+    }, [setEdges]);
 
     //Shortcut
 
@@ -127,8 +115,7 @@ export default function Graph() {
             const position = reactFlowInstance?.screenToFlowPosition({x: event.clientX, y: event.clientY});
             
             addNode("...", position, type)
-        },
-        [reactFlowInstance, nodeID],
+        },[reactFlowInstance, addNode]
     );
 
     //Mouse movements methods
@@ -149,7 +136,7 @@ export default function Graph() {
 
     useEffect(() => {
         reactFlowInstance?.fitView({nodes: fitViewNodes})
-    }, [fitViewNodes])
+    }, [fitViewNodes, reactFlowInstance])
 
     return (
         <div style={{flex: 1, flexWrap: 'wrap', display: 'flex', boxSizing:"border-box"}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >

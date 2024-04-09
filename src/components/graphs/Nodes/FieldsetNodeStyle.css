@@ -43,6 +43,10 @@
     font-family: "PoppinsSemiBold";
     width: 100%;
     cursor: text;
+    box-sizing: border-box;
+    padding: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .textLegendFieldsetNodeContainer {
@@ -54,6 +58,7 @@
     margin: 0px;
     border: none;
     outline: none; 
+    padding: 8px;
 }
 
 .inputLegendFieldsetNode {
@@ -61,8 +66,10 @@
     outline: none; 
     min-width: 100% !important;
     width: 100%;
-    padding: 8px !important;
+    box-sizing: border-box;
     font-family: inherit;
+    overflow: hidden;
+
 }
 
 .customNodeText {
@@ -72,6 +79,10 @@
     line-height: normal;
     font-family: "PoppinsSemiBold";
     user-select: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
 }
 
 div.FieldsetNodeToolbar {

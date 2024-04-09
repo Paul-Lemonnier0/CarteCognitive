@@ -53,11 +53,11 @@ const AppTopBar = () => {
     )
 }
 
-interface GraphTopBar {
+interface GraphTopBarProps {
     title: string
 }
 
-export const GraphTopBar: FC<GraphTopBar> = ({ title }) => {
+export const GraphTopBar: FC<GraphTopBarProps> = ({ title }) => {
     return (
         <div className="graphTopBar" style={{
             backgroundColor: "#FFFFFF",

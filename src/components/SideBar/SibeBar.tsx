@@ -19,8 +19,8 @@ const SideBar = () => {
             event.dataTransfer.setData('application/reactflow', nodeType);
             event.dataTransfer.effectAllowed = 'move';
     };
+    
     const [chooseColor, setChooseColor] = useState(false)
-    const [colorSibeBar, setColorSibeBar] = useState("#ebedee")
 
     const ChooseColor = () => {
         setWantSelectColor(!wantSelectColor);
@@ -29,7 +29,6 @@ const SideBar = () => {
 
 
     const chooseColorNode = (color = "#ebedee") => {
-        setColorSibeBar(color);
         setColorNode(color);
     }
 
@@ -67,7 +66,7 @@ const SideBar = () => {
                 <div className={`customSibeToolbar ${chooseColor ? '' : 'customSibeToolbarHidden'}`}>
                     {
                         baseColors.map(baseColor =>
-                            <ColorIcon isSelected={baseColor === colorNode} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                            <ColorIcon key={baseColor} isSelected={baseColor === colorNode} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
                         )
                     }
                 </div>

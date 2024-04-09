@@ -1,4 +1,4 @@
-import React, { Dispatch, MouseEvent, ReactNode, createContext, useState } from "react";
+import React, { Dispatch, ReactNode, createContext, useState } from "react";
 
 interface AppContextType {
     isDarkMode: boolean,

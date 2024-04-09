@@ -1,19 +1,24 @@
 import React, { Dispatch, FC } from "react"
-import { IoSearch } from "react-icons/io5";
-import { IoIosSearch } from "react-icons/io";
-
 import "./SearchBarStyle.css"
-import { CustomCard } from "../Card/CustomCard";
+import "./../TextInput/TextInputStyle.css"
 import { FiSearch } from "react-icons/fi";
+import IconTextInput from "../TextInput/IconTextInput";
 
 interface CustomSearchBarProps {
     searchValue: string,
     setSearchValue: Dispatch<string>,
     startingValue?: string,
-    isExpanded?: boolean
+    placeholder?: string,
+    iconHover?: boolean
 }
 
-const CustomSearchBar: FC<CustomSearchBarProps> = ({startingValue, searchValue, setSearchValue, isExpanded}) => {
+const CustomSearchBar: FC<CustomSearchBarProps> = ({
+    startingValue, 
+    searchValue, 
+    setSearchValue, 
+    placeholder,
+    iconHover
+}) => {
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
@@ -21,22 +26,13 @@ const CustomSearchBar: FC<CustomSearchBarProps> = ({startingValue, searchValue, 
     }
     
     return(
-        <div style={{minWidth: 50}}>
-            <CustomCard customPadding>
-                <div className="searchBarSubContainer">
-                    <div id="searchIconContainer">
-                    <FiSearch size={25}/>
-                    </div>
-                    
-                        <input className="customSearchBarInput"
-                            onChange={onChange}
-                            value={searchValue}
-                            defaultValue={startingValue}
-                            placeholder="Chercher un noeud..."/>
-                    
-                </div>
-            </CustomCard>
-        </div>
+        <IconTextInput 
+            iconHover={iconHover}
+            Icon={FiSearch}
+            startingValue={startingValue}
+            placeholder={placeholder}
+            textValue={searchValue}
+            onChangeCustom={onChange}/>
     )
 }
 

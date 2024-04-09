@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { FaGripLines } from "react-icons/fa";
 import { LuText } from "react-icons/lu";
 import { BackgroundIcon } from '../../Buttons/IconButtons';
 

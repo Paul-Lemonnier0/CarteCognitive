@@ -12,6 +12,8 @@
 
 .iconButton span {
     display: flex;
+    transition: 0.3s;
+
     justify-content: center;
 }
 

@@ -1,12 +1,11 @@
-import { ComponentType, Dispatch, FC, ReactNode, createContext, useMemo, useState, useEffect, useContext } from "react";
-import { Background, Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, Viewport, useEdgesState, useNodesState } from "reactflow";
+import { Dispatch, ReactNode, createContext, useMemo, useState } from "react";
+import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState } from "reactflow";
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
 import { PositionType } from "./AppContext";
 import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
-import { AppContext } from "./AppContext";
 
 interface GraphContextType {
     id: string,

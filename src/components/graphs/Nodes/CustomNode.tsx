@@ -1,11 +1,11 @@
-import { FC,useState, KeyboardEvent, useContext, MouseEventHandler, Dispatch, useEffect  } from "react";
-import ReactFlow, { Handle, NodeProps, Position, useKeyPress } from "reactflow";
+import { FC,useState, useContext, useEffect  } from "react";
+import { Handle, NodeProps, Position, useKeyPress } from "reactflow";
 import React from 'react'
 import { nodeStyle  } from "../../../styles/Graphes/NodeStyle";
 import {useStore } from 'reactflow';
 import "./CustomNodeStyle.css"
 import theme, { baseColors } from "../../../constantes/Colors";
-import { FiCopy, FiUser, FiLink, FiTrash2, FiClock } from "react-icons/fi";
+import { FiUser, FiLink, FiTrash2, FiClock } from "react-icons/fi";
 import { AppContext } from "../../../context/AppContext";
 import { GraphContext } from "../../../context/GraphContext";
 import ColorIcon from "../../Other/ColorIcon";
@@ -24,77 +24,80 @@ const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const {setIsWriting, colorNode, wantSelectColor } = useContext(AppContext)
-  const {
-    updateNodeData, 
-    lastSelectedNodeID, 
-    changeColorWithField , 
-    nodeColorField, 
-    setNodeColorField,
-    colorField, 
-    deleteSelectedNodes
-  } = useContext(GraphContext)
 
-  if(!data.date) data.date = "Non Definis"
+  const { updateNodeData, lastSelectedNodeID, deleteSelectedNodes } = useContext(GraphContext)
 
-  const [colorToolBar, updateColorToolBar] = useState("white")
+  const [label, setLabel] = useState(data.label ?? "")
+  const [selectedColor, setSelectedColor] = useState(data.couleur ?? "white")
 
-  const [nodeData, setNodeData] = useState<CustomNodeData>(data)
-  const [selectColor, setSelectColor] = useState(false)
+  const [isSelectingColor, setIsSelectingColor] = useState(false)
+  const [showCreator, setShowCreator] = useState(false)
+
+  const [node_style, setNodeStyle] = useState(nodeStyle(selected))
 
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const ctrlKeyPressed = useKeyPress("Control")
 
   const isConnecting = !!connectionNodeId;
 
-  const [node_style, setNodeStyle] = useState(nodeStyle(selected))
-
-  const [showCreator, setShoCreator] = useState(false)
-
+  data.date = data.date ?? "Non Definis"
 
   useEffect(() => {
-    updateNodeData(id, nodeData)
-  }, [nodeData])
+    setLabel(data.label)
+  }, [data.label])
+
+  
+  useEffect(() => {
+    setSelectedColor(data.couleur ?? "white")
+    setNodeStyle(nodeStyle(selected, data.couleur ?? "white"))
+
+  }, [data.couleur, selected])
 
   const handleStartWriting = () => {
     setIsWriting(true)
   }
 
   const handleEndWriting = () => {
-    if(nodeData != data) {
-      updateNodeData(id, nodeData)
+    if(!data.label || label !== data.label) {
+      updateNodeData(id, {...data, label})
     }
 
     setIsWriting(false)
   }
 
   const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNodeData((prevData) => ({...prevData, label: e.target.value}))
+    setLabel(e.target.value)
   }
 
   const chooseColorNode = (color = "white") => {
-    updateColorToolBar(color)
+    setSelectedColor(color)
+
     setNodeStyle(nodeStyle(selected, color))
-    setNodeData((prevData) => ({...prevData, couleur: color}))
+
+    if(!data.couleur || selectedColor !== data.couleur) {
+      updateNodeData(id, {...data, couleur: selectedColor})
+    }
   }
 
   const clickColorNode = () => {
-    setSelectColor(!selectColor);
+    setIsSelectingColor(!isSelectingColor);
   }
 
   const clickColorSibebar = () => {
     chooseColorNode(colorNode)
   }
 
-  useEffect(() => {
-    setNodeColorField([])
-    nodeColorField.map((node,index) => {
-      if(node === id) chooseColorNode(colorField)
+  //TODO : a revoir ça pcq je pense que ça peut etre plus propre (plus haut en hierarchie)
 
-    })
-  }, [changeColorWithField])
+  // useEffect(() => {
+  //   setNodeColorField([])
+  //   nodeColorField.forEach(node => {
+  //     if(node === id) chooseColorNode(colorField)
+  //   })
+  // }, [changeColorWithField, id, chooseColorNode, nodeColorField, colorField, setNodeColorField])
 
   const ShowCreator = () => {
-    setShoCreator(!showCreator)
+    setShowCreator(!showCreator)
   }
 
   return (
@@ -129,13 +132,13 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           <div className="separator"/>
 
           <div className="customNodeIconContainer">
-            <ColorIcon small isSelected color={nodeData.couleur ?? "white"} onPress={clickColorNode}/>
+            <ColorIcon small isSelected color={selectedColor} onPress={clickColorNode}/>
           </div>
           
-          <div className={`customNodeToolbar ${selectColor ? '' : 'customNodeToolbarHidden'}`}>
+          <div className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
             {
                 baseColors.map(baseColor =>
-                    <ColorIcon small isSelected={baseColor === nodeData.couleur} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                    <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
                 )
             }
           </div>
@@ -171,7 +174,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
           {
             !selected ?
-              <p className="customNodeText">{nodeData.label}</p>
+              <p className="customNodeText">{label}</p>
               :
               
               <div>
@@ -181,9 +184,9 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
                   onFocus={handleStartWriting}
                   onBlur={handleEndWriting}
                   type="text" 
-                  value={nodeData.label}
+                  value={label}
                   className={`inputCustomNode`}
-                  style={{color: theme.light.Font, backgroundColor: colorToolBar}}
+                  style={{color: theme.light.Font, backgroundColor: selectedColor}}
                 />
               </div>
           }

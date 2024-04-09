@@ -2,9 +2,8 @@ import { ReactFlowProvider } from 'reactflow';
 import './App.css';
 import { AppContextProvider } from './context/AppContext';
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import router from './Router';
-import AppTopBar from './components/TopBar/TopBar';
 
 import "./assets/fonts/Poppins-Light.ttf"
 import "./assets/fonts/Poppins-Medium.ttf"

@@ -1,5 +1,13 @@
-import { useCallback, useContext, useState } from 'react';
-import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge, getBezierPath, MarkerType } from 'reactflow';
+import { useCallback, useContext } from 'react';
+import { 
+  useStore, 
+  getStraightPath, 
+  Node, 
+  ReactFlowState, 
+  EdgeProps, 
+  EdgeLabelRenderer, 
+  BaseEdge
+} from 'reactflow';
 import { getEdgeParams } from '../../../utils/utils';
 import React from 'react';
 import { GraphContext } from '../../../context/GraphContext';
@@ -56,14 +64,14 @@ const FloatingEdge: React.FC<EdgeProps> = ({
     return null;
   }
 
-  const edgePathParams = {
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  };
+  // const edgePathParams = {
+  //   sourceX,
+  //   sourceY,
+  //   sourcePosition,
+  //   targetX,
+  //   targetY,
+  //   targetPosition,
+  // };
 
   let path = '';
 
