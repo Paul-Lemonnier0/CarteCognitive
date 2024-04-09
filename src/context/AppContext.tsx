@@ -36,7 +36,7 @@ const AppContextProvider = ({children}: AppContextProviderProps) => {
 
     const [isDarkMode, setIsDarkMode] = useState(false)
     const [isWriting, setIsWriting] = useState(false)
-    const [colorNode,setColorNode] = useState("white")
+    const [colorNode,setColorNode] = useState("#ebedee")
     const [wantSelectColor, setWantSelectColor] = useState<boolean>(false)
 
     return(

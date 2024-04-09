@@ -8,6 +8,7 @@ interface CustomNodeListItemProps {
     node: Node,
     bottomBorder?: boolean,
     isSelected?: boolean,
+    isVisible?: boolean,
     onPress: () => void,
     onDoublePress?: () => void,
 }
@@ -16,6 +17,7 @@ const CustomNodeListItem: FC<CustomNodeListItemProps> = ({
     node, 
     bottomBorder, 
     isSelected, 
+    isVisible,
     onPress, 
     onDoublePress
 }) => {
@@ -25,23 +27,20 @@ const CustomNodeListItem: FC<CustomNodeListItemProps> = ({
     }
 
     return (
-        <div className='customNodeListItemContainer' 
+        <div className={`customNodeListItemContainer ${!isVisible ? "hidden" : ""}`}
             onClick={onPress} 
             onDoubleClick={onDoublePress}
-            style={{
-                userSelect: 'none',
-                borderBottom: bottomBorder ? "2px solid black" : undefined
-            }}>
-
+            style={{ userSelect: 'none', borderBottom: bottomBorder ? "2px solid black" :  undefined}}>
+            
+            <div id="icon">
             {
                 node.type === "customNode" ?
                 <CustomNodeIcon color={node.data.couleur} isSelected={isSelected}/> :
                 <CustomZoneIcon color={node.data.couleur} isSelected={isSelected}/>
             }
-            <div style={{ flexDirection: 'column', gap: 5 }}>
-                <h3>
-                    {node.data.label}
-                </h3>
+            </div>
+            <div id="label">
+                {node.data.label}
             </div>
         </div>
     )

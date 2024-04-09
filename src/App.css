@@ -1,5 +1,6 @@
+
 @font-face {
-  font-family: "PoppinsLight";
+  font-family: "Poppins";
   src: local("Poppins-Light"),
     url("./assets/fonts/Poppins-Light.ttf") format("truetype");
 }
@@ -20,7 +21,7 @@
   font-family: "PoppinsBold";
   src: local("Poppins-Bold"),
     url("./assets/fonts/Poppins-Bold.ttf") format("truetype");
-}
+} 
 
 .App {
   text-align: center;
@@ -72,6 +73,7 @@ iframe#webpack-dev-server-client-overlay{display:none!important}
   width: 10px;
 }
 *::-webkit-scrollbar-track {
+  margin-block: 15px;
   border-radius: 5px;
   background-color: transparent;
 }

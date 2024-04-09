@@ -6,15 +6,12 @@ import { GraphType } from "../../types/Graph/GraphType";
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://support.google.com/firebase/answer/7015592
 
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
-
-
 
 async function CreateDoc(user: string, graph: GraphType) {
     const docRef = await addDoc(collection(db, user), graph)

@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { FaGripLines } from "react-icons/fa";
 import { LuText } from "react-icons/lu";
+import { BackgroundIcon } from '../../Buttons/IconButtons';
 
 interface CustomZoneIconProps {
     size?: number,
@@ -10,17 +11,12 @@ interface CustomZoneIconProps {
 
 export const CustomZoneIcon: FC<CustomZoneIconProps> = ({size, color, isSelected}) => {  
     return (
-        <div style={{
-            backgroundColor: color ?? "white",
-            borderRadius: 8,
-            width: size ?? 40,
-            aspectRatio: 1/1,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            border: isSelected ? "3px solid black" : undefined
-        }}>
-            <LuText size={25}/>
-        </div>
+        <BackgroundIcon
+            Icon={LuText} 
+            size={size ?? 25} 
+            color={color ?? "white"}
+            isSelected={isSelected}
+            squared
+        />
   )
 }

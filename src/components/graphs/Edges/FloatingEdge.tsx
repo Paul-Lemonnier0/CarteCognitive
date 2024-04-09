@@ -2,8 +2,12 @@ import React, { useCallback, useContext } from 'react';
 import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge, getBezierPath, MarkerType, Position } from 'reactflow';
 import { getEdgeParams } from '../../../utils/utils';
 import { GraphContext } from '../../../context/GraphContext';
+
 import { AppContext } from '../../../context/AppContext';
 import "./FloatingEdgeStyle.css"
+
+import CustomEdgeLabel from './CustomEdgeLabel';
+
 
 export type GetSpecialPathParams = {
   sourceX: number;
@@ -37,7 +41,6 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const sourceNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(source), [source])) as Node;
   const targetNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(target), [target])) as Node;
 
-  if(source === target) return null
 
   const {showEdge,edges} = useContext(GraphContext)
   
@@ -50,6 +53,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
     return edgeExists;
   });
 
+  if(source === target) return null
 
   if (!sourceNode || !targetNode) {
     return null;
@@ -85,7 +89,6 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const labelY = (sy + ty) / 2; // Position Y du label (milieu de l'edge)
 
 
-
   return (
     <>
     <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
@@ -109,6 +112,14 @@ const FloatingEdge: React.FC<EdgeProps> = ({
     }     
 
     </EdgeLabelRenderer> 
+
+      <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
+      {showEdge && 
+        <EdgeLabelRenderer>
+          <CustomEdgeLabel label={id} labelX={labelX} labelY={labelY}/>
+        </EdgeLabelRenderer>
+      }
+
     </>
   );
 }

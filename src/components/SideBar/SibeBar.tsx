@@ -1,13 +1,13 @@
-import React, { useState, FC, useContext, useEffect, } from "react"
-import { nodeStyle } from "../../styles/Graphes/NodeStyle";
+import React, { useState, useContext, } from "react"
 import "./SideBarStyle.css"
 import { GraphContext } from "../../context/GraphContext";
 import { AppContext } from "../../context/AppContext";
 import { CustomZoneIcon } from "../graphs/Zones/CustomZoneIcon";
 import { CustomNodeIcon } from "../graphs/Nodes/CustomNodeIcon";
-import { FillColorSideBarIcon } from "./Icons/FillColorSideBarIcon";
 import ColorIcon from "../Other/ColorIcon";
 import { baseColors } from "../../constantes/Colors";
+import { BackgroundIcon } from "../Buttons/IconButtons";
+import { BiColorFill } from "react-icons/bi";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 
@@ -20,8 +20,7 @@ const SideBar = () => {
             event.dataTransfer.effectAllowed = 'move';
     };
     const [chooseColor, setChooseColor] = useState(false)
-    const [colorSibeBar, setColorSibeBar] = useState("white")
-    const node_style = nodeStyle(false)
+    const [colorSibeBar, setColorSibeBar] = useState("#ebedee")
 
     const ChooseColor = () => {
         setWantSelectColor(!wantSelectColor);
@@ -29,7 +28,7 @@ const SideBar = () => {
     }
 
 
-    const chooseColorNode = (color = "white") => {
+    const chooseColorNode = (color = "#ebedee") => {
         setColorSibeBar(color);
         setColorNode(color);
     }
@@ -39,15 +38,10 @@ const SideBar = () => {
     }
 
     return(
-        <div className="sideBar" style={{
-            backgroundColor: "#ebedee",
-            padding: 15,
-            paddingBottom: 0,
-            flexDirection: "column",
-        }}>
+        <div className="sideBar">
              <div className="sideBarItem">
                 <div onDragStart={(event) => onDragStart(event, 'customNode')} draggable>
-                    <CustomNodeIcon/>
+                    <CustomNodeIcon color="#ebedee"/>
                 </div>
 
                 <p>Node</p>
@@ -55,15 +49,18 @@ const SideBar = () => {
 
             <div className="sideBarItem">
                 <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} draggable>
-                    <CustomZoneIcon/>
+                    <CustomZoneIcon color="#ebedee"/>
                 </div>
 
                 <p>Zone</p>
             </div>
 
-            <div style={{display: "flex", flexDirection: "row"}}>
-                <div className="sideBarItem" onClick={ChooseColor} style={{ margin:"auto"}}>
-                    <FillColorSideBarIcon color={colorNode}/>
+            <div style={{display: "inline-block", flexDirection: "row"}}>
+                <div className="sideBarItem" onClick={ChooseColor}>
+                    <BackgroundIcon 
+                        Icon={BiColorFill} 
+                        size={25} 
+                        color={colorNode}/>
                     <p>Couleur</p>
                 </div>
 
@@ -76,11 +73,11 @@ const SideBar = () => {
                 </div>
             </div>
 
-            <div className="sideBarItem" >
-                {
-                    showEdge ? <FiEye size={30}  onClick={clickShowEdge} style={{ margin:"auto"}}/> 
-                    : <FiEyeOff size={30} onClick={clickShowEdge} style={{ margin:"auto"}}/>
-                }
+            <div className="sideBarItem" onClick={clickShowEdge}>
+                <BackgroundIcon 
+                    Icon={showEdge ? FiEye : FiEyeOff} 
+                    size={25} 
+                    color={colorNode}/>
                 <p>Etiquettes</p>
             </div>
         </div>

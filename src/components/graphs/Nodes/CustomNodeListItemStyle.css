@@ -1,10 +1,21 @@
 .customNodeListItemContainer {
+    border-radius: 10px;
+    width: auto;
+    margin: 0;
     display: flex;
-    flex-direction: row;
-    gap: 20px;
     align-items: center;
-    cursor: pointer;
+    margin-right: auto;
     transition: 0.3s;
+    white-space: nowrap;
+    width: 100%;
+    margin-block: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.customNodeListItemContainer.hidden {
+    opacity: 0;
 }
 
 .customNodeListItemContainer:hover {
@@ -12,7 +23,7 @@
 }
 
 .customNodeListItemContainer h3 {
-    font-family: "PoppinsLight";
+    font-family: "Poppins";
 }
 
 .nodeCreator {
@@ -28,11 +39,9 @@
     
 }
 
-.nodeCreatorIcon {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    margin: 2px;
+.customNodeListItemContainer #label {
+    font-family: "PoppinsMedium";
     white-space: nowrap;
-
+    user-select: none;
+    margin-left: 20px;
 }
