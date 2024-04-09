@@ -17,11 +17,11 @@ import IconTextInput from "../TextInput/IconTextInput"
 import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
 import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { GraphType } from "../../types/Graph/GraphType";
 
 const GraphDetailsSideBar = () => {
 
-    const {graphTitle, nodes, setFitViewNodes, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData} = useContext(GraphContext)
-    const { graphTitle, nodes, edges, id, setFitViewNodes, selectedNodesIDs, setSelectedNodesIDs } = useContext(GraphContext)
+    const {graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData} = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -152,67 +152,21 @@ const GraphDetailsSideBar = () => {
 
     const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3], baseColors[4]]
 
-
-    const isSommetSelected = selectedNode && selectedNode.type && selectedNode.type === "customNode"
-
-    const selectedNodeTypeString = isSommetSelected ?
-        "Sommet" : "Zone"
-
-    const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedNodeData((prevData) => ({...prevData, label: e.target.value ?? ""}))
-    }
-
-    const handleUpdateNodeLabel = () => {
-        if(selectedNode) {
-            if(!selectedNode.data) {
-                updateNodeData(selectedNode.id, {...selectedNodeData})
-            }
-    
-            else {
-                if(selectedNode.data.label) {
-                    if(selectedNode.data.label !== selectedNodeData.label) {
-                        updateNodeData(selectedNode.id, {...selectedNodeData})
-                    }
-                }
-    
-                else updateNodeData(selectedNode.id, {...selectedNodeData})
-            }
-        }
-    }
-
-    const handleUpdateColor = (color: string) => {
-        if(selectedNode) {
-            if(!selectedNode.data) {
-                updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
-            }
-    
-            else {
-                if(selectedNode.data.couleur) {
-                    if(selectedNode.data.couleur !== color) {
-                        updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
-                    }
-                }
-    
-                else updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
-            }
-        }
-    }
-
-    const handleClickOnUnExpandedListItem = () => {
-        !isExpanded && setIsExpanded(true)
-    }
-
-    const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3], baseColors[4]]
-
-
-
     return (
         <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
             <div id="header">
                 <div id="baseButton">
                     <GoBackButton onPress={handleGoBack}/>
                 </div>
-                <p className="graphDetailsSideBarContainerTitleText">{graphTitle}</p>
+                {
+                    titleIsModif ?
+                    <p className="graphDetailsSideBarContainerTitleInput">{graphTitle}</p>
+                    : <p className="graphDetailsSideBarContainerTitleText">{graphTitle}</p>
+                }
+
+                <div>
+                    <FaPen/>
+                </div>
             </div>
         
             <div id="body">

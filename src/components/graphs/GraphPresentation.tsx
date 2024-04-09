@@ -6,7 +6,7 @@ import { deleteDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
 
 interface GraphPresentationProps {
     graph: GraphType
-    style?: React.CSSProperties // rend la propriété style facultative
+    style?: React.CSSProperties
 }
 
 
