@@ -18,7 +18,6 @@ const ListGraph = ({graphs, title, style} : ListGraphInterface) => {
             {
                 graphs.map(graph => (
                     <GraphPresentation graph={graph} style={{
-                        marginLeft: "10px"
                     }} />
                 ))
             }
