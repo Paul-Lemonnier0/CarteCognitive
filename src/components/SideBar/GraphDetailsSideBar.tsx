@@ -171,12 +171,15 @@ const GraphDetailsSideBar = () => {
         
             <div id="body">
                 <div id="searchNodeContainer">
-                    <div id="selectedOptionsItem" style={{display: "inline"}} onClick={handleClickOnUnExpandedListItem}>
-                        <CustomSearchBar 
-                            iconHover
-                            searchValue={searchValue} 
-                            setSearchValue={setSearchValue}
-                            placeholder="Chercher un noeud..."/>
+                    <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
+                        <div style={{display: "inline", flex: 1}}>
+                            <CustomSearchBar 
+                                iconHover
+                                searchValue={searchValue} 
+                                setSearchValue={setSearchValue}
+                                placeholder="Chercher un noeud..."/>
+                        </div>
+                        {!isExpanded && <span className="tooltip">Rechercher</span>}
                     </div>
                     
                     <CustomCard customPadding={!isExpanded}>
@@ -210,35 +213,47 @@ const GraphDetailsSideBar = () => {
                                 <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedNodeData.label ? 1 : 0}}>{selectedNodeData.label === "" ? "A" : selectedNodeData.label }</p>
                                 <p className="graphDetailsSideBarContainerText">{selectedNodeTypeString} - Paul</p>
                             </div>
+
+                            {!isExpanded && <span className="tooltip">{selectedNodeTypeString}</span>}
                         </div>
 
                         
-                        <div id="selectedOptionsItem" style={{display: "inline"}} onClick={handleClickOnUnExpandedListItem}>
-                            <IconTextInput 
-                                iconHover
-                                Icon={RxText} 
-                                textValue={selectedNodeData.label ?? ""} 
-                                onChangeCustom={handleWritting}
-                                onBlur={handleUpdateNodeLabel}
-                                placeholder="Nom du sommet..."
-                            />
+                        <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
+                            <div style={{display: "inline", flex: 1}}>
+                                <IconTextInput 
+                                    iconHover
+                                    Icon={RxText} 
+                                    textValue={selectedNodeData.label ?? ""} 
+                                    onChangeCustom={handleWritting}
+                                    onBlur={handleUpdateNodeLabel}
+                                    placeholder="Nom du sommet..."
+                                />
+                            </div>
+
+                            {!isExpanded && <span className="tooltip">Label</span>}
                         </div>
 
-                        <div id="selectedOptionsItem" style={{marginLeft: 2.5, marginBlock: -5, paddingBlock: 5, display: "inline"}} onClick={handleClickOnUnExpandedListItem}>
-                            <div style={{display: "flex", flexDirection: "row", gap: 10}}>
-                                <span style={{cursor: "pointer"}}>
-                                    <BackgroundIcon iconHover isSelected squared Icon={BiColorFill} size={25} color={selectedNodeData.couleur ?? "white"}/>
-                                </span>
-                                <div style={{display: "flex", flexDirection: "row", gap: 9, flex: 1}}>
-                                {
-                                    baseColorsReduit.map(color => (
-                                        <span id="colorBlockContainer" onClick={() => handleUpdateColor(color)}>
-                                            <BackgroundIcon squared key={color} size={25} color={color} hiddenIcon Icon={BiColorFill}/>
-                                        </span>
-                                    ))
-                                }
+                        <div id="selectedOptionsItem" style={{marginLeft: 2.5, marginBlock: -5, paddingBlock: 5}} onClick={handleClickOnUnExpandedListItem}>
+                            <div style={{display: "inline", flex: 1}}>
+
+                                <div style={{display: "flex", flexDirection: "row", gap: 10}}>
+                                    <span style={{cursor: "pointer"}}>
+                                        <BackgroundIcon iconHover isSelected squared Icon={BiColorFill} size={25} color={selectedNodeData.couleur ?? "white"}/>
+                                    </span>
+                                    <div style={{display: "flex", flexDirection: "row", gap: 9, flex: 1}}>
+                                    {
+                                        baseColorsReduit.map(color => (
+                                            <span id="colorBlockContainer" onClick={() => handleUpdateColor(color)}>
+                                                <BackgroundIcon squared key={color} size={25} color={color} hiddenIcon Icon={BiColorFill}/>
+                                            </span>
+                                        ))
+                                    }
+                                    </div>
                                 </div>
                             </div>
+
+                            {!isExpanded &&<span className="tooltip">Couleur</span>}
+
                         </div>
 
 

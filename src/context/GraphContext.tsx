@@ -24,6 +24,8 @@ interface GraphContextType {
     addNode: (label: string, position: PositionType, type?: string) => void,
     deleteSelectedNodes: () => void,
     updateNodeData: (nodeID: string, newNodeData: CustomNodeData) => void,
+    duplicateNode: (nodeID: string) => void,
+    deleteNode: (nodeID: string) => void,
     selectedNodesIDs: string[],
     setSelectedNodesIDs: Dispatch<React.SetStateAction<string[]>>,
     lastSelectedNodeID: string | null,
@@ -58,6 +60,8 @@ const GraphContext = createContext<GraphContextType>({
     addNode: () => {},
     deleteSelectedNodes: () => {},
     updateNodeData: () => {},
+    duplicateNode: () => {},
+    deleteNode: () => {},
     selectedNodesIDs: [],
     setSelectedNodesIDs: () => {},
     lastSelectedNodeID: null,
@@ -168,6 +172,32 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
         setSelectedNodesIDs([...selected_nodes_id])
     }
 
+    const duplicateNode = (nodeID: string) => {
+        const node = nodes.filter(node => node.id === nodeID)[0];
+        
+      if(node) {
+          const position = {
+              x: node.position.x + 75,
+              y: node.position.y + 75,
+            };
+      
+            if(node) {
+                const nodeLabel = ("label" in node.data) ? node.data.label as string : ""
+                addNode(nodeLabel, position, node.type)
+            }
+      }
+    }
+
+    const deleteNode = (nodeID: string) => {
+        const updatedNodes = nodes.filter(node => node.id !== nodeID)
+        const updatedEdges = edges.filter(edge => 
+                (nodeID !== edge.source) && 
+                (nodeID !== edge.target))
+
+        setNodes(updatedNodes)
+        setEdges(updatedEdges)
+    }
+
     return(
         <GraphContext.Provider value={{
             id,
@@ -179,7 +209,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
             nodes, setNodes, onNodesChange,
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,
-            addNode, deleteSelectedNodes, updateNodeData,
+            addNode, deleteSelectedNodes, updateNodeData, duplicateNode, deleteNode,
             selectNodesInPositionRange,
             nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField,
             showEdge, setShowEdge,

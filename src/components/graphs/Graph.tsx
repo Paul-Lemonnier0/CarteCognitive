@@ -7,6 +7,15 @@ import { GraphContext } from '../../context/GraphContext';
 import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
+import NodeContextMenu from './Nodes/NodeContextMenu';
+
+export type MenuType = {
+    id: string,
+    top: number | boolean,
+    left: number | boolean,
+    right: number | boolean,
+    bottom: number | boolean
+}
 
 export default function Graph() {
     const {
@@ -129,14 +138,34 @@ export default function Graph() {
         }
     }
 
-    const handleNodeSelection = (event: React.MouseEvent, node: Node) => {
-        // alert("hello")
-        
-    }
-
     useEffect(() => {
         reactFlowInstance?.fitView({nodes: fitViewNodes})
     }, [fitViewNodes, reactFlowInstance])
+
+    const [menu, setMenu] = useState<MenuType | null>(null);
+
+    const onNodeContextMenu = useCallback((event: React.MouseEvent, node: Node) => {
+          // Prevent native context menu from showing
+          event.preventDefault();
+    
+          // Calculate position of the context menu. We want to make sure it
+          // doesn't get positioned off-screen.
+          if(reactFlowRef.current) {
+            const pane = reactFlowRef.current.getBoundingClientRect();
+            setMenu({
+              id: node.id,
+              top: event.clientY,
+              left: event.clientX,
+              right: pane.width - event.clientX,
+              bottom: pane.height - event.clientY,
+            });
+          }
+        },
+        [setMenu],
+      );
+
+    const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
+
 
     return (
         <div style={{flex: 1, flexWrap: 'wrap', display: 'flex', boxSizing:"border-box"}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >
@@ -156,7 +185,8 @@ export default function Graph() {
                 defaultEdgeOptions={defaultEdgeOptions}
                 connectionLineComponent={CustomConnectionLine}
                 connectionLineStyle={connectionLineStyle}
-                onNodeClick={handleNodeSelection}>
+                onNodeContextMenu={onNodeContextMenu}
+                onPaneClick={onPaneClick}>
                 <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10}/>
                 <MiniMap 
                     nodeColor={(node: Node) => {

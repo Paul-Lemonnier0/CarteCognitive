@@ -249,3 +249,44 @@
     bottom: 0;
     margin-bottom: 10px;
 }
+
+.tooltip {
+    display: inline-block;
+    position: absolute;
+    background-color: #313443;
+    padding: 8px 15px;
+    border-radius: 3px;
+    margin-top: 0;
+    left: 90px;
+    font-weight: bold;
+    opacity: 0;    
+    font-family: "Poppins";
+    color: white;
+    visibility: hidden;
+    font-size: 14px;
+    letter-spacing: .5px;
+    z-index: 5000;
+    box-shadow: rgba(0, 0, 0, 0.175) 0px 5px 15px;
+    
+    &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: -4px;
+        top: 10px;
+        transform: rotate(45deg);
+        width: 10px;
+        height: 10px;
+        background-color: inherit;
+    }
+}
+
+#selectedOptionsItem {
+    &:hover {    
+        .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    }	
+}
+	

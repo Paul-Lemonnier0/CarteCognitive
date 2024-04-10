@@ -8,7 +8,7 @@ function createNewNodeObject(nodeID: number, label: string, position: PositionTy
         type: type, 
         zIndex: type === "fieldsetNode" ? -2 : 1,
         data: { 
-            label: label ?? type === "fieldsetNode" ? "Nouvelle zone" : "...",
+            label: label ?? ((type === "fieldsetNode" )? "Nouvelle zone" : "..."),
             date: date
         }
     }

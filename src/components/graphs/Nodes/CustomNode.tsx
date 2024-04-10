@@ -1,5 +1,5 @@
 import { FC,useState, useContext, useEffect  } from "react";
-import { Handle, NodeProps, Position, useKeyPress } from "reactflow";
+import { Handle, NodeProps, NodeToolbar, Position, useKeyPress } from "reactflow";
 import React from 'react'
 import { nodeStyle  } from "../../../styles/Graphes/NodeStyle";
 import {useStore } from 'reactflow';
@@ -9,6 +9,7 @@ import { FiUser, FiLink, FiTrash2, FiClock } from "react-icons/fi";
 import { AppContext } from "../../../context/AppContext";
 import { GraphContext } from "../../../context/GraphContext";
 import ColorIcon from "../../Other/ColorIcon";
+import { LuCopy } from "react-icons/lu";
 
 export type CustomNodeData = {
   label: string;
@@ -25,7 +26,13 @@ const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const {setIsWriting, colorNode, wantSelectColor } = useContext(AppContext)
 
-  const { updateNodeData, lastSelectedNodeID, deleteSelectedNodes } = useContext(GraphContext)
+  const { 
+    updateNodeData, 
+    lastSelectedNodeID, 
+    deleteSelectedNodes,
+    duplicateNode,
+    deleteNode
+  } = useContext(GraphContext)
 
   const [label, setLabel] = useState(data.label ?? "")
   const [selectedColor, setSelectedColor] = useState(data.couleur ?? "white")
@@ -100,83 +107,84 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     setShowCreator(!showCreator)
   }
 
+  const handleDuplicateNode = () => {
+    duplicateNode(id)
+  }
+
+  const handleDeleteNode = () => {
+    deleteNode(id)
+  }
+
   return (
     <div className="customNodeContainer" >  
       {
-        <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
-          <div className="customNodeIconContainer">
-            <FiLink />
-          </div>
-          <div className="customNodeIconContainer" onClick={ShowCreator}>
-            <FiUser />
-          </div>
-          {
-            showCreator ?
-            <div className="nodeCreator">
-              <div className="nodeCreatorIcon">
-                <FiUser />
-                <span>Nicolas Mdr</span>
-                
-              </div>
-              <div className="nodeCreatorIcon">
-                <FiClock />
-                {data.date}
-              </div>
+        <NodeToolbar nodeId={id} offset={50} align="start" isVisible={lastSelectedNodeID === id}> 
+          <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
+            <div className="customNodeIconContainer">
+              <FiLink size={20}/>
+              <span className="verticalTooltip">Lien</span>
             </div>
-            : undefined
-          }
-          <div className="customNodeIconContainer" onClick={deleteSelectedNodes}>
-            <FiTrash2 />
-          </div>
-
-          <div className="separator"/>
-
-          <div className="customNodeIconContainer">
-            <ColorIcon small isSelected color={selectedColor} onPress={clickColorNode}/>
-          </div>
-          
-          <div className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
+            <div className="customNodeIconContainer" onClick={handleDuplicateNode}>
+              <LuCopy size={20}/>
+              <span className="verticalTooltip">Dupliquer</span>
+            </div>
             {
-                baseColors.map(baseColor =>
-                    <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
-                )
+              showCreator ?
+              <div className="nodeCreator">
+                <div className="nodeCreatorIcon">
+                  <FiUser size={20}/>
+                  <span>Nicolas Mdr</span>
+                  
+                </div>
+                <div className="nodeCreatorIcon">
+                  <FiClock size={20}/>
+                  {data.date}
+                </div>
+              </div>
+              : undefined
             }
+            <div className="customNodeIconContainer" onClick={handleDeleteNode}>
+              <FiTrash2 size={20}/>
+              <span className="verticalTooltip">Supprimer</span>
+
+            </div>
+
+            <div className="separator"/>
+
+            <div className="customNodeIconContainer">
+              <ColorIcon small isSelected color={selectedColor} onPress={clickColorNode}/>
+              <span className="verticalTooltip">Couleur</span>
+
+            </div>
+            
+            <div className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
+              {
+                  baseColors.map(baseColor =>
+                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                  )
+              }
+            </div>
           </div>
-        </div>
+        </NodeToolbar>
       }
 
-      <div style={{ 
-                  border: selected ? "2px solid black" : "2px solid transparent",
-                  padding: 4,
-                  borderRadius: 500,
-                  opacity: 1
-                }}  >
+      <div style={{ border: selected ? "2px solid black" : "2px solid transparent", padding: 4, borderRadius: 500, opacity: 1}}  >
         <div style={node_style} className="customNode" onClick={wantSelectColor ? clickColorSibebar : undefined}>
-          {!ctrlKeyPressed && !selected && !wantSelectColor ?
+          {!ctrlKeyPressed && !selected && !wantSelectColor &&
               <>
                 {
                   !isConnecting &&
                   <Handle className="customHandle" position={Position.Bottom} type="source" /> 
                 }
 
-                <Handle
-                  className="customHandle" 
-                  position={Position.Left}
-                  type="target"
-                  isConnectableStart={false}
-                  
-                  
-                />
+                <Handle className="customHandle" position={Position.Left} type="target" isConnectableStart={false}/>
               </>
-              :
-              undefined
           }
 
           {
             !selected ?
               <p className="customNodeText">{label}</p>
               :
-              
               <div>
                 <input 
                   onChange={handleWritting}
