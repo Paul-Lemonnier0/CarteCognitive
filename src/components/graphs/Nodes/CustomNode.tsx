@@ -31,7 +31,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     lastSelectedNodeID, 
     deleteSelectedNodes,
     duplicateNode,
-    deleteNode
+    deleteNode,
+    breakLinks
   } = useContext(GraphContext)
 
   const [label, setLabel] = useState(data.label ?? "")
@@ -81,8 +82,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
     setNodeStyle(nodeStyle(selected, color))
 
-    if(!data.couleur || selectedColor !== data.couleur) {
-      updateNodeData(id, {...data, couleur: selectedColor})
+    if(!data.couleur || (color !== data.couleur)) {
+      updateNodeData(id, {...data, couleur: color})
     }
   }
 
@@ -115,14 +116,23 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     deleteNode(id)
   }
 
+  const handleBreakLinks = () => {
+    breakLinks(id)
+  }
+
+  const handleSelectColor = (color: string) => {
+    chooseColorNode(color)
+    setIsSelectingColor(false)
+  }
+
   return (
     <div className="customNodeContainer" >  
       {
         <NodeToolbar nodeId={id} offset={50} align="start" isVisible={lastSelectedNodeID === id}> 
           <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
-            <div className="customNodeIconContainer">
+            <div className="customNodeIconContainer" onClick={handleBreakLinks}>
               <FiLink size={20}/>
-              <span className="verticalTooltip">Lien</span>
+              <span className="verticalTooltip">Casser les liens</span>
             </div>
             <div className="customNodeIconContainer" onClick={handleDuplicateNode}>
               <LuCopy size={20}/>
@@ -157,10 +167,10 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
             </div>
             
-            <div className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
+            <div style={{top: -50}} className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
               {
                   baseColors.map(baseColor =>
-                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => handleSelectColor(baseColor)}/>
                   )
               }
             </div>

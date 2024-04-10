@@ -15,10 +15,10 @@ const ColorIcon: FC<ColorIconProps> = ({ onPress, small, color = "white" }) => {
             style={{
                 backgroundColor: color,
                 padding: 1,
-                borderRadius: 500,
+                borderRadius: 5,
                 height: small ? 12 : 18,
                 aspectRatio: 1,
-                border: `1px solid black`,
+                border: `3px solid black`,
             }}
             onClick={onPress}
         ></div>

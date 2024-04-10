@@ -26,6 +26,7 @@ interface GraphContextType {
     updateNodeData: (nodeID: string, newNodeData: CustomNodeData) => void,
     duplicateNode: (nodeID: string) => void,
     deleteNode: (nodeID: string) => void,
+    breakLinks: (nodeID: string) => void,
     selectedNodesIDs: string[],
     setSelectedNodesIDs: Dispatch<React.SetStateAction<string[]>>,
     lastSelectedNodeID: string | null,
@@ -62,6 +63,7 @@ const GraphContext = createContext<GraphContextType>({
     updateNodeData: () => {},
     duplicateNode: () => {},
     deleteNode: () => {},
+    breakLinks: () => {},
     selectedNodesIDs: [],
     setSelectedNodesIDs: () => {},
     lastSelectedNodeID: null,
@@ -188,15 +190,22 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
       }
     }
 
-    const deleteNode = (nodeID: string) => {
-        const updatedNodes = nodes.filter(node => node.id !== nodeID)
+    const breakLinks = (nodeID: string) => {
         const updatedEdges = edges.filter(edge => 
-                (nodeID !== edge.source) && 
-                (nodeID !== edge.target))
-
-        setNodes(updatedNodes)
+            (nodeID !== edge.source) && 
+            (nodeID !== edge.target))
+            
         setEdges(updatedEdges)
     }
+
+
+    const deleteNode = (nodeID: string) => {
+        const updatedNodes = nodes.filter(node => node.id !== nodeID)
+        setNodes(updatedNodes)
+
+        breakLinks(nodeID)
+    }
+
 
     return(
         <GraphContext.Provider value={{
@@ -209,7 +218,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
             nodes, setNodes, onNodesChange,
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,
-            addNode, deleteSelectedNodes, updateNodeData, duplicateNode, deleteNode,
+            addNode, deleteSelectedNodes, updateNodeData, duplicateNode, deleteNode, breakLinks,
             selectNodesInPositionRange,
             nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField,
             showEdge, setShowEdge,

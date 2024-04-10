@@ -72,6 +72,8 @@ div.customNode {
   letter-spacing: .5px;
   left: -10px;
   z-index: 5000;
+  white-space: nowrap;
+  width: auto;
   top: -50px;
   box-shadow: rgba(0, 0, 0, 0.175) 0px 5px 15px;
   
