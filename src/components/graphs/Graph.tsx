@@ -26,6 +26,7 @@ export default function Graph() {
         edges, setEdges, onEdgesChange,
         nodeTypes, edgeTypes,
         addNode, deleteSelectedNodes,
+        lastSelectedEdgeID, setLastSelectedEdgeID,
     } = useContext(GraphContext)
 
     //Data
@@ -70,6 +71,7 @@ export default function Graph() {
             const newSelectedNodeIds = nds.filter(node => node.selected).map(node => node.id)
             
             const lastSelectedNodeArray = newSelectedNodeIds.filter(node => !selectedNodesIDs.includes(node))
+            const lastSelectEdgeArray = edges.filter((edge) => edge.selected)
 
             if(lastSelectedNodeID && !newSelectedNodeIds.includes(lastSelectedNodeID)) {
                 setLastSelectedNodeID(null)
@@ -78,8 +80,12 @@ export default function Graph() {
             if(lastSelectedNodeArray.length > 0) {
                 setLastSelectedNodeID(lastSelectedNodeArray[0])
             } 
-
             else setLastSelectedNodeID(null)
+
+            if(lastSelectEdgeArray.length > 0) {
+                setLastSelectedEdgeID(lastSelectEdgeArray[0].id)
+            }
+            else setLastSelectedEdgeID(null)
 
             setSelectedNodesIDs(newSelectedNodeIds)
 

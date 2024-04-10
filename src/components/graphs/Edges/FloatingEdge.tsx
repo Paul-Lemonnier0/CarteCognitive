@@ -42,7 +42,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const targetNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(target), [target])) as Node;
 
 
-  const {showEdge,edges} = useContext(GraphContext)
+  const {showEdge,edges,setEdges} = useContext(GraphContext)
   
   const isBiDirectionEdge = useStore((s: ReactFlowState) => {
     const edgeExists = s.edges.some(
@@ -73,7 +73,11 @@ const FloatingEdge: React.FC<EdgeProps> = ({
         else if(edge.source===target && edge.target===source) {second=true }
       }
     })
-    if(second) return null
+    if(second) {
+      const previousEdges = edges.filter((edge) => edge.id !== id)
+      setEdges(previousEdges)
+      return null
+    }
   }
   
 

@@ -42,6 +42,8 @@ interface GraphContextType {
     setFitViewNodes: Dispatch<Node[]>,
     showEdge: boolean,
     setShowEdge:  Dispatch<React.SetStateAction<boolean>>,
+    lastSelectedEdgeID: string | null,
+    setLastSelectedEdgeID : Dispatch<React.SetStateAction<string | null>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -79,6 +81,8 @@ const GraphContext = createContext<GraphContextType>({
     setFitViewNodes: () => {},
     showEdge: true,
     setShowEdge: () => {},
+    lastSelectedEdgeID: null,
+    setLastSelectedEdgeID: () => {},
 })
 
 interface GraphContextProviderType {
@@ -118,6 +122,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
 
     const [selectedNodesIDs, setSelectedNodesIDs] = useState<string[]>([])
     const [lastSelectedNodeID, setLastSelectedNodeID] = useState<string | null>(null)
+    const [lastSelectedEdgeID, setLastSelectedEdgeID] = useState<string | null>(null)
 
     const [colorField, setColorField] = useState("white")
 
@@ -222,6 +227,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
             selectNodesInPositionRange,
             nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField,
             showEdge, setShowEdge,
+            lastSelectedEdgeID, setLastSelectedEdgeID,
         }}>
             {children}
         </GraphContext.Provider>

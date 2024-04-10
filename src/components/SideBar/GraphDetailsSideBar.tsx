@@ -5,7 +5,7 @@ import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
 import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem"
 import { GraphContext } from "../../context/GraphContext"
-import { Node } from "reactflow"
+import { Edge, Node } from "reactflow"
 import { BackgroundIcon, GoBackButton, IconButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
 import { IoChevronForward } from "react-icons/io5"
@@ -21,7 +21,7 @@ import { GraphType } from "../../types/Graph/GraphType";
 
 const GraphDetailsSideBar = () => {
 
-    const {graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData} = useContext(GraphContext)
+    const {graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID} = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -39,8 +39,10 @@ const GraphDetailsSideBar = () => {
     }
 
     const [selectedNode, setSelectedNode] = useState<Node | undefined>(lastSelectedNodeID ? nodes.filter(node => node.id === lastSelectedNodeID)[0] : undefined)
-    
     const [selectedNodeData, setSelectedNodeData] = useState<CustomNodeData>(selectedNode ? (selectedNode.data ?? {}) : {})
+
+    const [selectedEdge, setSelectedEdge] = useState<Edge | undefined>(lastSelectedEdgeID ? edges.filter(edge => edge.id === lastSelectedEdgeID)[0] : undefined)
+    const [selectedEdgeLabel, setSelectedEdgeLabel] = useState(selectedEdge ? selectedEdge.label : "")
 
     useEffect(() => {
         if(lastSelectedNodeID) {
@@ -54,6 +56,19 @@ const GraphDetailsSideBar = () => {
             setSelectedNodeData({label: ""})
         }
     }, [lastSelectedNodeID, nodes])
+
+    useEffect(() => {
+        if(lastSelectedEdgeID) {
+            const selectedEdge = edges.filter(edge => edge.id === lastSelectedEdgeID)[0]
+            setSelectedEdge(selectedEdge)
+            setSelectedEdgeLabel(selectedEdge ? selectedEdge.label : "")
+        }
+
+        else {
+            setSelectedEdge(undefined)
+            setSelectedEdgeLabel("")
+        }
+    }, [lastSelectedEdgeID, edges])
 
     useEffect(() => {
         setFilteredNodes(nodes.filter(node => {
@@ -211,7 +226,7 @@ const GraphDetailsSideBar = () => {
                             {/* <BackgroundIcon Icon={IoGitMergeOutline} size={25}/> */}
                             <div className="TitleAndSubtitleContainer">
                                 <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedNodeData.label ? 1 : 0}}>{selectedNodeData.label === "" ? "A" : selectedNodeData.label }</p>
-                                <p className="graphDetailsSideBarContainerText">{selectedNodeTypeString} - Paul</p>
+                                <p className="graphDetailsSideBarContainerText">{selectedNodeTypeString} - Paul {selectedNodeData.date === "Non Definis" ? undefined : selectedNodeData.date}</p>
                             </div>
 
                             {!isExpanded && <span className="tooltip">{selectedNodeTypeString}</span>}
@@ -259,6 +274,40 @@ const GraphDetailsSideBar = () => {
 
                         {/* TODO: label, couleur */}
                     </div>
+                }
+                {
+                    selectedEdge && 
+                    <div id="selectedOptions">
+                        <div id="selectedOptionsItem" style={{marginLeft: 2.5}} onClick={handleClickOnUnExpandedListItem}>
+                            {
+                                isSommetSelected ?
+                                <CustomNodeIcon size={25} color="#ebedee"/> :
+                                <CustomZoneIcon size={25} color="#ebedee"/>
+                            }
+                            <div className="TitleAndSubtitleContainer">
+                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel }</p>
+                                <p className="graphDetailsSideBarContainerText"> Nicolas </p>
+                            </div>
+                        </div>
+
+                        {/* Bon je finis après la c'est dégeu */}
+                        <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
+                            <div style={{display: "inline", flex: 1}}>
+                                <div style={{display: "flex"}} >
+                                    <RxText size={25}/>
+                                </div>                                
+                                <input
+                                    type="text"
+                                    value={selectedEdgeLabel ? "selectedEdgeLabel" : ""}
+                                    defaultValue={selectedEdgeLabel ? "selectedEdgeLabel" : ""}
+                                    placeholder="Nom de l'arrete..."
+                                />
+                            </div>
+
+                            {!isExpanded && <span className="tooltip">Label</span>}
+                        </div>
+                    </div>
+                    
                 }
             </div>
             
