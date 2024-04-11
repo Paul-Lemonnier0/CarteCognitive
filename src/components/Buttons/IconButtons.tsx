@@ -5,13 +5,14 @@ import { IconType } from 'react-icons';
 
 interface IconButtonProps {
     onPress: () => void,
-    Icon?: IconType
+    Icon?: IconType,
+    isSelected?: boolean,
     children?: ReactNode
 }
 
-export const IconButton: FC<IconButtonProps>  = ({Icon, children, onPress}) => {
+export const IconButton: FC<IconButtonProps>  = ({Icon, children, onPress, isSelected}) => {
     return (
-      <span className='iconButton' onClick={onPress}>
+      <span className='iconButton' style={{border: `2px solid ${isSelected ? "black" : "transparent"}`}} onClick={onPress}>
           <span>
               { Icon &&
                 <Icon/>

@@ -1,0 +1,54 @@
+.HM-commandItem {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.HM-commandItem p {
+    font-family: "PoppinsMedium";
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.HM-commandItem #complexCommand {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+
+.HM-commandItem h1 {
+    font-family: "PoppinsBold";
+    font-weight: bolder;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+
+}
+
+.HM-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.HM-subBody {
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+}
+
+.HM-subBody.separation {
+    margin-inline: -20px;
+    padding-inline: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #e2e2e2;
+}
+

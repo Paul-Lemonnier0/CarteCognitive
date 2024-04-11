@@ -10,6 +10,7 @@ import { AppContext } from "../../../context/AppContext";
 import { GraphContext } from "../../../context/GraphContext";
 import ColorIcon from "../../Other/ColorIcon";
 import { LuCopy } from "react-icons/lu";
+import { NormalText } from "../../Text/CustomText";
 
 export type CustomNodeData = {
   label: string;
@@ -191,7 +192,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
               </>
           }
 
-          <p>{label}</p>
+          <NormalText text={label} wrap center bold/>
 
           {/* {
             !selected ?
