@@ -10,6 +10,7 @@ import { BackgroundIcon } from "../Buttons/IconButtons";
 import { BiColorFill } from "react-icons/bi";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { MdOutlineQuestionMark } from "react-icons/md";
+import HelpModal from "../Modal/HelpModal";
 
 
 const SideBar = () => {
@@ -21,6 +22,7 @@ const SideBar = () => {
     };
     
     const [chooseColor, setChooseColor] = useState(false)
+    const [isHelpModalVisible, setIsHelpModalVisible] = useState<boolean>(false)
 
     const ChooseColor = () => {
         setWantSelectColor(!wantSelectColor);
@@ -34,6 +36,14 @@ const SideBar = () => {
 
     const clickShowEdge = () => {
         setShowEdge(!showEdge)
+    }
+
+    const handleShowHelpModal = () => {
+        setIsHelpModalVisible(true)
+    }
+
+    const onCloseHelpModal = () => {
+        setIsHelpModalVisible(false)
     }
 
     return(
@@ -81,7 +91,7 @@ const SideBar = () => {
             </div>
 
             <div id="footer">
-                <div className="sideBarItem" onClick={clickShowEdge}>
+                <div className="sideBarItem" onClick={handleShowHelpModal}>
                     <span style={{marginBottom: 15}}>
                         <BackgroundIcon 
                             Icon={MdOutlineQuestionMark} 
@@ -93,6 +103,8 @@ const SideBar = () => {
                 <span className="rightTooltip">Aide</span>
 
             </div>
+
+            {isHelpModalVisible && <HelpModal onClose={onCloseHelpModal}/>}
         </div>
     )
 }
