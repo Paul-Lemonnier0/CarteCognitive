@@ -22,7 +22,7 @@ import { GraphType } from "../../types/Graph/GraphType";
 
 const GraphDetailsSideBar = () => {
 
-    const {isGraphModified,setIsGraphModified,graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID, setEdges} = useContext(GraphContext)
+    const {upgrade, setUpgrade,isGraphModified,setIsGraphModified,graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID, setEdges} = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -37,7 +37,8 @@ const GraphDetailsSideBar = () => {
         nodes: nodes,
         edges: edges,
         id: id,
-        title: graphTitle
+        title: graphTitle,
+        upgrade : upgrade,
     })
 
     const [selectedNode, setSelectedNode] = useState<Node | undefined>(lastSelectedNodeID ? nodes.filter(node => node.id === lastSelectedNodeID)[0] : undefined)
@@ -46,7 +47,21 @@ const GraphDetailsSideBar = () => {
     const [selectedEdge, setSelectedEdge] = useState<Edge | undefined>(lastSelectedEdgeID ? edges.filter(edge => edge.id === lastSelectedEdgeID)[0] : undefined)
     const [selectedEdgeLabel, setSelectedEdgeLabel] = useState(selectedEdge ? selectedEdge.label : "")
     
+    //autoSauvegarde
+    useEffect(() =>{
+        if(upgrade){
+            let newGraph: GraphType = {
+                nodes: nodes,
+                edges: edges,
+                id: id,
+                title: editedTitle,
+                upgrade: upgrade
+            }
+            setDocument("Default", newGraph, newGraph.id)
+            setIsGraphModified(false)
 
+        } 
+    }, [upgrade, setUpgrade,isGraphModified,setIsGraphModified,graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID, setEdges])
 
     useEffect(() => {
         if (lastSelectedNodeID) {
@@ -107,7 +122,8 @@ const GraphDetailsSideBar = () => {
             nodes: nodes,
             edges: edges,
             id: id,
-            title: editedTitle
+            title: editedTitle,
+            upgrade: upgrade
         }
 
         if (isGraphModified) {

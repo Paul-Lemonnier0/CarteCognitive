@@ -22,7 +22,7 @@ import { toPng } from "html-to-image";
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor } = useContext(AppContext)
-    const {showEdge,setShowEdge, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified} = useContext(GraphContext)
+    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified} = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
 
@@ -53,7 +53,9 @@ const SideBar = () => {
             nodes: nodes,
             edges: edges,
             id: id,
-            title: graphTitle
+            title: graphTitle,
+            upgrade : upgrade,
+
         }
         setDocument("Default", newGraph, newGraph.id)
         console.log("sauvegarde effectué")

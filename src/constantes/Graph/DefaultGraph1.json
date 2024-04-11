@@ -240,5 +240,6 @@
             "target": "node_1_id"
         }
     ],
-    "id" : "Graphe1"
+    "id" : "Graphe1",
+    "upgrade" : false
 }

@@ -126,5 +126,7 @@
             "target": "node_D"
         }
     ],
-    "id": "graph2"
+    "id": "graph2",
+    "upgrade" : false
+
 }
