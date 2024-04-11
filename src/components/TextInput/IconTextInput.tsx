@@ -6,12 +6,12 @@ import { IconType } from "react-icons";
 
 interface IconTextInputProps {
     textValue: string,
+    Icon: IconType,
     setTextValue?: Dispatch<string>,
     startingValue?: string,
     onChangeCustom?:(e: React.ChangeEvent<HTMLInputElement>) => void,
     onBlur?: () => void,
     placeholder?: string,
-    Icon: IconType,
     iconHover?: boolean
 }
 
