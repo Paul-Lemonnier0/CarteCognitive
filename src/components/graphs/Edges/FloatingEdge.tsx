@@ -56,7 +56,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
 
 
-  const {showEdge,edges,setEdges} = useContext(GraphContext)
+  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, cyclique} = useContext(GraphContext)
 
   const isBiDirectionEdge = useStore((s: ReactFlowState) => {
     const edgeExists = s.edges.some(
@@ -81,42 +81,39 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   if(isBiDirectionEdge) {
     const previousEdge = edges.filter((edge) => edge.source !== source || edge.target !== target)
     setEdges(previousEdge)
-    return null
   }
-
-  {/*
-  const [cycle, setCycle] = useState(false)
-  const [visited, setVisited] = useState<string[]>([])
-  const nextEdgeToSource = (IDSource:string, IDFind:string) => {
-    if(!cycle && !visited.find((elem) => elem===IDSource)) {
-      const nextEdges = edges.filter((edge) => edge.source === IDSource && edge.source !== source)
-      nextEdges.map((edge) => {
-        if(!cycle) {
-          if(edge.target === IDFind ) {
-            setCycle(true)
-            return null
-          }
-          else {
-            let temp = visited
-            temp.concat(source)
-            setVisited(temp)
-            return nextEdgeToSource(edge.target,IDFind)
-          }
-        }
-      })
-    }
-  }
-  nextEdgeToSource(target,source);
-  if(cycle) {
-    const previousEdge = edges[0]
-    const currentEdge = edges.filter((edge) => edge.id != previousEdge.id)
-    setEdges(currentEdge)
-    return null
-  }
-
-  */}
 
   
+  const [cycle, setCycle] = useState(false)
+  const [visited, setVisited] = useState<string[]>([source])
+  const nextEdgeToSource = (IDSource:string, IDFind:string) => {
+    if(!cycle) {
+      if(!cycle && !visited.find((elem) => elem===IDSource)) {
+        setVisited([...visited,IDSource])
+        const nextEdges = edges.filter((edge) => edge.source === IDSource)
+        nextEdges.forEach((edge) => {
+          if(!cycle) {
+            if(edge.target === IDFind ) {
+              setCycle(true)
+              console.log("Visited :" , visited)
+              return null
+            }
+            else if (!visited.find((edg) => edg==edge.source)) {
+              return nextEdgeToSource(edge.target,IDFind)
+            }
+          }
+        })
+      }
+    }
+    }
+
+  if(!cyclique) nextEdgeToSource(target,source)
+  if(cycle && !cyclique) {
+    const currentEdge = edges.filter((edge) => edge.id != id);
+    setEdges(currentEdge);
+  }
+  
+
 
   [path] = getStraightPath({
       sourceX: sx,

@@ -49,6 +49,8 @@ interface GraphContextType {
     setShowEdge:  Dispatch<React.SetStateAction<boolean>>,
     lastSelectedEdgeID: string | null,
     setLastSelectedEdgeID : Dispatch<React.SetStateAction<string | null>>,
+    cyclique: boolean,
+    setCyclique: Dispatch<React.SetStateAction<boolean>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -93,6 +95,8 @@ const GraphContext = createContext<GraphContextType>({
     lastSelectedEdgeID: null,
     setLastSelectedEdgeID: () => {},
     groupSelectedNodes: () => {},
+    cyclique: true,
+    setCyclique: () => {}
 })
 
 export interface SizeType {
@@ -120,6 +124,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState(false)
     const [showEdge,setShowEdge] = useState(true)
+    const [cyclique,setCyclique] = useState(false)
 
     const current = new Date();
     const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`
@@ -306,6 +311,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField,
             showEdge, setShowEdge,
             lastSelectedEdgeID, setLastSelectedEdgeID,
+            cyclique,setCyclique
         }}>
             {children}
         </GraphContext.Provider>

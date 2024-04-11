@@ -17,12 +17,13 @@ import { GrUpgrade } from "react-icons/gr";
 import { TbFileExport } from "react-icons/tb";
 import { getRectOfNodes, getTransformForBounds, useReactFlow } from "reactflow";
 import { toPng } from "html-to-image";
+import { RxValueNone,RxUpdate  } from "react-icons/rx";
 
 
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor } = useContext(AppContext)
-    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified} = useContext(GraphContext)
+    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified,cyclique,setCyclique } = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
 
@@ -46,6 +47,10 @@ const SideBar = () => {
 
     const clickShowEdge = () => {
         setShowEdge(!showEdge)
+    }
+
+    const clickCyclique = () => {
+        setCyclique(!cyclique)
     }
 
     const upGradeGraph = () =>{
@@ -155,23 +160,37 @@ const SideBar = () => {
                 </div>
 
                 <div id="tooltipContainer">
+                    <div className="sideBarItem" onClick={clickCyclique}>
+                        <BackgroundIcon 
+                            Icon={cyclique ? RxUpdate : RxValueNone} 
+                            size={25}/>
+                        <span className="rightTooltip">Cyclique</span>
+                    </div>
+                </div>
+
+                
+                
+            </div>
+
+            <div id="tooltipContainer">
                     <div className="sideBarItem" onClick={upGradeGraph}>
                         <BackgroundIcon 
                             Icon={GrUpgrade} 
                             size={25}/>
                         <span className="rightTooltip">Sauvegarde</span>
                     </div>
-                </div>
-                
-                <div id="tooltipContainer">
+            </div>
+
+            <div id="tooltipContainer" style={{marginBottom:10, marginTop:10}}>
                     <div className="sideBarItem" onClick={handleDownloadGraph}>
                         <BackgroundIcon 
                             Icon={TbFileExport} 
                             size={25}/>
                     </div>
                     <span className="rightTooltip">Exporter</span>
-                </div>
             </div>
+
+
             <div id="footer">
                 <div className="sideBarItem" onClick={handleShowHelpModal}>
                     <span style={{marginBottom: 15}}>
