@@ -36,7 +36,7 @@ const ComposantsModal: FC<ComposantsModalProps> = ({ onClose }) => {
 
     return (
         <div className='ModalOverlay' onClick={onClose}>
-            <div className='ModalContainer' onClick={(e) => e.stopPropagation()}>
+            <div className='ModalContainer maxHeight' onClick={(e) => e.stopPropagation()}>
 
                 <div className='ModalCore'>
                     <div className='ModalHeader'>
@@ -102,10 +102,12 @@ const ComposantsModal: FC<ComposantsModalProps> = ({ onClose }) => {
                         </div>
                         <div>
                             <h3>Interrupteur</h3>
-                            <ToggleButton
-                                isActive={isActive}
-                                setIsActive={setIsActive}
-                            />
+                            <div className='composantsRow'>
+                                <ToggleButton
+                                    isActive={isActive}
+                                    setIsActive={setIsActive}
+                                />
+                            </div>
                         </div>
 
                     </div>
