@@ -104,59 +104,70 @@ const SideBar = () => {
     return(
         <div className="sideBar">
             <div id="body">
-                <div className="sideBarItem">
-                    <div onDragStart={(event) => onDragStart(event, 'customNode')} draggable>
-                        <CustomNodeIcon color="#ebedee"/>
-                    </div>
+                <div id="tooltipContainer">
+                    <div className="sideBarItem">
+                        <div onDragStart={(event) => onDragStart(event, 'customNode')} draggable>
+                            <CustomNodeIcon color="#ebedee"/>
+                        </div>
 
-                    <p>Node</p>
+                        <span className="rightTooltip">Sommet</span>
+                    </div>
                 </div>
 
-                <div className="sideBarItem">
-                    <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} draggable>
-                        <CustomZoneIcon color="#ebedee"/>
-                    </div>
+                <div id="tooltipContainer">
+                    <div className="sideBarItem">
+                        <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} draggable>
+                            <CustomZoneIcon color="#ebedee"/>
+                        </div>
 
-                    <p>Zone</p>
+                        <span className="rightTooltip">Zone</span>
+                    </div>
+                </div>
+                <div id="tooltipContainer">
+                    <div style={{display: "inline-block", flexDirection: "row"}}>
+                        <div className="sideBarItem" onClick={ChooseColor}>
+                            <BackgroundIcon 
+                                Icon={BiColorFill} 
+                                size={25} 
+                                color={colorNode}/>
+                        <span className="rightTooltip">Couleur</span>
+                        </div>
+
+                        <div className={`customSibeToolbar ${chooseColor ? '' : 'customSibeToolbarHidden'}`}>
+                            {
+                                baseColors.map(baseColor =>
+                                    <ColorIcon key={baseColor} isSelected={baseColor === colorNode} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                                )
+                            }
+                        </div>
+                    </div>
                 </div>
 
-                <div style={{display: "inline-block", flexDirection: "row"}}>
-                    <div className="sideBarItem" onClick={ChooseColor}>
+                <div id="tooltipContainer">
+                    <div className="sideBarItem" onClick={clickShowEdge}>
                         <BackgroundIcon 
-                            Icon={BiColorFill} 
-                            size={25} 
-                            color={colorNode}/>
-                        <p>Couleur</p>
-                    </div>
-
-                    <div className={`customSibeToolbar ${chooseColor ? '' : 'customSibeToolbarHidden'}`}>
-                        {
-                            baseColors.map(baseColor =>
-                                <ColorIcon key={baseColor} isSelected={baseColor === colorNode} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
-                            )
-                        }
+                            Icon={showEdge ? FiEye : FiEyeOff} 
+                            size={25}/>
+                        <span className="rightTooltip">Etiquettes</span>
                     </div>
                 </div>
 
-                <div className="sideBarItem" onClick={clickShowEdge}>
-                    <BackgroundIcon 
-                        Icon={showEdge ? FiEye : FiEyeOff} 
-                        size={25}/>
-                    <p>Etiquettes</p>
+                <div id="tooltipContainer">
+                    <div className="sideBarItem" onClick={upGradeGraph}>
+                        <BackgroundIcon 
+                            Icon={GrUpgrade} 
+                            size={25}/>
+                        <span className="rightTooltip">Sauvegarde</span>
+                    </div>
                 </div>
-
-                <div className="sideBarItem" onClick={upGradeGraph}>
-                    <BackgroundIcon 
-                        Icon={GrUpgrade} 
-                        size={25}/>
-                    <p>Sauvegarde</p>
-                </div>
-
-                <div className="sideBarItem" onClick={handleDownloadGraph}>
-                    <BackgroundIcon 
-                        Icon={TbFileExport} 
-                        size={25}/>
-                    <p>Exporter</p>
+                
+                <div id="tooltipContainer">
+                    <div className="sideBarItem" onClick={handleDownloadGraph}>
+                        <BackgroundIcon 
+                            Icon={TbFileExport} 
+                            size={25}/>
+                    </div>
+                    <span className="rightTooltip">Exporter</span>
                 </div>
             </div>
             <div id="footer">
