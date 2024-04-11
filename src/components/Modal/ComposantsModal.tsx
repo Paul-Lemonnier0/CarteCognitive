@@ -101,14 +101,10 @@ const ComposantsModal: FC<ComposantsModalProps> = ({ onClose }) => {
                             </div>
                         </div>
                         <div>
-                            <h3>Intérupteur</h3>
+                            <h3>Interrupteur</h3>
                             <ToggleButton
                                 isActive={isActive}
                                 setIsActive={setIsActive}
-                                style={{
-                                    
-
-                                }}
                             />
                         </div>
 
