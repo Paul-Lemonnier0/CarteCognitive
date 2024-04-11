@@ -201,21 +201,32 @@ const GraphDetailsSideBar = () => {
 
     const [nodeAndField, setNodeAndField] = useState(true)
 
+    const handleEditTitle = () => {
+        setTitleIsModif(!titleIsModif)
+    }
+
+    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedTitle(e.target.value); 
+        setIsGraphModified(true)
+    }
+
     return (
         <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
             <div id="header">
-                <div id="baseButton">
+                <div>
                     <GoBackButton onPress={handleGoBack} />
                 </div>
                 {
                     titleIsModif ?
-                        <input type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={(e) => {setEditedTitle(e.target.value); setIsGraphModified(true)}}></input>
+                        <input autoFocus type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={onTitleChange}></input>
                         : <p className="graphDetailsSideBarContainerTitleText">{editedTitle}</p>
                 }
 
                 <div>
-                    <IconButton Icon={FiEdit3} onPress={() => { setTitleIsModif(!titleIsModif) }} />
+                    <IconButton isSelected={titleIsModif} Icon={FiEdit3} onPress={handleEditTitle} />
                 </div>
+                {isExpanded && <span className="tooltip">Rechercher</span>}
+
             </div>
 
             <div id="body">

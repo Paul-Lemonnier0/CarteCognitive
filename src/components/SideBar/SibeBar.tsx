@@ -14,12 +14,18 @@ import HelpModal from "../Modal/HelpModal";
 import { GraphType } from "../../types/Graph/GraphType";
 import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB";
 import { GrUpgrade } from "react-icons/gr";
+import { TbFileExport } from "react-icons/tb";
+import { getRectOfNodes, getTransformForBounds, useReactFlow } from "reactflow";
+import { toPng } from "html-to-image";
 
 
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor } = useContext(AppContext)
     const {showEdge,setShowEdge, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified} = useContext(GraphContext)
+  
+    const { getNodes } = useReactFlow();
+
     const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
             event.dataTransfer.setData('application/reactflow', nodeType);
             event.dataTransfer.effectAllowed = 'move';
@@ -62,65 +68,103 @@ const SideBar = () => {
         setIsHelpModalVisible(false)
     }
 
+    function downloadImage(dataUrl: string) {
+        const a = document.createElement('a');
+      
+        a.setAttribute('download', 'reactflow.png');
+        a.setAttribute('href', dataUrl);
+        a.click();
+    }
+
+    const imageWidth = 1024;
+    const imageHeight = 768;
+
+    const handleDownloadGraph = () => {
+        console.log("ok download graph")
+        const nodesBounds = getRectOfNodes(getNodes());
+        const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+        const viewport = document.querySelector('.react-flow__viewport')
+        if(viewport) {
+            console.log("ok viewport")
+            toPng(viewport as HTMLElement, {
+                backgroundColor: '#e2e2e2',
+                width: imageWidth,
+                height: imageHeight,
+                style: {
+                  width: imageWidth.toString(),
+                  height: imageHeight.toString(),
+                  transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+                },
+              }).then(downloadImage);
+        }
+
+        else console.log("pas de viewport")
+    }
+
     return(
         <div className="sideBar">
-             <div className="sideBarItem">
-                <div onDragStart={(event) => onDragStart(event, 'customNode')} draggable>
-                    <CustomNodeIcon color="#ebedee"/>
+            <div id="body">
+                <div className="sideBarItem">
+                    <div onDragStart={(event) => onDragStart(event, 'customNode')} draggable>
+                        <CustomNodeIcon color="#ebedee"/>
+                    </div>
+
+                    <p>Node</p>
                 </div>
 
-                <p>Node</p>
-            </div>
+                <div className="sideBarItem">
+                    <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} draggable>
+                        <CustomZoneIcon color="#ebedee"/>
+                    </div>
 
-            <div className="sideBarItem">
-                <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} draggable>
-                    <CustomZoneIcon color="#ebedee"/>
+                    <p>Zone</p>
                 </div>
 
-                <p>Zone</p>
-            </div>
+                <div style={{display: "inline-block", flexDirection: "row"}}>
+                    <div className="sideBarItem" onClick={ChooseColor}>
+                        <BackgroundIcon 
+                            Icon={BiColorFill} 
+                            size={25} 
+                            color={colorNode}/>
+                        <p>Couleur</p>
+                    </div>
 
-            <div style={{display: "inline-block", flexDirection: "row"}}>
-                <div className="sideBarItem" onClick={ChooseColor}>
+                    <div className={`customSibeToolbar ${chooseColor ? '' : 'customSibeToolbarHidden'}`}>
+                        {
+                            baseColors.map(baseColor =>
+                                <ColorIcon key={baseColor} isSelected={baseColor === colorNode} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
+                            )
+                        }
+                    </div>
+                </div>
+
+                <div className="sideBarItem" onClick={clickShowEdge}>
                     <BackgroundIcon 
-                        Icon={BiColorFill} 
-                        size={25} 
-                        color={colorNode}/>
-                    <p>Couleur</p>
+                        Icon={showEdge ? FiEye : FiEyeOff} 
+                        size={25}/>
+                    <p>Etiquettes</p>
                 </div>
 
-                <div className={`customSibeToolbar ${chooseColor ? '' : 'customSibeToolbarHidden'}`}>
-                    {
-                        baseColors.map(baseColor =>
-                            <ColorIcon key={baseColor} isSelected={baseColor === colorNode} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
-                        )
-                    }
+                <div className="sideBarItem" onClick={upGradeGraph}>
+                    <BackgroundIcon 
+                        Icon={GrUpgrade} 
+                        size={25}/>
+                    <p>Sauvegarde</p>
+                </div>
+
+                <div className="sideBarItem" onClick={handleDownloadGraph}>
+                    <BackgroundIcon 
+                        Icon={TbFileExport} 
+                        size={25}/>
+                    <p>Exporter</p>
                 </div>
             </div>
-
-            <div className="sideBarItem" onClick={clickShowEdge}>
-                <BackgroundIcon 
-                    Icon={showEdge ? FiEye : FiEyeOff} 
-                    size={25} 
-                    color={colorNode}/>
-                <p>Etiquettes</p>
-            </div>
-
-            <div className="sideBarItem" onClick={upGradeGraph}>
-                <BackgroundIcon 
-                    Icon={GrUpgrade} 
-                    size={25} 
-                    color={colorNode}/>
-                <p>Sauvegarde</p>
-            </div>
-
             <div id="footer">
                 <div className="sideBarItem" onClick={handleShowHelpModal}>
                     <span style={{marginBottom: 15}}>
                         <BackgroundIcon 
                             Icon={MdOutlineQuestionMark} 
-                            size={25} 
-                            color={colorNode}/>
+                            size={25} />
                     </span>
                     
                 </div>

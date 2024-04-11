@@ -1,0 +1,28 @@
+.baseText {
+    padding: 0;
+    margin: 0;
+    text-align: left;
+
+}
+
+.smallText {
+    font-size: 10px;
+    font-family: "Poppins";
+}
+
+.normalText {
+    font-size: 14px;
+    font-family: "Poppins";
+}
+
+.wrap {
+    text-overflow: wrap;
+}
+
+.center {
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold;
+}

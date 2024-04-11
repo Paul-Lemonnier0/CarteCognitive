@@ -37,14 +37,6 @@ div.separator {
   background-color: #dfe1e2;
 }
 
-
-div.customNode p {
-  font-size: 14px;
-  text-overflow: wrap;
-  margin: 0;
-  padding: 0; 
-}
-
 /* 
 .inputCustomNode {
   border: none; 
