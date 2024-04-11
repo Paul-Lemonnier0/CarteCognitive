@@ -11,9 +11,9 @@ const CustomEdgeLabel: FC<CustomEdgeLabelProps> = ({label, labelX, labelY}) => {
     <div
         style={{
             position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-            border: "2px solid #b1b1b7",
-            backgroundColor: "white",
+            transform: `translate(-50%, -50%) translate(${labelX+10}px,${labelY+10}px)`,
+            // border: "2px solid #b1b1b7",
+            // backgroundColor: "white",
             paddingLeft: 12,
             paddingRight: 12,
             paddingBottom: 8,
