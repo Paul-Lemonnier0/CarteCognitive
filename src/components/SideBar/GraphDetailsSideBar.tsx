@@ -149,9 +149,11 @@ const GraphDetailsSideBar = () => {
 
     const handleWrittingNode = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedNodeData((prevData) => ({...prevData, label: e.target.value ?? ""}))
+        setIsGraphModified(true)
     }
     const handleWrittingEdge = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedEdgeLabel(e.target.value)
+        setIsGraphModified(true)
     }
 
     const handleUpdateNodeLabel = () => {
@@ -183,6 +185,7 @@ const GraphDetailsSideBar = () => {
             edge.id === selectedEdge?.id ?
                 { ...edge, data: {label :selectedEdgeLabel} as any} : edge
         ))
+        setIsGraphModified(true)
     }
 
     const handleUpdateColor = (color: string) => {
