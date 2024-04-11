@@ -8,7 +8,7 @@ import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
 import NodeContextMenu from './Nodes/NodeContextMenu';
-import SelectorButton from '../Buttons/SelectorButton';
+import SelectorButton, { ToggleButton } from '../Buttons/SelectorButton';
 
 export type MenuType = {
     id: string,
@@ -34,9 +34,9 @@ export default function Graph() {
 
     //Data
 
-    const {isWriting} = useContext(AppContext)
+    const { isWriting } = useContext(AppContext)
 
-    const [mousePosition, setMousePosition] = useState<PositionType>({x: 0, y:0})
+    const [mousePosition, setMousePosition] = useState<PositionType>({ x: 0, y: 0 })
 
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
     const reactFlowRef = useRef<ReactFlowRefType>(null)
@@ -46,7 +46,7 @@ export default function Graph() {
 
     const onConnect: OnConnect = useCallback((params) => {
         const id = "edge_" + params.source + "-" + params.target
-        setEdges((eds) => addEdge({...params, id}, eds))
+        setEdges((eds) => addEdge({ ...params, id }, eds))
         setIsGraphModified(true)
     }, [setEdges]);
 
@@ -55,9 +55,9 @@ export default function Graph() {
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'n' && !isWriting) {
             addNode("...", mousePosition)
-        }   
-        
-        else if(e.key === 's' && !isWriting) {
+        }
+
+        else if (e.key === 's' && !isWriting) {
             deleteSelectedNodes()
         }
 
@@ -78,47 +78,47 @@ export default function Graph() {
             const nodeIDs = nds.map((node) => node.id)
 
             const newSelectedNodeIds = nds.filter(node => node.selected).map(node => node.id)
-            
+
             const lastSelectedNodeArray = newSelectedNodeIds.filter(node => !selectedNodesIDs.includes(node))
             const lastSelectEdgeArray = edges.filter((edge) => edge.selected)
 
-            if(lastSelectedNodeID && !newSelectedNodeIds.includes(lastSelectedNodeID)) {
+            if (lastSelectedNodeID && !newSelectedNodeIds.includes(lastSelectedNodeID)) {
                 setLastSelectedNodeID(null)
             }
 
-            if(lastSelectedNodeArray.length > 0) {
+            if (lastSelectedNodeArray.length > 0) {
                 setLastSelectedNodeID(lastSelectedNodeArray[0])
-            } 
+            }
             else setLastSelectedNodeID(null)
 
-            if(lastSelectEdgeArray.length > 0) {
+            if (lastSelectEdgeArray.length > 0) {
                 setLastSelectedEdgeID(lastSelectEdgeArray[0].id)
             }
             else setLastSelectedEdgeID(null)
 
             setSelectedNodesIDs(newSelectedNodeIds)
 
-            setNodes((previousNodes) => (previousNodes.map((node) => { 
+            setNodes((previousNodes) => (previousNodes.map((node) => {
 
-                if(nodeIDs.includes(node.id)) {
-                    return {...node, selected: true}
+                if (nodeIDs.includes(node.id)) {
+                    return { ...node, selected: true }
                 }
 
-                return {...node, selected: false}
+                return { ...node, selected: false }
             })));
 
             const edgeIDs = edges.map((edge) => edge.id)
 
-            setEdges((previousEdges) => (previousEdges.map((edge) => { 
-                if(edgeIDs.includes(edge.id)) {
-                    return {...edge, selected: true}
+            setEdges((previousEdges) => (previousEdges.map((edge) => {
+                if (edgeIDs.includes(edge.id)) {
+                    return { ...edge, selected: true }
                 }
 
-                return {...edge, selected: false}
+                return { ...edge, selected: false }
             })));
         },
-      });
-    
+    });
+
     //Drags methods
 
     const onDragOver = useCallback((event: React.DragEvent) => {
@@ -129,66 +129,66 @@ export default function Graph() {
     const onDrop = useCallback(
         (event: React.DragEvent) => {
             event.preventDefault();
-        
+
             const type = event.dataTransfer.getData('application/reactflow');
-        
+
             if (typeof type === 'undefined' || !type || !reactFlowInstance) {
                 return;
             }
-        
-            const position = reactFlowInstance?.screenToFlowPosition({x: event.clientX, y: event.clientY});
-            
+
+            const position = reactFlowInstance?.screenToFlowPosition({ x: event.clientX, y: event.clientY });
+
             addNode("...", position, type as TypesNode)
-        },[reactFlowInstance, addNode]
+        }, [reactFlowInstance, addNode]
     );
 
     //Mouse movements methods
 
-    const handleMouseMove: React.MouseEventHandler<HTMLDivElement>  = (event) => {
-        if(reactFlowRef.current && reactFlowInstance) {
+    const handleMouseMove: React.MouseEventHandler<HTMLDivElement> = (event) => {
+        if (reactFlowRef.current && reactFlowInstance) {
             const rect = reactFlowRef.current.getBoundingClientRect()
-            const pos = reactFlowInstance.screenToFlowPosition({ x: event.clientX - rect.x + 50, y: event.clientY - rect.y + 50})
-        
+            const pos = reactFlowInstance.screenToFlowPosition({ x: event.clientX - rect.x + 50, y: event.clientY - rect.y + 50 })
+
             setMousePosition(pos)
         }
     }
 
     useEffect(() => {
-        reactFlowInstance?.fitView({nodes: fitViewNodes})
+        reactFlowInstance?.fitView({ nodes: fitViewNodes })
     }, [fitViewNodes, reactFlowInstance])
 
     const [menu, setMenu] = useState<MenuType | null>(null);
 
     const onNodeContextMenu = useCallback((event: React.MouseEvent, node: Node) => {
-          // Prevent native context menu from showing
-          event.preventDefault();
-    
-          // Calculate position of the context menu. We want to make sure it
-          // doesn't get positioned off-screen.
-          if(reactFlowRef.current) {
+        // Prevent native context menu from showing
+        event.preventDefault();
+
+        // Calculate position of the context menu. We want to make sure it
+        // doesn't get positioned off-screen.
+        if (reactFlowRef.current) {
             const pane = reactFlowRef.current.getBoundingClientRect();
             setMenu({
-              id: node.id,
-              top: event.clientY,
-              left: event.clientX,
-              right: pane.width - event.clientX,
-              bottom: pane.height - event.clientY,
+                id: node.id,
+                top: event.clientY,
+                left: event.clientX,
+                right: pane.width - event.clientX,
+                bottom: pane.height - event.clientY,
             });
-          }
-        },
+        }
+    },
         [setMenu],
-      );
+    );
 
     const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
 
     return (
-        <div style={{flex: 1, flexWrap: 'wrap', display: 'flex', boxSizing:"border-box"}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >
-            <ReactFlow 
+        <div style={{ flex: 1, flexWrap: 'wrap', display: 'flex', boxSizing: "border-box" }} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >
+            <ReactFlow
                 ref={reactFlowRef}
-                nodes={nodes} 
+                nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange} 
+                onEdgesChange={onEdgesChange}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 onConnect={onConnect}
@@ -201,12 +201,12 @@ export default function Graph() {
                 connectionLineStyle={connectionLineStyle}
                 onNodeContextMenu={onNodeContextMenu}
                 onPaneClick={onPaneClick}>
-                <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10}/>
-                <MiniMap 
+                <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10} />
+                <MiniMap
                     nodeColor={(node: Node) => {
-                        if(!node.data.couleur || node.data.couleur === "#FFFFFF") 
+                        if (!node.data.couleur || node.data.couleur === "#FFFFFF")
                             return "#e2e2e2"
-                        if(node.type === "customNode")
+                        if (node.type === "customNode")
                             return node.data.couleur
 
                         else {
@@ -215,20 +215,30 @@ export default function Graph() {
                         }
                     }}
                 />
-                <Controls/>
+                <Controls />
             </ReactFlow>
-            
+
             <SelectorButton style={{
-                position : "absolute",
-                backgroundColor : upgrade ? "rgba(0,255,0,0.2)" : "rgba(255,0,0,0.2)",
-                marginTop:"5px",
-                right:110
+                position: "absolute",
+                backgroundColor: upgrade ? "rgba(0,255,0,0.2)" : "rgba(255,0,0,0.2)",
+                marginTop: "5px",
+                right: 110
 
             }}
-        onClick={()=>{
-            setUpgrade(!upgrade)
-            }}
-        text='Sauvegarde Auto'
+                onClick={() => {
+                    setUpgrade(!upgrade)
+                }}
+                text='Sauvegarde Auto'
+            />
+            <ToggleButton
+                isActive={upgrade}
+                setIsActive={setUpgrade}
+                style={{
+                    position: "absolute",
+                    marginTop: "30px",
+                    right: 110
+
+                }}
             />
         </div>
     );
