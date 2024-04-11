@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge, getBezierPath, MarkerType, Position } from 'reactflow';
 import { getEdgeParams } from '../../../utils/utils';
 import { GraphContext } from '../../../context/GraphContext';
@@ -7,6 +7,8 @@ import { AppContext } from '../../../context/AppContext';
 import "./FloatingEdgeStyle.css"
 
 import CustomEdgeLabel from './CustomEdgeLabel';
+
+
 
 
 export type GetSpecialPathParams = {
@@ -26,7 +28,18 @@ export const getSpecialPath = (
   return `M ${sourceX} ${sourceY} Q ${centerX} ${centerY + offset} ${targetX} ${targetY}`;
 };
 
-const FloatingEdge: React.FC<EdgeProps> = ({   
+export type CustomEdgeData = {
+  label: "t";
+  couleur?: string;
+};
+
+export interface CustomEdgeProps extends EdgeProps {
+  data: CustomEdgeData;
+}
+
+
+const FloatingEdge: React.FC<EdgeProps> = ({ 
+  data,
   id,
   source,
   target,
@@ -42,8 +55,9 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const targetNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(target), [target])) as Node;
 
 
+
   const {showEdge,edges,setEdges} = useContext(GraphContext)
-  
+
   const isBiDirectionEdge = useStore((s: ReactFlowState) => {
     const edgeExists = s.edges.some(
       (e) =>
@@ -65,20 +79,43 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const {sx, sy, tx, ty} = getEdgeParams(sourceNode, targetNode);
 
   if(isBiDirectionEdge) {
-    let second = false
-    let first = false
-    edges.forEach((edge) =>{
-      if(!first && !second) {
-        if(edge.source===source && edge.target===target) { first = true}
-        else if(edge.source===target && edge.target===source) {second=true }
-      }
-    })
-    if(second) {
-      const previousEdges = edges.filter((edge) => edge.id !== id)
-      setEdges(previousEdges)
-      return null
+    const previousEdge = edges.filter((edge) => edge.source !== source || edge.target !== target)
+    setEdges(previousEdge)
+    return null
+  }
+
+  {/*
+  const [cycle, setCycle] = useState(false)
+  const [visited, setVisited] = useState<string[]>([])
+  const nextEdgeToSource = (IDSource:string, IDFind:string) => {
+    if(!cycle && !visited.find((elem) => elem===IDSource)) {
+      const nextEdges = edges.filter((edge) => edge.source === IDSource && edge.source !== source)
+      nextEdges.map((edge) => {
+        if(!cycle) {
+          if(edge.target === IDFind ) {
+            setCycle(true)
+            return null
+          }
+          else {
+            let temp = visited
+            temp.concat(source)
+            setVisited(temp)
+            return nextEdgeToSource(edge.target,IDFind)
+          }
+        }
+      })
     }
   }
+  nextEdgeToSource(target,source);
+  if(cycle) {
+    const previousEdge = edges[0]
+    const currentEdge = edges.filter((edge) => edge.id != previousEdge.id)
+    setEdges(currentEdge)
+    return null
+  }
+
+  */}
+
   
 
   [path] = getStraightPath({
@@ -98,7 +135,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
       <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
       {showEdge && 
         <EdgeLabelRenderer>
-          <CustomEdgeLabel label={id} labelX={labelX} labelY={labelY}/>
+          <CustomEdgeLabel label={data ? data.label : ""} labelX={labelX} labelY={labelY}/>
         </EdgeLabelRenderer>
       }
     </>

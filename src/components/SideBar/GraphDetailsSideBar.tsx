@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"
 import { IoChevronForward } from "react-icons/io5"
 import { CustomZoneIcon } from "../graphs/Zones/CustomZoneIcon"
 import { CustomNodeIcon } from "../graphs/Nodes/CustomNodeIcon"
+import { CustomEdgeIcon } from "../graphs/Edges/CustomEdgeIcon"
 import { BiColorFill } from "react-icons/bi"
 import { RxText } from "react-icons/rx";
 import IconTextInput from "../TextInput/IconTextInput"
@@ -21,7 +22,7 @@ import { GraphType } from "../../types/Graph/GraphType";
 
 const GraphDetailsSideBar = () => {
 
-    const {graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID} = useContext(GraphContext)
+    const {graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID, setEdges} = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -42,7 +43,7 @@ const GraphDetailsSideBar = () => {
     const [selectedNodeData, setSelectedNodeData] = useState<CustomNodeData>(selectedNode ? (selectedNode.data ?? {}) : {})
 
     const [selectedEdge, setSelectedEdge] = useState<Edge | undefined>(lastSelectedEdgeID ? edges.filter(edge => edge.id === lastSelectedEdgeID)[0] : undefined)
-    const [selectedEdgeLabel, setSelectedEdgeLabel] = useState(selectedEdge ? selectedEdge.label : "")
+    const [selectedEdgeLabel, setSelectedEdgeLabel] = useState(selectedEdge ? selectedEdge.data.label : "")
 
     useEffect(() => {
         if(lastSelectedNodeID) {
@@ -61,7 +62,7 @@ const GraphDetailsSideBar = () => {
         if(lastSelectedEdgeID) {
             const selectedEdge = edges.filter(edge => edge.id === lastSelectedEdgeID)[0]
             setSelectedEdge(selectedEdge)
-            setSelectedEdgeLabel(selectedEdge ? selectedEdge.label : "")
+            setSelectedEdgeLabel(selectedEdge ? selectedEdge.data.label : "")
         }
 
         else {
@@ -121,8 +122,11 @@ const GraphDetailsSideBar = () => {
     const selectedNodeTypeString = isSommetSelected ?
         "Sommet" : "Zone"
 
-    const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleWrittingNode = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedNodeData((prevData) => ({...prevData, label: e.target.value ?? ""}))
+    }
+    const handleWrittingEdge = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedEdgeLabel(e.target.value)
     }
 
     const handleUpdateNodeLabel = () => {
@@ -141,6 +145,12 @@ const GraphDetailsSideBar = () => {
                 else updateNodeData(selectedNode.id, {...selectedNodeData})
             }
         }
+    }
+    const handleUpdateEdgeLabel = () => {
+        setEdges((prevEdges) => prevEdges.map(edge => 
+            edge.id === selectedEdge?.id ?
+                { ...edge, data: {label :selectedEdgeLabel} as any} : edge
+        ))
     }
 
     const handleUpdateColor = (color: string) => {
@@ -166,6 +176,8 @@ const GraphDetailsSideBar = () => {
     }
 
     const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3]]
+
+    const [nodeAndField, setNodeAndField] = useState(true)
 
     return (
         <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
@@ -214,7 +226,7 @@ const GraphDetailsSideBar = () => {
                 </div>
 
                 {
-                    selectedNodeData && selectedNode &&
+                    selectedNodeData && selectedNode && 
                     <div id="selectedOptions">
                         <div id="selectedOptionsItem" style={{marginLeft: 2.5}} onClick={handleClickOnUnExpandedListItem}>
                             {
@@ -239,7 +251,7 @@ const GraphDetailsSideBar = () => {
                                     iconHover
                                     Icon={RxText} 
                                     textValue={selectedNodeData.label ?? ""} 
-                                    onChangeCustom={handleWritting}
+                                    onChangeCustom={handleWrittingNode}
                                     onBlur={handleUpdateNodeLabel}
                                     placeholder="Nom du sommet..."
                                 />
@@ -276,32 +288,30 @@ const GraphDetailsSideBar = () => {
                     </div>
                 }
                 {
-                    selectedEdge && 
+                    selectedEdge && !isSommetSelected &&
                     <div id="selectedOptions">
                         <div id="selectedOptionsItem" style={{marginLeft: 2.5}} onClick={handleClickOnUnExpandedListItem}>
                             {
-                                isSommetSelected ?
-                                <CustomNodeIcon size={25} color="#ebedee"/> :
-                                <CustomZoneIcon size={25} color="#ebedee"/>
+                                <CustomEdgeIcon size={25} color="#ebedee"/>
                             }
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel }</p>
+                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string }</p>
                                 <p className="graphDetailsSideBarContainerText"> Nicolas </p>
                             </div>
                         </div>
 
-                        {/* Bon je finis après la c'est dégeu */}
                         <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
                             <div style={{display: "inline", flex: 1}}>
                                 <div style={{display: "flex"}} >
-                                    <RxText size={25}/>
+                                    <IconTextInput 
+                                        iconHover
+                                        Icon={RxText} 
+                                        textValue={selectedEdgeLabel ?? ""} 
+                                        onChangeCustom={handleWrittingEdge}
+                                        onBlur={handleUpdateEdgeLabel}
+                                        placeholder="Nom de l'arrete ..."
+                                    />
                                 </div>                                
-                                <input
-                                    type="text"
-                                    value={selectedEdgeLabel ? "selectedEdgeLabel" : ""}
-                                    defaultValue={selectedEdgeLabel ? "selectedEdgeLabel" : ""}
-                                    placeholder="Nom de l'arrete..."
-                                />
                             </div>
 
                             {!isExpanded && <span className="tooltip">Label</span>}

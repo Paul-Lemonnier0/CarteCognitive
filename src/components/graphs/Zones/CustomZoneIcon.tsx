@@ -19,3 +19,4 @@ export const CustomZoneIcon: FC<CustomZoneIconProps> = ({size, color, isSelected
         />
   )
 }
+
