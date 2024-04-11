@@ -27,6 +27,7 @@ export const edgeBase = (data: Edge): Edge => {
 }
 
 export const defaultEdgeOptions = {
+    data: {label : ""},
     style: { strokeWidth: 1, stroke: 'black' },
     type: 'floating',
     markerEnd: {
