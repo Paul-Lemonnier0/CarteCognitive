@@ -35,7 +35,7 @@ const GraphDetailsSideBar = () => {
         nodes: nodes,
         edges: edges,
         id: id,
-        title: editedTitle
+        title: graphTitle
     }
 
     const [selectedNode, setSelectedNode] = useState<Node | undefined>(lastSelectedNodeID ? nodes.filter(node => node.id === lastSelectedNodeID)[0] : undefined)
@@ -105,7 +105,7 @@ const GraphDetailsSideBar = () => {
         }
         //compare les deux graph en chaine de caractère
         console.log(`${startGraph.edges} \t ${newGraph.edges}`)
-        if (JSON.stringify(startGraph) == JSON.stringify(newGraph)) {
+        if (JSON.stringify(startGraph) != JSON.stringify(newGraph)) {
             setDocument("Default", newGraph, newGraph.id)
             console.log("graphe modifiée")
         }
@@ -175,12 +175,12 @@ const GraphDetailsSideBar = () => {
                 </div>
                 {
                     titleIsModif ?
-                    <p className="graphDetailsSideBarContainerTitleInput">{graphTitle}</p>
-                    : <p className="graphDetailsSideBarContainerTitleText">{graphTitle}</p>
+                    <input type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={(e)=>setEditedTitle(e.target.value)}></input>
+                    : <p className="graphDetailsSideBarContainerTitleText">{editedTitle}</p>
                 }
 
                 <div>
-                    <IconButton Icon={FiEdit3} onPress={() => {}}/>
+                    <IconButton Icon={FiEdit3} onPress={() => {setTitleIsModif(!titleIsModif)}}/>
                 </div>
             </div>
         
