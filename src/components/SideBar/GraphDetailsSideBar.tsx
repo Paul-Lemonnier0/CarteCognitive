@@ -258,8 +258,8 @@ const GraphDetailsSideBar = () => {
                                     <div style={{display: "flex", flexDirection: "row", gap: 9, flex: 1}}>
                                     {
                                         baseColorsReduit.map(color => (
-                                            <span id="colorBlockContainer" onClick={() => handleUpdateColor(color)}>
-                                                <BackgroundIcon squared key={color} size={25} color={color} hiddenIcon Icon={BiColorFill}/>
+                                            <span id="colorBlockContainer" key={color} onClick={() => handleUpdateColor(color)}>
+                                                <BackgroundIcon squared size={25} color={color} hiddenIcon Icon={BiColorFill}/>
                                             </span>
                                         ))
                                     }
@@ -295,7 +295,8 @@ const GraphDetailsSideBar = () => {
                             <div style={{display: "inline", flex: 1}}>
                                 <div style={{display: "flex"}} >
                                     <RxText size={25}/>
-                                </div>                                
+                                </div>                       
+                                         
                                 <input
                                     type="text"
                                     value={selectedEdgeLabel ? "selectedEdgeLabel" : ""}

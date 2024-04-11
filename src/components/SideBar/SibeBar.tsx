@@ -9,7 +9,7 @@ import { baseColors } from "../../constantes/Colors";
 import { BackgroundIcon } from "../Buttons/IconButtons";
 import { BiColorFill } from "react-icons/bi";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-
+import { MdOutlineQuestionMark } from "react-icons/md";
 
 
 const SideBar = () => {
@@ -78,6 +78,20 @@ const SideBar = () => {
                     size={25} 
                     color={colorNode}/>
                 <p>Etiquettes</p>
+            </div>
+
+            <div id="footer">
+                <div className="sideBarItem" onClick={clickShowEdge}>
+                    <span style={{marginBottom: 15}}>
+                        <BackgroundIcon 
+                            Icon={MdOutlineQuestionMark} 
+                            size={25} 
+                            color={colorNode}/>
+                    </span>
+                    
+                </div>
+                <span className="rightTooltip">Aide</span>
+
             </div>
         </div>
     )

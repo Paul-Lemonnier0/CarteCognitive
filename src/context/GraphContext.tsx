@@ -21,12 +21,13 @@ interface GraphContextType {
     setNodeID: Dispatch<React.SetStateAction<number>>,
     nodeTypes: Record<string, React.ComponentType<NodeProps>>,
     edgeTypes: Record<string, React.ComponentType<EdgeProps>>
-    addNode: (label: string, position: PositionType, type?: string) => void,
+    addNode: (label: string, position: PositionType,  type?: TypesNode, size?: SizeType) => void,
     deleteSelectedNodes: () => void,
     updateNodeData: (nodeID: string, newNodeData: CustomNodeData) => void,
     duplicateNode: (nodeID: string) => void,
     deleteNode: (nodeID: string) => void,
     breakLinks: (nodeID: string) => void,
+    groupSelectedNodes: () => void,
     selectedNodesIDs: string[],
     setSelectedNodesIDs: Dispatch<React.SetStateAction<string[]>>,
     lastSelectedNodeID: string | null,
@@ -83,7 +84,18 @@ const GraphContext = createContext<GraphContextType>({
     setShowEdge: () => {},
     lastSelectedEdgeID: null,
     setLastSelectedEdgeID: () => {},
+    groupSelectedNodes: () => {},
 })
+
+export interface SizeType {
+    w: number,
+    h: number
+}
+
+export enum TypesNode {
+    customNode = "customNode",
+    fieldsetNode = "fieldsetNode"
+}
 
 interface GraphContextProviderType {
     defaultNodes: Node[],
@@ -126,8 +138,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
 
     const [colorField, setColorField] = useState("white")
 
-    const addNode = (label: string, position: PositionType, type = "customNode") => {
-        const node = createNewNodeObject(nodeID, label, position, type,date)
+    const addNode = (label: string, position: PositionType, type?: TypesNode, size?: SizeType) => {
+        const node = createNewNodeObject(nodeID, label, position, type ?? TypesNode.customNode, date, size)
 
         setNodes((previousNodes) => {
             setNodeID(nodeID + 1);
@@ -190,7 +202,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
       
             if(node) {
                 const nodeLabel = ("label" in node.data) ? node.data.label as string : ""
-                addNode(nodeLabel, position, node.type)
+                addNode(nodeLabel, position, node.type as TypesNode)
             }
       }
     }
@@ -211,6 +223,45 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
         breakLinks(nodeID)
     }
 
+    const groupSelectedNodes = () => {
+        const selectedNodes = nodes.filter(node => selectedNodesIDs.includes(node.id))
+
+        let x_left = 100000000, x_right = -100000, y_top = 100000000, y_bottom = -100000
+
+        console.log(selectedNodes)
+        
+        selectedNodes.forEach((node) => {
+            if(node.position.x < x_left) {
+                x_left = node.position.x
+            }
+
+            if(node.position.x > x_right) {
+                x_right = node.position.x
+            }
+
+            if(node.position.y < y_top) {
+                y_top = node.position.y
+            }
+
+            if(node.position.y > y_bottom) {
+                y_bottom = node.position.y
+            }
+        })
+
+        const ZONE_OFFSET = 100
+
+        x_left -= ZONE_OFFSET
+        y_top -= ZONE_OFFSET
+
+        x_right += ZONE_OFFSET
+        y_bottom += ZONE_OFFSET
+
+        console.log({x: x_left, y: y_top})
+        console.log({w: x_right - x_left, h: y_bottom - y_top})
+
+        addNode("Nouvelle zone", {x: x_left, y: y_top}, TypesNode.fieldsetNode, {w: x_right - x_left, h: y_bottom - y_top})
+    }
+
 
     return(
         <GraphContext.Provider value={{
@@ -224,7 +275,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,
             addNode, deleteSelectedNodes, updateNodeData, duplicateNode, deleteNode, breakLinks,
-            selectNodesInPositionRange,
+            selectNodesInPositionRange, groupSelectedNodes,
             nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField,
             showEdge, setShowEdge,
             lastSelectedEdgeID, setLastSelectedEdgeID,

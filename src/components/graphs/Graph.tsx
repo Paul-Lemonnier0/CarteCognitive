@@ -3,7 +3,7 @@ import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node
 import 'reactflow/dist/style.css';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
 import { AppContext, PositionType } from '../../context/AppContext';
-import { GraphContext } from '../../context/GraphContext';
+import { GraphContext, TypesNode } from '../../context/GraphContext';
 import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
@@ -25,7 +25,7 @@ export default function Graph() {
         nodes, setNodes, onNodesChange,
         edges, setEdges, onEdgesChange,
         nodeTypes, edgeTypes,
-        addNode, deleteSelectedNodes,
+        addNode, deleteSelectedNodes, groupSelectedNodes,
         lastSelectedEdgeID, setLastSelectedEdgeID,
     } = useContext(GraphContext)
 
@@ -42,7 +42,8 @@ export default function Graph() {
     //Connection methods
 
     const onConnect: OnConnect = useCallback((params) => {
-        setEdges((eds) => addEdge(params, eds))
+        const id = "edge_" + params.source + "-" + params.target
+        setEdges((eds) => addEdge({...params, id}, eds))
     }, [setEdges]);
 
     //Shortcut
@@ -54,6 +55,10 @@ export default function Graph() {
         
         else if(e.key === 's' && !isWriting) {
             deleteSelectedNodes()
+        }
+
+        else if (e.key === "g" && !isWriting) {
+            groupSelectedNodes()
         }
     }
 
@@ -129,7 +134,7 @@ export default function Graph() {
         
             const position = reactFlowInstance?.screenToFlowPosition({x: event.clientX, y: event.clientY});
             
-            addNode("...", position, type)
+            addNode("...", position, type as TypesNode)
         },[reactFlowInstance, addNode]
     );
 
@@ -171,7 +176,6 @@ export default function Graph() {
       );
 
     const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
-
 
     return (
         <div style={{flex: 1, flexWrap: 'wrap', display: 'flex', boxSizing:"border-box"}} tabIndex={0} onKeyDown={handleKeyDown} ref={reactFlowWrapper} >

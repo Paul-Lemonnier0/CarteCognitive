@@ -1,7 +1,8 @@
 import { Node } from "reactflow"
 import { PositionType } from "../context/AppContext"
+import { SizeType, TypesNode } from "../context/GraphContext"
 
-function createNewNodeObject(nodeID: number, label: string, position: PositionType, type: string, date:string): Node {
+function createNewNodeObject(nodeID: number, label: string, position: PositionType, type: TypesNode, date:string, size?: SizeType): Node {
     const node: Node = { 
         id: String(nodeID), 
         position: { x: position?.x ?? 0, y: position?.y ?? 0 },
@@ -11,6 +12,10 @@ function createNewNodeObject(nodeID: number, label: string, position: PositionTy
             label: label ?? ((type === "fieldsetNode" )? "Nouvelle zone" : "..."),
             date: date
         }
+    }
+
+    if(size) {
+        node.style = {width: size.w, height: size.h}
     }
 
     return node
