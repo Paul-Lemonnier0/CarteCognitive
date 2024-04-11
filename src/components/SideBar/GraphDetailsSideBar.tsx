@@ -32,7 +32,7 @@ const GraphDetailsSideBar = () => {
     const [titleIsModif, setTitleIsModif] = useState(false)
 
     // Utilisation de useRef pour maintenir une valeur constante pour startGraph
-    const startGraph = useRef<GraphType> ( {
+    const startGraph = useRef<GraphType>({
         nodes: nodes,
         edges: edges,
         id: id,
@@ -46,11 +46,11 @@ const GraphDetailsSideBar = () => {
     const [selectedEdgeLabel, setSelectedEdgeLabel] = useState(selectedEdge ? selectedEdge.label : "")
     const [isGraphModified, setIsGraphModified] = useState(false)
 
-    useEffect(()=>{
-        setIsGraphModified(true)
+    useEffect(() => {
+        //setIsGraphModified(true)
         console.log('modification sur le graph')
     }, [nodes, edges, id, graphTitle])
-    
+
     useEffect(() => {
         if (lastSelectedNodeID) {
             const selectedNode = nodes.filter(node => node.id === lastSelectedNodeID)[0]
@@ -142,16 +142,23 @@ const GraphDetailsSideBar = () => {
         if (selectedNode) {
             if (!selectedNode.data) {
                 updateNodeData(selectedNode.id, { ...selectedNodeData })
+                setIsGraphModified(true)
+
             }
 
             else {
                 if (selectedNode.data.label) {
                     if (selectedNode.data.label !== selectedNodeData.label) {
                         updateNodeData(selectedNode.id, { ...selectedNodeData })
+                        setIsGraphModified(true)
+
                     }
                 }
 
-                else updateNodeData(selectedNode.id, { ...selectedNodeData })
+                else {
+                    updateNodeData(selectedNode.id, { ...selectedNodeData })
+                    setIsGraphModified(true)
+                }
             }
         }
     }
@@ -160,16 +167,22 @@ const GraphDetailsSideBar = () => {
         if (selectedNode) {
             if (!selectedNode.data) {
                 updateNodeData(selectedNode.id, { ...selectedNodeData, couleur: color })
+                setIsGraphModified(true)
+
             }
 
             else {
                 if (selectedNode.data.couleur) {
                     if (selectedNode.data.couleur !== color) {
                         updateNodeData(selectedNode.id, { ...selectedNodeData, couleur: color })
+                        setIsGraphModified(true)
+
                     }
                 }
 
                 else updateNodeData(selectedNode.id, { ...selectedNodeData, couleur: color })
+                setIsGraphModified(true)
+
             }
         }
     }
@@ -188,7 +201,7 @@ const GraphDetailsSideBar = () => {
                 </div>
                 {
                     titleIsModif ?
-                        <input type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)}></input>
+                        <input type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={(e) => {setEditedTitle(e.target.value); setIsGraphModified(true)}}></input>
                         : <p className="graphDetailsSideBarContainerTitleText">{editedTitle}</p>
                 }
 
