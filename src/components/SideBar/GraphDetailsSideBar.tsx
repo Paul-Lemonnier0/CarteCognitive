@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { FiEdit3 } from "react-icons/fi";
 import "./GraphDetailsSideBarStyle.css"
 import CustomSearchBar from "../SearchBar/SearchBar"
@@ -21,7 +21,7 @@ import { GraphType } from "../../types/Graph/GraphType";
 
 const GraphDetailsSideBar = () => {
 
-    const {graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID} = useContext(GraphContext)
+    const { graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID } = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -31,21 +31,28 @@ const GraphDetailsSideBar = () => {
 
     const [titleIsModif, setTitleIsModif] = useState(false)
 
-    const startGraph: GraphType = {
+    // Utilisation de useRef pour maintenir une valeur constante pour startGraph
+    const startGraph = useRef<GraphType> ( {
         nodes: nodes,
         edges: edges,
         id: id,
         title: graphTitle
-    }
+    })
 
     const [selectedNode, setSelectedNode] = useState<Node | undefined>(lastSelectedNodeID ? nodes.filter(node => node.id === lastSelectedNodeID)[0] : undefined)
     const [selectedNodeData, setSelectedNodeData] = useState<CustomNodeData>(selectedNode ? (selectedNode.data ?? {}) : {})
 
     const [selectedEdge, setSelectedEdge] = useState<Edge | undefined>(lastSelectedEdgeID ? edges.filter(edge => edge.id === lastSelectedEdgeID)[0] : undefined)
     const [selectedEdgeLabel, setSelectedEdgeLabel] = useState(selectedEdge ? selectedEdge.label : "")
+    const [isGraphModified, setIsGraphModified] = useState(false)
 
+    useEffect(()=>{
+        setIsGraphModified(true)
+        console.log('modification sur le graph')
+    }, [nodes, edges, id, graphTitle])
+    
     useEffect(() => {
-        if(lastSelectedNodeID) {
+        if (lastSelectedNodeID) {
             const selectedNode = nodes.filter(node => node.id === lastSelectedNodeID)[0]
             setSelectedNode(selectedNode)
             setSelectedNodeData(selectedNode ? (selectedNode.data ?? {}) : {})
@@ -53,12 +60,12 @@ const GraphDetailsSideBar = () => {
 
         else {
             setSelectedNode(undefined)
-            setSelectedNodeData({label: ""})
+            setSelectedNodeData({ label: "" })
         }
     }, [lastSelectedNodeID, nodes])
 
     useEffect(() => {
-        if(lastSelectedEdgeID) {
+        if (lastSelectedEdgeID) {
             const selectedEdge = edges.filter(edge => edge.id === lastSelectedEdgeID)[0]
             setSelectedEdge(selectedEdge)
             setSelectedEdgeLabel(selectedEdge ? selectedEdge.label : "")
@@ -72,7 +79,7 @@ const GraphDetailsSideBar = () => {
 
     useEffect(() => {
         setFilteredNodes(nodes.filter(node => {
-            if("data" in node && "label" in node.data) {
+            if ("data" in node && "label" in node.data) {
                 return (node.data.label as string).toLowerCase().includes(searchValue.toLowerCase())
             }
 
@@ -82,13 +89,15 @@ const GraphDetailsSideBar = () => {
     }, [nodes, searchValue])
 
 
+
+
     const handlePressOnNode = (nodeID: string) => {
         setSelectedNodesIDs([nodeID])
         setLastSelectedNodeID(nodeID)
     }
 
     const handleDoublePressOnNode = () => {
-        if(selectedNode) {
+        if (selectedNode) {
             setFitViewNodes([selectedNode])
         }
     }
@@ -97,17 +106,21 @@ const GraphDetailsSideBar = () => {
 
     const handleGoBack = () => {
 
-        const newGraph: GraphType = {
+        let newGraph: GraphType = {
             nodes: nodes,
             edges: edges,
             id: id,
             title: editedTitle
         }
-        //compare les deux graph en chaine de caractère
-        console.log(`${startGraph.edges} \t ${newGraph.edges}`)
-        if (JSON.stringify(startGraph) != JSON.stringify(newGraph)) {
-            setDocument("Default", newGraph, newGraph.id)
-            console.log("graphe modifiée")
+
+        if (isGraphModified) {
+            //ouvre une fenêtre demandant si l'utilisateur veut sauvegarder
+            const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications");
+            if (shouldSave) {
+
+                setDocument("Default", newGraph, newGraph.id)
+                console.log("graphe modifiée")
+            }
         }
         navigate(-1)
     }
@@ -122,41 +135,41 @@ const GraphDetailsSideBar = () => {
         "Sommet" : "Zone"
 
     const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedNodeData((prevData) => ({...prevData, label: e.target.value ?? ""}))
+        setSelectedNodeData((prevData) => ({ ...prevData, label: e.target.value ?? "" }))
     }
 
     const handleUpdateNodeLabel = () => {
-        if(selectedNode) {
-            if(!selectedNode.data) {
-                updateNodeData(selectedNode.id, {...selectedNodeData})
+        if (selectedNode) {
+            if (!selectedNode.data) {
+                updateNodeData(selectedNode.id, { ...selectedNodeData })
             }
-    
+
             else {
-                if(selectedNode.data.label) {
-                    if(selectedNode.data.label !== selectedNodeData.label) {
-                        updateNodeData(selectedNode.id, {...selectedNodeData})
+                if (selectedNode.data.label) {
+                    if (selectedNode.data.label !== selectedNodeData.label) {
+                        updateNodeData(selectedNode.id, { ...selectedNodeData })
                     }
                 }
-    
-                else updateNodeData(selectedNode.id, {...selectedNodeData})
+
+                else updateNodeData(selectedNode.id, { ...selectedNodeData })
             }
         }
     }
 
     const handleUpdateColor = (color: string) => {
-        if(selectedNode) {
-            if(!selectedNode.data) {
-                updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
+        if (selectedNode) {
+            if (!selectedNode.data) {
+                updateNodeData(selectedNode.id, { ...selectedNodeData, couleur: color })
             }
-    
+
             else {
-                if(selectedNode.data.couleur) {
-                    if(selectedNode.data.couleur !== color) {
-                        updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
+                if (selectedNode.data.couleur) {
+                    if (selectedNode.data.couleur !== color) {
+                        updateNodeData(selectedNode.id, { ...selectedNodeData, couleur: color })
                     }
                 }
-    
-                else updateNodeData(selectedNode.id, {...selectedNodeData, couleur: color})
+
+                else updateNodeData(selectedNode.id, { ...selectedNodeData, couleur: color })
             }
         }
     }
@@ -171,42 +184,42 @@ const GraphDetailsSideBar = () => {
         <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
             <div id="header">
                 <div id="baseButton">
-                    <GoBackButton onPress={handleGoBack}/>
+                    <GoBackButton onPress={handleGoBack} />
                 </div>
                 {
                     titleIsModif ?
-                    <input type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={(e)=>setEditedTitle(e.target.value)}></input>
-                    : <p className="graphDetailsSideBarContainerTitleText">{editedTitle}</p>
+                        <input type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)}></input>
+                        : <p className="graphDetailsSideBarContainerTitleText">{editedTitle}</p>
                 }
 
                 <div>
-                    <IconButton Icon={FiEdit3} onPress={() => {setTitleIsModif(!titleIsModif)}}/>
+                    <IconButton Icon={FiEdit3} onPress={() => { setTitleIsModif(!titleIsModif) }} />
                 </div>
             </div>
-        
+
             <div id="body">
                 <div id="searchNodeContainer">
                     <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
-                        <div style={{display: "inline", flex: 1}}>
-                            <CustomSearchBar 
+                        <div style={{ display: "inline", flex: 1 }}>
+                            <CustomSearchBar
                                 iconHover
-                                searchValue={searchValue} 
+                                searchValue={searchValue}
                                 setSearchValue={setSearchValue}
-                                placeholder="Chercher un noeud..."/>
+                                placeholder="Chercher un noeud..." />
                         </div>
                         {!isExpanded && <span className="tooltip">Rechercher</span>}
                     </div>
-                    
+
                     <CustomCard customPadding={!isExpanded}>
-                        <div id="searchListContainer" style={{marginLeft: isExpanded ? 0 : 10, overflowY: isExpanded ? "initial" : "hidden"}}>       
+                        <div id="searchListContainer" style={{ marginLeft: isExpanded ? 0 : 10, overflowY: isExpanded ? "initial" : "hidden" }}>
                             {
                                 filteredNodes.map((node, index) => (
-                                    <CustomNodeListItem key={index} 
-                                        node={node} 
+                                    <CustomNodeListItem key={index}
+                                        node={node}
                                         isVisible={isExpanded}
                                         onPress={() => handlePressOnNode(node.id)}
                                         onDoublePress={handleDoublePressOnNode}
-                                        isSelected={lastSelectedNodeID === node.id}/>
+                                        isSelected={lastSelectedNodeID === node.id} />
                                 ))
                             }
                         </div>
@@ -216,29 +229,29 @@ const GraphDetailsSideBar = () => {
                 {
                     selectedNodeData && selectedNode &&
                     <div id="selectedOptions">
-                        <div id="selectedOptionsItem" style={{marginLeft: 2.5}} onClick={handleClickOnUnExpandedListItem}>
+                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }} onClick={handleClickOnUnExpandedListItem}>
                             {
                                 isSommetSelected ?
-                                <CustomNodeIcon size={25} color="#ebedee"/> :
-                                <CustomZoneIcon size={25} color="#ebedee"/>
+                                    <CustomNodeIcon size={25} color="#ebedee" /> :
+                                    <CustomZoneIcon size={25} color="#ebedee" />
                             }
 
                             {/* <BackgroundIcon Icon={IoGitMergeOutline} size={25}/> */}
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedNodeData.label ? 1 : 0}}>{selectedNodeData.label === "" ? "A" : selectedNodeData.label }</p>
+                                <p className="graphDetailsSideBarContainerTitleText" style={{ opacity: selectedNodeData.label ? 1 : 0 }}>{selectedNodeData.label === "" ? "A" : selectedNodeData.label}</p>
                                 <p className="graphDetailsSideBarContainerText">{selectedNodeTypeString} - Paul {selectedNodeData.date === "Non Definis" ? undefined : selectedNodeData.date}</p>
                             </div>
 
                             {!isExpanded && <span className="tooltip">{selectedNodeTypeString}</span>}
                         </div>
 
-                        
+
                         <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
-                            <div style={{display: "inline", flex: 1}}>
-                                <IconTextInput 
+                            <div style={{ display: "inline", flex: 1 }}>
+                                <IconTextInput
                                     iconHover
-                                    Icon={RxText} 
-                                    textValue={selectedNodeData.label ?? ""} 
+                                    Icon={RxText}
+                                    textValue={selectedNodeData.label ?? ""}
                                     onChangeCustom={handleWritting}
                                     onBlur={handleUpdateNodeLabel}
                                     placeholder="Nom du sommet..."
@@ -248,26 +261,26 @@ const GraphDetailsSideBar = () => {
                             {!isExpanded && <span className="tooltip">Label</span>}
                         </div>
 
-                        <div id="selectedOptionsItem" style={{marginLeft: 2.5, marginBlock: -5, paddingBlock: 5}} onClick={handleClickOnUnExpandedListItem}>
-                            <div style={{display: "inline", flex: 1}}>
+                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5, marginBlock: -5, paddingBlock: 5 }} onClick={handleClickOnUnExpandedListItem}>
+                            <div style={{ display: "inline", flex: 1 }}>
 
-                                <div style={{display: "flex", flexDirection: "row", gap: 10}}>
-                                    <span style={{cursor: "pointer"}}>
-                                        <BackgroundIcon iconHover isSelected squared Icon={BiColorFill} size={25} color={selectedNodeData.couleur ?? "white"}/>
+                                <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+                                    <span style={{ cursor: "pointer" }}>
+                                        <BackgroundIcon iconHover isSelected squared Icon={BiColorFill} size={25} color={selectedNodeData.couleur ?? "white"} />
                                     </span>
-                                    <div style={{display: "flex", flexDirection: "row", gap: 9, flex: 1}}>
-                                    {
-                                        baseColorsReduit.map(color => (
-                                            <span id="colorBlockContainer" onClick={() => handleUpdateColor(color)}>
-                                                <BackgroundIcon squared key={color} size={25} color={color} hiddenIcon Icon={BiColorFill}/>
-                                            </span>
-                                        ))
-                                    }
+                                    <div style={{ display: "flex", flexDirection: "row", gap: 9, flex: 1 }}>
+                                        {
+                                            baseColorsReduit.map(color => (
+                                                <span id="colorBlockContainer" onClick={() => handleUpdateColor(color)}>
+                                                    <BackgroundIcon squared key={color} size={25} color={color} hiddenIcon Icon={BiColorFill} />
+                                                </span>
+                                            ))
+                                        }
                                     </div>
                                 </div>
                             </div>
 
-                            {!isExpanded &&<span className="tooltip">Couleur</span>}
+                            {!isExpanded && <span className="tooltip">Couleur</span>}
 
                         </div>
 
@@ -276,26 +289,26 @@ const GraphDetailsSideBar = () => {
                     </div>
                 }
                 {
-                    selectedEdge && 
+                    selectedEdge &&
                     <div id="selectedOptions">
-                        <div id="selectedOptionsItem" style={{marginLeft: 2.5}} onClick={handleClickOnUnExpandedListItem}>
+                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }} onClick={handleClickOnUnExpandedListItem}>
                             {
                                 isSommetSelected ?
-                                <CustomNodeIcon size={25} color="#ebedee"/> :
-                                <CustomZoneIcon size={25} color="#ebedee"/>
+                                    <CustomNodeIcon size={25} color="#ebedee" /> :
+                                    <CustomZoneIcon size={25} color="#ebedee" />
                             }
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel }</p>
+                                <p className="graphDetailsSideBarContainerTitleText" style={{ opacity: selectedEdgeLabel ? 1 : 0 }}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel}</p>
                                 <p className="graphDetailsSideBarContainerText"> Nicolas </p>
                             </div>
                         </div>
 
                         {/* Bon je finis après la c'est dégeu */}
                         <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
-                            <div style={{display: "inline", flex: 1}}>
-                                <div style={{display: "flex"}} >
-                                    <RxText size={25}/>
-                                </div>                                
+                            <div style={{ display: "inline", flex: 1 }}>
+                                <div style={{ display: "flex" }} >
+                                    <RxText size={25} />
+                                </div>
                                 <input
                                     type="text"
                                     value={selectedEdgeLabel ? "selectedEdgeLabel" : ""}
@@ -307,11 +320,11 @@ const GraphDetailsSideBar = () => {
                             {!isExpanded && <span className="tooltip">Label</span>}
                         </div>
                     </div>
-                    
+
                 }
             </div>
-            
-            
+
+
             <div id="footer">
                 <li className="graphSideBarRow" onClick={handleChangeExpandState}>
                     <span style={{ marginLeft: -15 }}>
