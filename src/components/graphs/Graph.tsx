@@ -8,6 +8,7 @@ import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
 import NodeContextMenu from './Nodes/NodeContextMenu';
+import SelectorButton from '../Buttons/SelectorButton';
 
 export type MenuType = {
     id: string,
@@ -19,6 +20,7 @@ export type MenuType = {
 
 export default function Graph() {
     const {
+        isGraphModified, setIsGraphModified,
         fitViewNodes,
         lastSelectedNodeID, setLastSelectedNodeID,
         selectedNodesIDs, setSelectedNodesIDs,
@@ -27,6 +29,7 @@ export default function Graph() {
         nodeTypes, edgeTypes,
         addNode, deleteSelectedNodes, groupSelectedNodes,
         lastSelectedEdgeID, setLastSelectedEdgeID,
+        upgrade, setUpgrade,
     } = useContext(GraphContext)
 
     //Data
@@ -44,6 +47,7 @@ export default function Graph() {
     const onConnect: OnConnect = useCallback((params) => {
         const id = "edge_" + params.source + "-" + params.target
         setEdges((eds) => addEdge({...params, id}, eds))
+        setIsGraphModified(true)
     }, [setEdges]);
 
     //Shortcut
@@ -213,6 +217,19 @@ export default function Graph() {
                 />
                 <Controls/>
             </ReactFlow>
+            
+            <SelectorButton style={{
+                position : "absolute",
+                backgroundColor : upgrade ? "rgba(0,255,0,0.2)" : "rgba(255,0,0,0.2)",
+                marginTop:"5px",
+                right:110
+
+            }}
+        onClick={()=>{
+            setUpgrade(!upgrade)
+            }}
+        text='Sauvegarde Auto'
+            />
         </div>
     );
 }

@@ -18,7 +18,7 @@ import { GrUpgrade } from "react-icons/gr";
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor } = useContext(AppContext)
-    const {showEdge,setShowEdge, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified} = useContext(GraphContext)
+    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified} = useContext(GraphContext)
     const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
             event.dataTransfer.setData('application/reactflow', nodeType);
             event.dataTransfer.effectAllowed = 'move';
@@ -45,7 +45,9 @@ const SideBar = () => {
             nodes: nodes,
             edges: edges,
             id: id,
-            title: graphTitle
+            title: graphTitle,
+            upgrade : upgrade,
+
         }
         setDocument("Default", newGraph, newGraph.id)
         console.log("sauvegarde effectué")

@@ -126,6 +126,6 @@
             "target": "node_R"
         }
     ],
-    "id": "graph3"
-
+    "id": "graph3",
+    "upgrade" : false
 }

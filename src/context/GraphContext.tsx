@@ -8,7 +8,9 @@ import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 
 interface GraphContextType {
-    isGraphModified: boolean
+    upgrade: boolean
+    setUpgrade : Dispatch<React.SetStateAction<boolean>>,
+    isGraphModified: boolean,
     setIsGraphModified : Dispatch<React.SetStateAction<boolean>>,
     id: string,
     graphTitle: string,
@@ -50,6 +52,8 @@ interface GraphContextType {
 }
 
 const GraphContext = createContext<GraphContextType>({
+    upgrade:false,
+    setUpgrade: () =>{},
     isGraphModified:false,
     setIsGraphModified : () => {},
     id: "",
@@ -102,6 +106,7 @@ export enum TypesNode {
 }
 
 interface GraphContextProviderType {
+    autoUpgrade : boolean,
     defaultNodes: Node[],
     defaultEdges: Edge[],
     graphName: string,
@@ -109,7 +114,7 @@ interface GraphContextProviderType {
     children: ReactNode
 }
 
-const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, children}: GraphContextProviderType) => {
+const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphName, id, children}: GraphContextProviderType) => {
     const [isGraphModified, setIsGraphModified] = useState(false)
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
@@ -136,6 +141,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
     const [nodeID, setNodeID] = useState(0)
     const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(defaultNodes_zIndexed)
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(defaultEdges)
+    const [upgrade, setUpgrade] = useState(autoUpgrade)
+
 
     const [selectedNodesIDs, setSelectedNodesIDs] = useState<string[]>([])
     const [lastSelectedNodeID, setLastSelectedNodeID] = useState<string | null>(null)
@@ -283,6 +290,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
 
     return(
         <GraphContext.Provider value={{
+            upgrade, setUpgrade,
             isGraphModified, setIsGraphModified,
             id,
             graphTitle, setGraphTitle,
