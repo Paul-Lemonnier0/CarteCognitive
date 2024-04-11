@@ -2,6 +2,7 @@ import React, { FC, ReactNode } from 'react'
 import { IoChevronBack } from "react-icons/io5";
 import "./IconButtonsStyle.css"
 import { IconType } from 'react-icons';
+import { FaCheck } from "react-icons/fa6";
 
 interface IconButtonProps {
     onPress: () => void,
@@ -34,6 +35,13 @@ export const GoBackButton: FC<PremadeButtonProps>  = ({onPress}) => {
     <IconButton onPress={onPress} Icon={IoChevronBack}/>
   )
 }
+
+export const CheckButton: FC<PremadeButtonProps>  = ({onPress}) => {
+  return (
+    <IconButton onPress={onPress} Icon={FaCheck}/>
+  )
+}
+
 
 interface BackgroundIconProps {
   squared?: boolean,

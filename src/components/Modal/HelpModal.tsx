@@ -8,17 +8,6 @@ import { IoClose } from "react-icons/io5";
 import { TbSquareLetterG, TbSquareLetterN, TbSquareLetterS } from "react-icons/tb";
 import { TbClick } from "react-icons/tb";
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
 interface HelpModalProps {
   onClose: () => void
 }
@@ -93,7 +82,7 @@ const HelpModal: FC<HelpModalProps> = ({onClose}) => {
 
               <div className='ModalFooter'>
                   <div className='ModalButtons'>
-                    <ValidationButton content="Terminer" onClick={onClose}/>
+                    <ValidationButton text="Terminer" onPress={onClose}/>
                   </div>
               </div>
           </div>

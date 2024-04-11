@@ -1,0 +1,21 @@
+.composantsRow {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.composantsCol {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+#Composants-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

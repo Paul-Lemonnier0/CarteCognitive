@@ -29,3 +29,36 @@ export const NormalText: FC<TextProps> = ({text, wrap, center, bold}) => {
         <p className={classe}>{text}</p>
     )
 }
+
+export const MidText: FC<TextProps> = ({text, wrap, center, bold}) => {
+    const classe = "baseText midText" 
+        + (wrap ? " wrap" : "" )
+        + (center ? " center" : "" )
+        + (bold ? " bold" : "" )
+
+    return(
+        <p className={classe}>{text}</p>
+    )
+}
+
+export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold}) => {
+    const classe = "baseText midTextBold" 
+        + (wrap ? " wrap" : "" )
+        + (center ? " center" : "" )
+        + (bold ? " bold" : "" )
+
+    return(
+        <p className={classe}>{text}</p>
+    )
+}
+
+export const TitleText: FC<TextProps> = ({text, wrap, center, bold}) => {
+    const classe = "baseText titleText" 
+        + (wrap ? " wrap" : "" )
+        + (center ? " center" : "" )
+        + (bold ? " bold" : "" )
+
+    return(
+        <p className={classe}>{text}</p>
+    )
+}

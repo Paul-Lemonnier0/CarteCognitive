@@ -5,6 +5,8 @@ import { GraphType } from "../types/Graph/GraphType"
 import { getGraphFromJSON } from "../primitives/GraphMethods"
 import ListGraph from "../components/graphs/ListGraph"
 import { getCollection } from "../firebase/FireStore.tsx/FirestoreDB"
+import { ValidationButton } from "../components/Buttons/Buttons"
+import ComposantsModal from "../components/Modal/ComposantsModal"
 
 const HomeScreen = () => {
     const graph1 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph1.json") as GraphType)
@@ -26,6 +28,16 @@ const HomeScreen = () => {
         fetchGraphData("Default");
     }, []);
 
+    const [showComposants, setShowComposants] = useState<boolean>(false)
+
+    const handleShowComposants = () => {
+        setShowComposants(true)
+    }
+
+    const handleCloseComposants = () => {
+        setShowComposants(false)
+    }
+
     return (
         <>
             <AppTopBar />
@@ -33,6 +45,13 @@ const HomeScreen = () => {
                 <ListGraph graphs={graphs} title={"Graphes d'exemple"}/>
                 <ListGraph graphs={graphsUser} title = {`Graphes de ${user}`}/>
             </div>
+            <div style={{padding: 20}}>
+                <ValidationButton text="Composants" onPress={handleShowComposants}/>
+            </div>
+            {
+                showComposants &&
+                <ComposantsModal onClose={handleCloseComposants}/>
+            }
         </>
     )
 }
