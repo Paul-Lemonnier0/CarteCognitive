@@ -14,8 +14,18 @@
     align-items: center;
 }
 
+.maxHeight {
+    max-height: 80%;
+    height: 80%;
+}
+
 #Composants-body {
     display: flex;
+    flex: 1;
+    margin-inline: -10px;
+    padding-inline: 10px;
     flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
     gap: 20px;
 }
