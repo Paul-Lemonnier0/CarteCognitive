@@ -8,6 +8,8 @@ import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 
 interface GraphContextType {
+    isGraphModified: boolean
+    setIsGraphModified : Dispatch<React.SetStateAction<boolean>>,
     id: string,
     graphTitle: string,
     setGraphTitle: Dispatch<string>,
@@ -48,6 +50,8 @@ interface GraphContextType {
 }
 
 const GraphContext = createContext<GraphContextType>({
+    isGraphModified:false,
+    setIsGraphModified : () => {},
     id: "",
     graphTitle: "",
     setGraphTitle: () => {},
@@ -106,6 +110,7 @@ interface GraphContextProviderType {
 }
 
 const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, children}: GraphContextProviderType) => {
+    const [isGraphModified, setIsGraphModified] = useState(false)
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState(false)
@@ -145,6 +150,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
             setNodeID(nodeID + 1);
             return [...previousNodes, node];
         });
+        setIsGraphModified(true)
     }
 
     const deleteSelectedNodes = () => {
@@ -157,6 +163,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
 
         setNodes(updatedNodes)
         setEdges(updatedEdgesSecond)
+        setIsGraphModified(true)
+
     }   
 
     const updateNodeData = (nodeID: string, newNodeData: CustomNodeData) => {
@@ -164,6 +172,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
             node.id === nodeID ?
                 { ...node, data: newNodeData as any} : node
         ))
+        setIsGraphModified(true)
+
     }
 
 
@@ -189,6 +199,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
         }))
         setChangeColorWithField(!changeColorWithField)
         setSelectedNodesIDs([...selected_nodes_id])
+        setIsGraphModified(true)
+
     }
 
     const duplicateNode = (nodeID: string) => {
@@ -205,6 +217,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
                 addNode(nodeLabel, position, node.type as TypesNode)
             }
       }
+      setIsGraphModified(true)
+
     }
 
     const breakLinks = (nodeID: string) => {
@@ -213,6 +227,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
             (nodeID !== edge.target))
             
         setEdges(updatedEdges)
+        setIsGraphModified(true)
+
     }
 
 
@@ -221,6 +237,8 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
         setNodes(updatedNodes)
 
         breakLinks(nodeID)
+        setIsGraphModified(true)
+
     }
 
     const groupSelectedNodes = () => {
@@ -265,6 +283,7 @@ const GraphContextProvider = ({defaultNodes, defaultEdges, graphName, id, childr
 
     return(
         <GraphContext.Provider value={{
+            isGraphModified, setIsGraphModified,
             id,
             graphTitle, setGraphTitle,
             fitViewNodes, setFitViewNodes,

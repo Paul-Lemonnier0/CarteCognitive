@@ -22,7 +22,7 @@ import { GraphType } from "../../types/Graph/GraphType";
 
 const GraphDetailsSideBar = () => {
 
-    const {graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID, setEdges} = useContext(GraphContext)
+    const {isGraphModified,setIsGraphModified,graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID, setEdges} = useContext(GraphContext)
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -45,7 +45,7 @@ const GraphDetailsSideBar = () => {
 
     const [selectedEdge, setSelectedEdge] = useState<Edge | undefined>(lastSelectedEdgeID ? edges.filter(edge => edge.id === lastSelectedEdgeID)[0] : undefined)
     const [selectedEdgeLabel, setSelectedEdgeLabel] = useState(selectedEdge ? selectedEdge.label : "")
-    const [isGraphModified, setIsGraphModified] = useState(false)
+    
 
 
     useEffect(() => {
@@ -328,7 +328,7 @@ const GraphDetailsSideBar = () => {
                                     <IconTextInput 
                                         iconHover
                                         Icon={RxText} 
-                                        textValue={selectedEdgeLabel ?? ""} 
+                                        textValue={String(selectedEdgeLabel) ?? ""} 
                                         onChangeCustom={handleWrittingEdge}
                                         onBlur={handleUpdateEdgeLabel}
                                         placeholder="Nom de l'arrete ..."

@@ -10,11 +10,15 @@ import { BackgroundIcon } from "../Buttons/IconButtons";
 import { BiColorFill } from "react-icons/bi";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { MdOutlineQuestionMark } from "react-icons/md";
+import { GraphType } from "../../types/Graph/GraphType";
+import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB";
+import { GrUpgrade } from "react-icons/gr";
+
 
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor } = useContext(AppContext)
-    const {showEdge,setShowEdge} = useContext(GraphContext)
+    const {showEdge,setShowEdge, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified} = useContext(GraphContext)
     const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
             event.dataTransfer.setData('application/reactflow', nodeType);
             event.dataTransfer.effectAllowed = 'move';
@@ -34,6 +38,18 @@ const SideBar = () => {
 
     const clickShowEdge = () => {
         setShowEdge(!showEdge)
+    }
+
+    const upGradeGraph = () =>{
+        let newGraph: GraphType = {
+            nodes: nodes,
+            edges: edges,
+            id: id,
+            title: graphTitle
+        }
+        setDocument("Default", newGraph, newGraph.id)
+        console.log("sauvegarde effectué")
+        setIsGraphModified(false)
     }
 
     return(
@@ -78,6 +94,14 @@ const SideBar = () => {
                     size={25} 
                     color={colorNode}/>
                 <p>Etiquettes</p>
+            </div>
+
+            <div className="sideBarItem" onClick={upGradeGraph}>
+                <BackgroundIcon 
+                    Icon={GrUpgrade} 
+                    size={25} 
+                    color={colorNode}/>
+                <p>Sauvegarde</p>
             </div>
 
             <div id="footer">
