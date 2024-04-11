@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   },
   {
     path:"/Profile",
-    element : <ProfileScreen/>
+    element : <ProfileScreen user="Default"/>
   },
 
   {

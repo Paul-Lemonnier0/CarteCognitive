@@ -1,0 +1,16 @@
+.circle-image-container {
+    width: 100px; /* Ajustez la taille du conteneur selon vos besoins */
+    height: 100px; /* Ajustez la taille du conteneur selon vos besoins */
+    border-radius: 50%; /* Rend l'élément circulaire */
+    border: 2px solid black;
+    overflow: hidden; /* Masque tout contenu qui dépasse de la forme */
+    display: flex; /* Utilise la disposition flexbox */
+    justify-content: center; /* Centre l'élément horizontalement */
+    align-items: center; /* Centre l'élément verticalement */
+}
+
+.circle-image {
+    width: 100%; /* Assurez-vous que l'image remplisse le conteneur */
+    height: 100%; /* Assurez-vous que l'image remplisse le conteneur */
+    object-fit: cover; /* Ajuste la taille de l'image pour couvrir l'intégralité du conteneur */
+}
