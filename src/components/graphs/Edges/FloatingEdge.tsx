@@ -57,7 +57,11 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
 
 
+<<<<<<< HEAD
   const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID } = useContext(GraphContext)
+=======
+  const {showEdge } = useContext(GraphContext)
+>>>>>>> c9e454783abe84ab62cc4e373396f556a9555535
 
   let path = '';
   
@@ -85,7 +89,13 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
   return (
     <>
-      <BaseEdge id={id} path={path} markerEnd={markerEnd}/>
+      <BaseEdge id={id} path={path} interactionWidth={25} style={{
+        backgroundColor: "red",
+        borderColor: "red",
+        stroke: "black",
+        strokeWidth: 2
+        
+      }} markerEnd={markerEnd}/>
       {showEdge && 
         <EdgeLabelRenderer>
           <CustomEdgeLabel label={data ? data.label : ""} labelX={labelX} labelY={labelY}/>

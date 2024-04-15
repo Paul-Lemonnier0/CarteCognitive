@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import "./MainSideBar.css"
 import { GoBackButton, IconButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
@@ -10,6 +10,7 @@ import EditSideBar from "./EditSideBar"
 import CalculSideBar from "./CalculSideBar"
 import SettingsSideBar from "./SettingsSideBar"
 import { SlCalculator } from "react-icons/sl"
+import { GraphContext } from "../../context/GraphContext"
 
 enum SideBarMenuType {
     Edit = "Edit",
@@ -18,6 +19,8 @@ enum SideBarMenuType {
 }
 
 const MainSideBar = () => {
+
+    const {isCalculating, setIsCalculating} = useContext(GraphContext)
 
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
@@ -34,9 +37,16 @@ const MainSideBar = () => {
     }
 
     const handleChangeMenu = (menu: SideBarMenuType) => {
-        if(!isExpanded) {
-            setIsExpanded(true)
+        // if(!isExpanded) {
+        //     setIsExpanded(true)
+        // }
+
+        if(menu === SideBarMenuType.Calcul) {
+            setIsCalculating(true)
         }
+
+        else setIsCalculating(false)
+
         setSelectedMenu(menu)
     }
 

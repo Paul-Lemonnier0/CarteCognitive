@@ -6,10 +6,11 @@ interface TextProps {
     wrap?: boolean,
     center?: boolean,
     bold?: boolean,
-    flex?: boolean
+    flex?: boolean,
+    color?: string
 }
 
-export const SmallText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
+export const SmallText: FC<TextProps> = ({text, wrap, center, bold, flex, color}) => {
     const classe = "baseText smallText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
@@ -17,11 +18,11 @@ export const SmallText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
         + (flex ? " flex" : "" )
 
     return(
-        <p className={classe}>{text}</p>
+        <p className={classe} style={{color: color}}>{text}</p>
     )
 }
 
-export const NormalText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
+export const NormalText: FC<TextProps> = ({text, wrap, center, bold, flex, color}) => {
     const classe = "baseText normalText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
@@ -29,11 +30,11 @@ export const NormalText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
         + (flex ? " flex" : "" )
 
     return(
-        <p className={classe}>{text}</p>
+        <p className={classe} style={{color: color}}>{text}</p>
     )
 }
 
-export const MidText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
+export const MidText: FC<TextProps> = ({text, wrap, center, bold, flex, color}) => {
     const classe = "baseText midText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
@@ -41,11 +42,11 @@ export const MidText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
         + (flex ? " flex" : "" )
 
     return(
-        <p className={classe}>{text}</p>
+        <p className={classe} style={{color: color}}>{text}</p>
     )
 }
 
-export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
+export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold, flex, color}) => {
     const classe = "baseText midTextBold" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
@@ -53,11 +54,11 @@ export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold, flex}) => 
         + (flex ? " flex" : "" )
 
     return(
-        <p className={classe}>{text}</p>
+        <p className={classe} style={{color: color}}>{text}</p>
     )
 }
 
-export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
+export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color}) => {
     const classe = "baseText titleText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
@@ -65,6 +66,6 @@ export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex}) => {
         + (flex ? " flex" : "" )
 
     return(
-        <p className={classe}>{text}</p>
+        <p className={classe} style={{color: color}}>{text}</p>
     )
 }
