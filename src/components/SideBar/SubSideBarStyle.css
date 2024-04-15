@@ -1,0 +1,55 @@
+.subSideBarContainer {
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px;
+    gap: 20px;
+
+    max-height: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+
+.subSideBarContainer #header {
+    display: flex; 
+    flex-direction: row;
+    align-items: center; 
+    gap: 20px;
+
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+
+    padding-inline: 20px;
+    margin-inline: -20px;
+
+    border-bottom: 2px solid #ebedee
+}
+
+.subSideBarContainer #body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.subSideBarContainerText {
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    user-select: none;
+}
+
+
+.subSideBarContainerTitleInput {
+    min-width:0;
+    flex: 1;
+    text-align: left;    
+    user-select: none;
+    border: none;
+    outline: none;
+}

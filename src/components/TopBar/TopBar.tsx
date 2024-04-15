@@ -67,8 +67,6 @@ export const GraphTopBar: FC<GraphTopBarProps> = ({ title }) => {
             flexDirection: "column",
             fontFamily: "PoppinsSemiBold",
         }}>
-            <h3 style={{ fontFamily: "PoppinsBold" }}>{title}</h3>
-
         </div>
     )
 }

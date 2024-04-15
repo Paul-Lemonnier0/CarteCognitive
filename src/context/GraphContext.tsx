@@ -1,5 +1,6 @@
 import { Dispatch, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState, addEdge, useStore,ReactFlowState } from "reactflow";
+
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
@@ -54,8 +55,9 @@ interface GraphContextType {
     cyclique: boolean,
     setCyclique: Dispatch<React.SetStateAction<boolean>>,
     adjMat:AdjMat,
-    setAdjMat: Dispatch<React.SetStateAction<AdjMat>>,
-    getNodeWithID: (nodeID: string) => Node | null
+    getNodeWithID: (nodeID: string) => Node | null,
+    isCalculating: boolean,
+    setIsCalculating: Dispatch<React.SetStateAction<boolean>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -104,13 +106,20 @@ const GraphContext = createContext<GraphContextType>({
     cyclique: true,
     setCyclique: () => {},
     adjMat: {},
-    setAdjMat: () => {},
-    getNodeWithID: () => null
+    getNodeWithID: () => null,
+    isCalculating: false,
+    setIsCalculating: () => {}
 })
 
 export interface SizeType {
     w: number,
     h: number
+}
+
+export interface InfluancePathType {
+    sourceID: string,
+    targetID: string,
+    edges: Edge[]
 }
 
 export enum TypesNode {
@@ -126,6 +135,7 @@ interface GraphContextProviderType {
     id: string,
     children: ReactNode
 }
+
 
 const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphName, id, children}: GraphContextProviderType) => {
     const [isGraphModified, setIsGraphModified] = useState(false)
@@ -159,6 +169,8 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(defaultEdges)
     const [upgrade, setUpgrade] = useState(autoUpgrade)
 
+    const [influancePath, setInfluancePath] = useState<InfluancePathType | null>(null)
+    const [isCalculating, setIsCalculating] = useState<boolean>(false)
 
     const [selectedNodesIDs, setSelectedNodesIDs] = useState<string[]>([])
     const [lastSelectedNodeID, setLastSelectedNodeID] = useState<string | null>(null)
@@ -211,13 +223,15 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         const selected_nodes_id: string[] = []
         setColorField(color)
         setNodeColorField([])
-        console.log(nodeColorField)
+
         setNodes((prevNodes) => prevNodes.map(node => {
             if(node.type === "customNode") {
                 if(node.position.x >= x_left && node.position.x <= x_right) {
                     if(node.position.y >= y_top && node.position.y <= y_bottom) {
                         selected_nodes_id.push(node.id)
+                        
                         const temp = nodeColorField
+
                         temp.push(node.id)
                         setNodeColorField(temp)
                         return {...node, selected: true}
@@ -227,6 +241,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             
             return node
         }))
+
         setChangeColorWithField(!changeColorWithField)
         setSelectedNodesIDs([...selected_nodes_id])
         setIsGraphModified(true)
@@ -236,19 +251,14 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     const duplicateNode = (nodeID: string) => {
         const node = nodes.filter(node => node.id === nodeID)[0];
         
-      if(node) {
-          const position = {
-              x: node.position.x + 75,
-              y: node.position.y + 75,
-            };
-      
-            if(node) {
-                const nodeLabel = ("label" in node.data) ? node.data.label as string : ""
-                addNode(nodeLabel, position, node.type as TypesNode)
-            }
-      }
-      setIsGraphModified(true)
-
+        if(node) {
+                const position = { x: node.position.x + 75, y: node.position.y + 75,};
+                if(node) {
+                    const nodeLabel = ("label" in node.data) ? node.data.label as string : ""
+                    addNode(nodeLabel, position, node.type as TypesNode)
+                }
+        }
+        setIsGraphModified(true)
     }
 
     const breakLinks = (nodeID: string) => {
@@ -364,7 +374,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         <GraphContext.Provider value={{
             upgrade, setUpgrade,
             isGraphModified, setIsGraphModified,
-            id, adjMat, setAdjMat,
+            id, adjMat, 
             graphTitle, setGraphTitle,
             fitViewNodes, setFitViewNodes,
             nodeID, setNodeID,
@@ -380,7 +390,8 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             showEdge, setShowEdge,
             lastSelectedEdgeID, setLastSelectedEdgeID,
             cyclique,setCyclique,
-            getNodeWithID
+            getNodeWithID,
+            isCalculating, setIsCalculating
         }}>
             {children}
         </GraphContext.Provider>

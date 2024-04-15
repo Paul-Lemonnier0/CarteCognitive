@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { FC, useContext, useEffect, useRef, useState } from "react"
 import { FiEdit3 } from "react-icons/fi";
-import "./GraphDetailsSideBarStyle.css"
 import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
 import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem"
 import { GraphContext } from "../../context/GraphContext"
 import { Edge, Node } from "reactflow"
-import { BackgroundIcon, GoBackButton, IconButton } from "../Buttons/IconButtons"
+import { BackgroundIcon, IconButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
-import { IoChevronForward } from "react-icons/io5"
 import { CustomZoneIcon } from "../graphs/Zones/CustomZoneIcon"
 import { CustomNodeIcon } from "../graphs/Nodes/CustomNodeIcon"
 import { CustomEdgeIcon } from "../graphs/Edges/CustomEdgeIcon"
@@ -19,10 +17,16 @@ import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
 import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { GraphType } from "../../types/Graph/GraphType";
-import { CiCalculator2 } from "react-icons/ci";
-import { FaCalculator } from "react-icons/fa6";
+import "./EditSideBarStyle.css"
+import "./SubSideBarStyle.css"
 
-const GraphDetailsSideBar = () => {
+import { NormalText, TitleText } from "../Text/CustomText";
+
+interface EditSideBarProps {
+    isExpanded: boolean
+}
+
+const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
     const {
         upgrade, setUpgrade,
         isGraphModified, setIsGraphModified,
@@ -42,8 +46,6 @@ const GraphDetailsSideBar = () => {
     const [searchValue, setSearchValue] = useState<string>("")
 
     const [editedTitle, setEditedTitle] = useState(graphTitle)
-
-    const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
     const [titleIsModif, setTitleIsModif] = useState(false)
 
@@ -119,8 +121,6 @@ const GraphDetailsSideBar = () => {
     }, [nodes, searchValue])
 
 
-
-
     const handlePressOnNode = (nodeID: string) => {
         setSelectedNodesIDs([nodeID])
         setLastSelectedNodeID(nodeID)
@@ -134,31 +134,23 @@ const GraphDetailsSideBar = () => {
 
     const navigate = useNavigate()
 
-    const handleGoBack = () => {
+    // const handleGoBack = () => {
+    //     let newGraph: GraphType = {
+    //         nodes: nodes,
+    //         edges: edges,
+    //         id: id,
+    //         title: editedTitle,
+    //         upgrade: upgrade
+    //     }
 
-        let newGraph: GraphType = {
-            nodes: nodes,
-            edges: edges,
-            id: id,
-            title: editedTitle,
-            upgrade: upgrade
-        }
-
-        if (isGraphModified) {
-            //ouvre une fenêtre demandant si l'utilisateur veut sauvegarder
-            const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications");
-            if (shouldSave) {
-
-                setDocument("Default", newGraph, newGraph.id)
-                console.log("graphe modifiée")
-            }
-        }
-        navigate(-1)
-    }
-
-    const handleChangeExpandState = () => {
-        setIsExpanded(!isExpanded)
-    }
+    //     if (isGraphModified) {
+    //         const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications ?");
+    //         if (shouldSave) {
+    //             setDocument("Default", newGraph, newGraph.id)
+    //         }
+    //     }
+    //     navigate(-1)
+    // }
 
     const isSommetSelected = selectedNode && selectedNode.type && selectedNode.type === "customNode"
 
@@ -230,13 +222,7 @@ const GraphDetailsSideBar = () => {
         }
     }
 
-    const handleClickOnUnExpandedListItem = () => {
-        !isExpanded && setIsExpanded(true)
-    }
-
     const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3]]
-
-    const [nodeAndField, setNodeAndField] = useState(true)
 
     const handleEditTitle = () => {
         setTitleIsModif(!titleIsModif)
@@ -247,32 +233,28 @@ const GraphDetailsSideBar = () => {
         setIsGraphModified(true)
     }
 
-    const handleCalculate = () => {
-        setIsCalculating(!isCalculating)
-    }
+    if(!isExpanded) return null
+    
+    const nodeProprietaire = "Paul"
+    const nodeDate = selectedNodeData.date ?? "Non Definis"
 
     return (
-        <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
+        <div className={`subSideBarContainer`}>
             <div id="header">
-                <div>
-                    <GoBackButton onPress={handleGoBack} />
-                </div>
                 {
                     titleIsModif ?
-                        <input autoFocus type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={onTitleChange}></input>
-                        : <p className="graphDetailsSideBarContainerTitleText">{editedTitle}</p>
+                        <input autoFocus type="text" className="subSideBarContainerTitleInput titleText" value={editedTitle} onChange={onTitleChange}></input>
+                        : <TitleText text={editedTitle} flex/> 
                 }
 
                 <div>
                     <IconButton isSelected={titleIsModif} Icon={FiEdit3} onPress={handleEditTitle} />
                 </div>
-                {isExpanded && <span className="tooltip">Rechercher</span>}
-
             </div>
 
             <div id="body">
                 <div id="searchNodeContainer">
-                    <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
+                    <div id="selectedOptionsItem">
                         <div style={{ display: "inline", flex: 1 }}>
                             <CustomSearchBar
                                 iconHover
@@ -280,16 +262,15 @@ const GraphDetailsSideBar = () => {
                                 setSearchValue={setSearchValue}
                                 placeholder="Chercher un noeud..." />
                         </div>
-                        {!isExpanded && <span className="tooltip">Rechercher</span>}
                     </div>
 
-                    <CustomCard customPadding={!isExpanded}>
-                        <div id="searchListContainer" style={{ marginLeft: isExpanded ? 0 : 10, overflowY: isExpanded ? "initial" : "hidden" }}>
+                    <CustomCard>
+                        <div id="searchListContainer" style={{ marginLeft: 0 }}>
                             {
                                 filteredNodes.map((node, index) => (
                                     <CustomNodeListItem key={index}
+                                        isVisible
                                         node={node}
-                                        isVisible={isExpanded}
                                         onPress={() => handlePressOnNode(node.id)}
                                         onDoublePress={handleDoublePressOnNode}
                                         isSelected={lastSelectedNodeID === node.id} />
@@ -300,26 +281,23 @@ const GraphDetailsSideBar = () => {
                 </div>
 
                 {
-                    selectedNodeData && selectedNode && 
+                    selectedNodeData && selectedNode &&
                     <div id="selectedOptions">
-                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }} onClick={handleClickOnUnExpandedListItem}>
+                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }}>
                             {
                                 isSommetSelected ?
                                     <CustomNodeIcon size={25} color="#ebedee" /> :
                                     <CustomZoneIcon size={25} color="#ebedee" />
                             }
 
-                            {/* <BackgroundIcon Icon={IoGitMergeOutline} size={25}/> */}
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{ opacity: selectedNodeData.label ? 1 : 0 }}>{selectedNodeData.label === "" ? "A" : selectedNodeData.label}</p>
-                                <p className="graphDetailsSideBarContainerText">{selectedNodeTypeString} - Paul {selectedNodeData.date === "Non Definis" ? undefined : selectedNodeData.date}</p>
+                                <TitleText text={selectedNodeData.label === "" ? "A" : selectedNodeData.label}/>
+                                <NormalText text={selectedNodeTypeString + "-" + nodeProprietaire + "-" + nodeDate}/>
                             </div>
-
-                            {!isExpanded && <span className="tooltip">{selectedNodeTypeString}</span>}
                         </div>
 
 
-                        <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
+                        <div id="selectedOptionsItem">
                             <div style={{ display: "inline", flex: 1 }}>
                                 <IconTextInput
                                     iconHover
@@ -330,13 +308,10 @@ const GraphDetailsSideBar = () => {
                                     placeholder="Nom du sommet..."
                                 />
                             </div>
-
-                            {!isExpanded && <span className="tooltip">Label</span>}
                         </div>
 
-                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5, marginBlock: -5, paddingBlock: 5 }} onClick={handleClickOnUnExpandedListItem}>
+                        <div id="selectedOptionsItem">
                             <div style={{ display: "inline", flex: 1 }}>
-
                                 <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                     <span style={{ cursor: "pointer" }}>
                                         <BackgroundIcon iconHover isSelected squared Icon={BiColorFill} size={25} color={selectedNodeData.couleur ?? "white"} />
@@ -352,71 +327,39 @@ const GraphDetailsSideBar = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {!isExpanded && <span className="tooltip">Couleur</span>}
-
                         </div>
                     </div>
                 }
                 {
                     selectedEdge && !isSommetSelected &&
                     <div id="selectedOptions">
-                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }} onClick={handleClickOnUnExpandedListItem}>
-                            {
-                                <CustomEdgeIcon size={25} color="#ebedee"/>
-                            }
+                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }}>
+                            <CustomEdgeIcon size={25} color="#ebedee"/>
+    
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string }</p>
-                                <p className="graphDetailsSideBarContainerText"> Nicolas </p>
+                                <TitleText text={selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string }/>
+                                <NormalText text={nodeProprietaire}/>
                             </div>
                         </div>
 
-                        <div id="selectedOptionsItem" onClick={handleClickOnUnExpandedListItem}>
+                        <div id="selectedOptionsItem">
                             <div style={{display: "inline", flex: 1}}>
-                                <div style={{display: "flex"}} >
-                                    <IconTextInput 
-                                        iconHover
-                                        Icon={RxText} 
-                                        textValue={String(selectedEdgeLabel) ?? ""} 
-                                        onChangeCustom={handleWrittingEdge}
-                                        onBlur={handleUpdateEdgeLabel}
-                                        placeholder="Nom de l'arrete ..."
-                                    />
-                                </div>                                
+                                <IconTextInput 
+                                    iconHover
+                                    Icon={RxText} 
+                                    textValue={String(selectedEdgeLabel) ?? ""} 
+                                    onChangeCustom={handleWrittingEdge}
+                                    onBlur={handleUpdateEdgeLabel}
+                                    placeholder="Nom de l'arrete ..."
+                                />
                             </div>
-
-                            {!isExpanded && <span className="tooltip">Label</span>}
                         </div>
                     </div>
-
                 }
-            </div>
-
-
-            <div id="footer">
-                <li className="graphSideBarRow" onClick={handleCalculate}>
-                    <span style={{ marginLeft: -15 }}>
-                        <IconButton onPress={handleCalculate}>
-                            <FaCalculator/>
-                        </IconButton>
-                    </span>
-                    <div id="title" style={{ marginLeft: 15 }}>
-                        Calculer
-                    </div>
-                </li>
-                <li className="graphSideBarRow" onClick={handleChangeExpandState}>
-                    <span style={{ marginLeft: -15 }}>
-                        <IconButton onPress={handleChangeExpandState}>
-                            <IoChevronForward id="developIcon" />
-                        </IconButton>
-                    </span>
-                    <div id="title" style={{ marginLeft: 15 }}>
-                        Réduire
-                    </div>
-                </li>
             </div>
         </div>
     )
 }
 
-export default GraphDetailsSideBar
+export default EditSideBar
+

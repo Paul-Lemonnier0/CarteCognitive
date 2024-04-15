@@ -31,6 +31,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     updateNodeData, 
     lastSelectedNodeID, 
     deleteSelectedNodes,
+    isCalculating,
     duplicateNode,
     deleteNode,
     breakLinks
@@ -59,21 +60,6 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
   }, [data.couleur, selected])
 
-  const handleStartWriting = () => {
-    setIsWriting(true)
-  }
-
-  const handleEndWriting = () => {
-    if(!data.label || label !== data.label) {
-      updateNodeData(id, {...data, label})
-    }
-
-    setIsWriting(false)
-  }
-
-  const handleWritting = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value)
-  }
 
   const chooseColorNode = (color = "white") => {
     setSelectedColor(color)
@@ -120,6 +106,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     chooseColorNode(color)
     setIsSelectingColor(false)
   }
+
+  const isPartOfInfluanceCalcul = isCalculating ? selected : true
 
   return (
     <div className="customNodeContainer" >  
@@ -175,13 +163,14 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
       }
 
         <div style={{
-            backgroundColor: selectedColor,
-            border:  `2px solid ${selected ? "black" : "transparent"}`
+            backgroundColor: selectedColor, 
+            border:  `2px solid ${selected ? "black" : "transparent"}`,
+            opacity: isPartOfInfluanceCalcul ? 1 : 0.25
           }} 
           className="customNode" 
           onClick={wantSelectColor ? clickColorSibebar : undefined}>
 
-          {!ctrlKeyPressed && !selected && !wantSelectColor &&
+          {!ctrlKeyPressed && !selected && !wantSelectColor && !isCalculating &&
               <>
                 {
                   !isConnecting &&
@@ -193,21 +182,6 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           }
 
           <NormalText text={label} wrap center bold/>
-
-          {/* {
-            !selected ?
-              <p>{label}</p>
-
-              :
-              <input 
-                // onChange={handleWritting}
-
-                type="text" 
-                className={`inputCustomNode`}
-                style={{color: theme.light.Font, backgroundColor: selectedColor}}
-              />
-
-          } */}
         </div>
     </div>
   );

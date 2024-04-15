@@ -20,12 +20,9 @@ export const AdjMat_init = (nodes: Node[], edges: Edge[]): AdjMat => {
     })
 
     //MAJ des relations
-    console.log(edges)
     edges.forEach((edge) => {
         adjMat[edge.source][edge.target] = edge.id
     })
-
-    console.log("adjMat : ", adjMat)
 
     return adjMat
 }
