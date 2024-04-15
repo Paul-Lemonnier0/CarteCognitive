@@ -3,7 +3,7 @@ import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node
 import 'reactflow/dist/style.css';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
 import { AppContext, PositionType } from '../../context/AppContext';
-import { GraphContext, TypesNode } from '../../context/GraphContext';
+import { GraphContext, InfluancePathType, TypesNode } from '../../context/GraphContext';
 import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
@@ -22,6 +22,7 @@ export type MenuType = {
 export default function Graph() {
     const {
         isGraphModified, setIsGraphModified, isCalculating,
+        influancePath, setInfluancePath,
         fitViewNodes, adjMat,
         lastSelectedNodeID, setLastSelectedNodeID,
         selectedNodesIDs, setSelectedNodesIDs,
@@ -77,9 +78,26 @@ export default function Graph() {
         onChange: ({ nodes: nds, edges }: onSelectionChangeProps) => {
             const nodeIDs = nds.map((node) => node.id)
 
-            if(isCalculating) {
-                
+            if(isCalculating && nodeIDs.length > 0) {
+                setInfluancePath((prevInfluancePath) => {
+                    if(prevInfluancePath) {
+                        if(prevInfluancePath?.sourceID) {
+                            if(prevInfluancePath.targetID) {
+                                prevInfluancePath.sourceID = nodeIDs[0]
+                                return {...prevInfluancePath, targetID: undefined, sourceID: nodeIDs[0]} as InfluancePathType
+                            }
+        
+                            else return {...prevInfluancePath, targetID: nodeIDs[0]} as InfluancePathType
+                        }
+        
+                        else return {...prevInfluancePath, sourceID: nodeIDs[0]} as InfluancePathType
+                    }
+
+                    else return {sourceID: nodeIDs[0]} as InfluancePathType
+                })
+
             }
+   
 
             const newSelectedNodeIds = nds.filter(node => node.selected).map(node => node.id)
 
@@ -201,8 +219,13 @@ export default function Graph() {
                 connectionLineComponent={CustomConnectionLine}
                 connectionLineStyle={connectionLineStyle}
                 onNodeContextMenu={onNodeContextMenu}
-                onPaneClick={onPaneClick}>
-                <Background color='#dfe1e2' variant={BackgroundVariant.Dots} size={2} gap={10} />
+                onPaneClick={onPaneClick}
+                multiSelectionKeyCode={isCalculating ? "DISABLED" : "Control"}>
+                <Background 
+                    color={isCalculating ? "rgba(49, 52, 67, 0.25)" : "rgba(49, 52, 67, 0.25)"} 
+                    variant={isCalculating ? BackgroundVariant.Lines : BackgroundVariant.Dots} 
+                    size={4} 
+                    gap={20} />
                 <MiniMap
                     nodeColor={(node: Node) => {
                         if (!node.data.couleur || node.data.couleur === "#FFFFFF")

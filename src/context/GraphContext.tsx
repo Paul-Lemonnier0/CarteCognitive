@@ -58,6 +58,8 @@ interface GraphContextType {
     getNodeWithID: (nodeID: string) => Node | null,
     isCalculating: boolean,
     setIsCalculating: Dispatch<React.SetStateAction<boolean>>,
+    influancePath: InfluancePathType | null,
+    setInfluancePath: Dispatch<React.SetStateAction<InfluancePathType | null>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -108,7 +110,9 @@ const GraphContext = createContext<GraphContextType>({
     adjMat: {},
     getNodeWithID: () => null,
     isCalculating: false,
-    setIsCalculating: () => {}
+    setIsCalculating: () => {},
+    influancePath: null,
+    setInfluancePath: () => {},
 })
 
 export interface SizeType {
@@ -117,8 +121,8 @@ export interface SizeType {
 }
 
 export interface InfluancePathType {
-    sourceID: string,
-    targetID: string,
+    sourceID?: string,
+    targetID?: string,
     edges: Edge[]
 }
 
@@ -393,7 +397,8 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             lastSelectedEdgeID, setLastSelectedEdgeID,
             cyclique,setCyclique,
             getNodeWithID,
-            isCalculating, setIsCalculating
+            isCalculating, setIsCalculating,
+            influancePath, setInfluancePath
         }}>
             {children}
         </GraphContext.Provider>

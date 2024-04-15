@@ -10,7 +10,7 @@ import { AppContext } from "../../../context/AppContext";
 import { GraphContext } from "../../../context/GraphContext";
 import ColorIcon from "../../Other/ColorIcon";
 import { LuCopy } from "react-icons/lu";
-import { NormalText } from "../../Text/CustomText";
+import { MidText, MidTextBold, NormalText, TitleText } from "../../Text/CustomText";
 
 export type CustomNodeData = {
   label: string;
@@ -34,7 +34,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     isCalculating,
     duplicateNode,
     deleteNode,
-    breakLinks
+    breakLinks,
+    influancePath
   } = useContext(GraphContext)
 
   const [label, setLabel] = useState(data.label ?? "")
@@ -107,13 +108,28 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     setIsSelectingColor(false)
   }
 
-  const isPartOfInfluanceCalcul = isCalculating ? selected : true
+  const isSourceOfInfluanceCalcul = (isCalculating && influancePath && influancePath.sourceID && influancePath.sourceID === id) as boolean
+  const isTargetOfInfluanceCalcul = (isCalculating && influancePath && influancePath.targetID && influancePath.targetID === id) as boolean
+  const isPartOfInfluanceCalcul = isSourceOfInfluanceCalcul || isTargetOfInfluanceCalcul
+
+  const isHighLighted = (isCalculating && isPartOfInfluanceCalcul) || selected
+  const isToolbarVisible = (isCalculating && isPartOfInfluanceCalcul) || lastSelectedNodeID === id
 
   return (
     <div className="customNodeContainer" >  
       {
-        <NodeToolbar nodeId={id} offset={50} align="start" isVisible={lastSelectedNodeID === id}> 
-          <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
+        <NodeToolbar nodeId={id} offset={50} align="start" isVisible={isToolbarVisible}> 
+         { 
+          isCalculating ?
+
+          <div className={`customNodeToolbar ${isPartOfInfluanceCalcul ? '' : 'customNodeToolbarHidden'}`}
+            style={{backgroundColor: "#313443"}}>
+            <MidTextBold text={isSourceOfInfluanceCalcul ? "Source" : "Cible"} color="white"/>
+          </div>
+        
+         :
+         
+         <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
             <div className="customNodeIconContainer" onClick={handleBreakLinks}>
               <FiLink size={20}/>
               <span className="verticalTooltip">Casser les liens</span>
@@ -159,13 +175,14 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
               }
             </div>
           </div>
+          }
         </NodeToolbar>
       }
 
         <div style={{
             backgroundColor: selectedColor, 
-            border:  `2px solid ${selected ? "black" : "transparent"}`,
-            opacity: isPartOfInfluanceCalcul ? 1 : 0.25
+            border:  `3px solid ${isHighLighted ? "black" : "transparent"}`,
+            // opacity: isPartOfInfluanceCalcul ? 1 : 0.25
           }} 
           className="customNode" 
           onClick={wantSelectColor ? clickColorSibebar : undefined}>

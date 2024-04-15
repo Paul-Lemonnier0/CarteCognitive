@@ -31,3 +31,9 @@
 .validation-button:hover{
     outline-offset: 2px;
 }
+
+.validation-button.disabled {
+    background-color: gray;
+    border: 2px solid gray;
+    outline: 2px solid gray;
+}
