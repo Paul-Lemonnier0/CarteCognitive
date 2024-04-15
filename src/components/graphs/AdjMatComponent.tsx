@@ -2,6 +2,7 @@ import React, { FC, useContext } from 'react';
 import { AdjMat } from '../../primitives/MatriceMethods';
 import "./AdjMatStyle.css";
 import { GraphContext } from '../../context/GraphContext';
+import { RxCross2 } from "react-icons/rx";
 
 interface AdjMatComponentProps {
     adjMat: AdjMat;
@@ -33,7 +34,13 @@ const AdjMatComponent: FC<AdjMatComponentProps> = ({ adjMat }) => {
                             <tr key={nodeID_1}>
                                 <th>{node !== null ? node.data.label : nodeID_1}</th>
                                 {Object.keys(adjMat[nodeID_1]).map(nodeID_2 => (
-                                    <td key={nodeID_2}>{adjMat[nodeID_1][nodeID_2]}</td>
+                                    // <td key={nodeID_2}>{adjMat[nodeID_1][nodeID_2]}</td>
+                                    <td>
+                                        {
+                                            adjMat[nodeID_1][nodeID_2] !== null ?
+                                            <RxCross2 size={25}/> : null
+                                        }
+                                    </td>
                                 ))}
                             </tr>
                         )})}
