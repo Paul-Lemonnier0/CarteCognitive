@@ -35,7 +35,7 @@ export default function Graph() {
 
     //Data
 
-    const { isWriting } = useContext(AppContext)
+    const { isWriting, cyclique } = useContext(AppContext)
 
     const [mousePosition, setMousePosition] = useState<PositionType>({ x: 0, y: 0 })
 
@@ -48,7 +48,7 @@ export default function Graph() {
     const onConnect: OnConnect = useCallback((params) => {
         const id = "edge_" + params.source + "-" + params.target
         addNewEdge({...params, id} as Edge)
-    }, [nodes, edges]);
+    }, [nodes, edges, cyclique]);
 
     //Shortcut
 

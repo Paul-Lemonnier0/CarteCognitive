@@ -22,8 +22,8 @@ import { RxValueNone,RxUpdate  } from "react-icons/rx";
 
 
 const SideBar = () => {
-    const {colorNode, setColorNode, setWantSelectColor, wantSelectColor } = useContext(AppContext)
-    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified,cyclique,setCyclique } = useContext(GraphContext)
+    const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique } = useContext(AppContext)
+    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified } = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
 

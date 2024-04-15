@@ -57,7 +57,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
 
 
-  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, cyclique, adjMat,setAdjMat } = useContext(GraphContext)
+  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID } = useContext(GraphContext)
 
   let path = '';
   

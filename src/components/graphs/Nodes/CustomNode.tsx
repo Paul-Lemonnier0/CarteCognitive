@@ -100,6 +100,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
   const handleBreakLinks = () => {
     breakLinks(id)
+    console.log("TEST")
   }
 
   const handleSelectColor = (color: string) => {

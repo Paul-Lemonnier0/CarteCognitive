@@ -1,10 +1,10 @@
-import { Dispatch, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { Dispatch, ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState, addEdge, useStore,ReactFlowState } from "reactflow";
 
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
-import { PositionType } from "./AppContext";
+import { AppContext, PositionType } from "./AppContext";
 import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 import { AdjMat, AdjMat_addEdge, AdjMat_addNode, AdjMat_breakNodeLinks, AdjMat_deleteMultipleEdges, AdjMat_deleteMultipleNodes, AdjMat_deleteNode, AdjMat_init } from "../primitives/MatriceMethods";
@@ -52,8 +52,6 @@ interface GraphContextType {
     setShowEdge:  Dispatch<React.SetStateAction<boolean>>,
     lastSelectedEdgeID: string | null,
     setLastSelectedEdgeID : Dispatch<React.SetStateAction<string | null>>,
-    cyclique: boolean,
-    setCyclique: Dispatch<React.SetStateAction<boolean>>,
     adjMat:AdjMat,
     getNodeWithID: (nodeID: string) => Node | null,
     isCalculating: boolean,
@@ -103,8 +101,6 @@ const GraphContext = createContext<GraphContextType>({
     lastSelectedEdgeID: null,
     setLastSelectedEdgeID: () => {},
     groupSelectedNodes: () => {},
-    cyclique: true,
-    setCyclique: () => {},
     adjMat: {},
     getNodeWithID: () => null,
     isCalculating: false,
@@ -143,7 +139,8 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState<boolean>(false)
     const [showEdge,setShowEdge] = useState<boolean>(true)
-    const [cyclique,setCyclique] = useState<boolean>(false)
+
+    const {cyclique } = useContext(AppContext)
 
     const [adjMat, setAdjMat] = useState<AdjMat>(AdjMat_init(defaultNodes, defaultEdges))
 
@@ -191,7 +188,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     }
 
     const deleteSelectedNodes = () => {
-
+        const deletedEdges = edges.filter(edge => edge.selected)
         const updateEdgesFirst = edges.filter(edge => !edge.selected)
         const selectedNodeIDs = nodes.filter(node => node.selected).map(node => node.id)
         const updatedNodes = nodes.filter(node => !node.selected)
@@ -199,7 +196,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
                 !selectedNodeIDs.includes(edge.source) && 
                 !selectedNodeIDs.includes(edge.target))
 
-        const deletedEdges = edges.filter(edge => edge.selected)
+        
 
         setNodes(updatedNodes)
         setEdges(updatedEdgesSecond)
@@ -219,10 +216,6 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         setIsGraphModified(true)
     }
 
-    
-    useEffect(() => {
-        console.log(nodes)
-    }, [nodes])
 
 
     const selectNodesInPositionRange = (x_left: number, x_right: number, y_top: number ,y_bottom: number, color = "white"): void => {
@@ -339,30 +332,26 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     }
 
     const addNewEdge = (newEdge: Edge) => {
-        
-        const isBiDirectionEdge = edges.find((edge) => edge.source === newEdge.target && edge.target === newEdge.source)
+        const isBiDirectionEdge = edges.find((edge) => (edge.source === newEdge.target && edge.target === newEdge.source) || (edge.source === newEdge.source && edge.target === newEdge.target))
         let cycle = false
         let visited = [newEdge.source]
         const nextEdgeToSource = (IDSource:string, IDFind:string) => {
-            if(!cycle) {
               if(!cycle && !visited.find((elem) => elem===IDSource)) {
                 visited = [...visited,IDSource]
                 const nextEdges = edges.filter((edge) => edge.source === IDSource)
                 nextEdges.forEach((edge) => {
                   if(!cycle) {
-                    if(edge.target === IDFind ) {
+                    if(edge.target === IDFind ) { 
                       cycle = true
                     }
-                    else if (!visited.find((edg) => edg==edge.source)) {
+                    else if (!visited.find((edg) => edg==edge.target)) {
                       return nextEdgeToSource(edge.target,IDFind)
                     }
                   }
                 })
               }
-            }
-        }
-        
-        if(!cyclique) nextEdgeToSource(newEdge.target,newEdge.source)
+        }    
+        if(!cyclique && !isBiDirectionEdge &&  (newEdge.source !== newEdge.target)) nextEdgeToSource(newEdge.target,newEdge.source)
 
         if(!isBiDirectionEdge && (cyclique || !cycle) && (newEdge.source !== newEdge.target)) {
             setEdges((prevEdge) => addEdge(newEdge, prevEdge))
@@ -391,7 +380,6 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField,
             showEdge, setShowEdge,
             lastSelectedEdgeID, setLastSelectedEdgeID,
-            cyclique,setCyclique,
             getNodeWithID,
             isCalculating, setIsCalculating
         }}>
