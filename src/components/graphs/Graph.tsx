@@ -21,7 +21,7 @@ export type MenuType = {
 
 export default function Graph() {
     const {
-        isGraphModified, setIsGraphModified,
+        isGraphModified, setIsGraphModified, isCalculating,
         fitViewNodes, adjMat,
         lastSelectedNodeID, setLastSelectedNodeID,
         selectedNodesIDs, setSelectedNodesIDs,
@@ -76,6 +76,10 @@ export default function Graph() {
     useOnSelectionChange({
         onChange: ({ nodes: nds, edges }: onSelectionChangeProps) => {
             const nodeIDs = nds.map((node) => node.id)
+
+            if(isCalculating) {
+                
+            }
 
             const newSelectedNodeIds = nds.filter(node => node.selected).map(node => node.id)
 
@@ -160,11 +164,8 @@ export default function Graph() {
     const [menu, setMenu] = useState<MenuType | null>(null);
 
     const onNodeContextMenu = useCallback((event: React.MouseEvent, node: Node) => {
-        // Prevent native context menu from showing
         event.preventDefault();
 
-        // Calculate position of the context menu. We want to make sure it
-        // doesn't get positioned off-screen.
         if (reactFlowRef.current) {
             const pane = reactFlowRef.current.getBoundingClientRect();
             setMenu({
@@ -225,11 +226,8 @@ export default function Graph() {
                 backgroundColor: upgrade ? "rgba(0,255,0,0.2)" : "rgba(255,0,0,0.2)",
                 marginTop: "5px",
                 right: 110
-
             }}
-                onClick={() => {
-                    setUpgrade(!upgrade)
-                }}
+                onClick={() => {setUpgrade(!upgrade)}}
                 text='Sauvegarde Auto'
             />
             <ToggleButton

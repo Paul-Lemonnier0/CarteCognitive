@@ -19,10 +19,26 @@ import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
 import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { GraphType } from "../../types/Graph/GraphType";
+import { CiCalculator2 } from "react-icons/ci";
+import { FaCalculator } from "react-icons/fa6";
 
 const GraphDetailsSideBar = () => {
 
-    const {upgrade, setUpgrade,isGraphModified,setIsGraphModified,graphTitle, nodes, edges, setFitViewNodes, id, setSelectedNodesIDs, lastSelectedNodeID, setLastSelectedNodeID, updateNodeData, lastSelectedEdgeID, setLastSelectedEdgeID, setEdges} = useContext(GraphContext)
+    const {
+        upgrade, setUpgrade,
+        isGraphModified, setIsGraphModified,
+        graphTitle, 
+        nodes, 
+        edges, setEdges,
+        setFitViewNodes, 
+        id, 
+        setSelectedNodesIDs, 
+        lastSelectedNodeID, setLastSelectedNodeID, 
+        updateNodeData, 
+        lastSelectedEdgeID, setLastSelectedEdgeID, 
+        setIsCalculating, isCalculating
+    } = useContext(GraphContext)
+
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
@@ -229,6 +245,10 @@ const GraphDetailsSideBar = () => {
         setIsGraphModified(true)
     }
 
+    const handleCalculate = () => {
+        setIsCalculating(!isCalculating)
+    }
+
     return (
         <div className={`graphDetailsSideBarContainer ${isExpanded ? "expanded" : ""}`}>
             <div id="header">
@@ -334,9 +354,6 @@ const GraphDetailsSideBar = () => {
                             {!isExpanded && <span className="tooltip">Couleur</span>}
 
                         </div>
-
-
-                        {/* TODO: label, couleur */}
                     </div>
                 }
                 {
@@ -375,6 +392,16 @@ const GraphDetailsSideBar = () => {
 
 
             <div id="footer">
+                <li className="graphSideBarRow" onClick={handleCalculate}>
+                    <span style={{ marginLeft: -15 }}>
+                        <IconButton onPress={handleCalculate}>
+                            <FaCalculator/>
+                        </IconButton>
+                    </span>
+                    <div id="title" style={{ marginLeft: 15 }}>
+                        Calculer
+                    </div>
+                </li>
                 <li className="graphSideBarRow" onClick={handleChangeExpandState}>
                     <span style={{ marginLeft: -15 }}>
                         <IconButton onPress={handleChangeExpandState}>

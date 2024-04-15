@@ -140,6 +140,9 @@
     height: auto;
     list-style-type: none;
     margin-top: auto;
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .graphDetailsSideBarContainer #footer h3 {
