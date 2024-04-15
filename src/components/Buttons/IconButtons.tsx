@@ -13,10 +13,13 @@ interface IconButtonProps {
 
 export const IconButton: FC<IconButtonProps>  = ({Icon, children, onPress, isSelected}) => {
     return (
-      <span className='iconButton' style={{border: `2px solid ${isSelected ? "black" : "transparent"}`}} onClick={onPress}>
+      <span className='iconButton' style={{
+        border: `2px solid ${isSelected ? "black" : "transparent"}`,
+        backgroundColor: isSelected ? "#313443" : "white"
+        }} onClick={onPress}>
           <span>
               { Icon &&
-                <Icon/>
+                <Icon size={20} color={isSelected ? "white" : "black"}/>
               }
 
               {children ?? undefined}
