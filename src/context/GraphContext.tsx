@@ -1,5 +1,5 @@
-import { Dispatch, ReactNode, createContext, useMemo, useState } from "react";
-import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState, addEdge } from "reactflow";
+import { Dispatch, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState, addEdge, useStore,ReactFlowState } from "reactflow";
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
@@ -54,6 +54,7 @@ interface GraphContextType {
     cyclique: boolean,
     setCyclique: Dispatch<React.SetStateAction<boolean>>,
     adjMat:AdjMat,
+    setAdjMat: Dispatch<React.SetStateAction<AdjMat>>,
     getNodeWithID: (nodeID: string) => Node | null
 }
 
@@ -103,6 +104,7 @@ const GraphContext = createContext<GraphContextType>({
     cyclique: true,
     setCyclique: () => {},
     adjMat: {},
+    setAdjMat: () => {},
     getNodeWithID: () => null
 })
 
@@ -320,17 +322,49 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         return null
     }
 
-    const addNewEdge = (newEdge: Edge) => {
-        setEdges((prevEdge) => addEdge(newEdge, prevEdge))
-        setAdjMat(AdjMat_addEdge(adjMat, newEdge.source, newEdge.target, newEdge))
-        setIsGraphModified(true)
-    }
+    const addNewEdge = useCallback( (newEdge: Edge) => {
+        
+        console.log("Nodes 2 ", nodes)
+
+        const isBiDirectionEdge = edges.find((edge) => edge.source === newEdge.target && edge.target === newEdge.source)
+        let cycle = false
+        let visited = [newEdge.source]
+        const nextEdgeToSource = (IDSource:string, IDFind:string) => {
+            if(!cycle) {
+              if(!cycle && !visited.find((elem) => elem===IDSource)) {
+                visited = [...visited,IDSource]
+                const nextEdges = edges.filter((edge) => edge.source === IDSource)
+                nextEdges.forEach((edge) => {
+                  if(!cycle) {
+                    if(edge.target === IDFind ) {
+                      cycle = true
+                    }
+                    else if (!visited.find((edg) => edg==edge.source)) {
+                      return nextEdgeToSource(edge.target,IDFind)
+                    }
+                  }
+                })
+              }
+            }
+        }
+        
+        if(!cyclique) nextEdgeToSource(newEdge.target,newEdge.source)
+
+        if(!isBiDirectionEdge && (cyclique || !cycle) && (newEdge.source !== newEdge.target)) {
+            setEdges((prevEdge) => addEdge(newEdge, prevEdge))
+            setIsGraphModified(true)
+            setAdjMat(AdjMat_addEdge(adjMat, newEdge.source, newEdge.target, id))
+        }
+        
+        
+    },[nodes,cyclique,edges])
+
 
     return(
         <GraphContext.Provider value={{
             upgrade, setUpgrade,
             isGraphModified, setIsGraphModified,
-            id, adjMat,
+            id, adjMat, setAdjMat,
             graphTitle, setGraphTitle,
             fitViewNodes, setFitViewNodes,
             nodeID, setNodeID,

@@ -84,8 +84,8 @@ export const AdjMat_hasEdge = (adjMat: AdjMat, nodeID_1: string, nodeID_2: strin
     return adjMat[nodeID_1][nodeID_2] !== null
 }
 
-export const AdjMat_addEdge = (adjMat: AdjMat, nodeID_1: string, nodeID_2: string, edge: Edge): AdjMat => {
-    adjMat[nodeID_1][nodeID_2] = edge.id
+export const AdjMat_addEdge = (adjMat: AdjMat, nodeID_1: string, nodeID_2: string, edge: string): AdjMat => {
+    adjMat[nodeID_1][nodeID_2] = edge
     return adjMat
 }
 

@@ -8,6 +8,7 @@ import "./FloatingEdgeStyle.css"
 
 import CustomEdgeLabel from './CustomEdgeLabel';
 
+import { AdjMat_addEdge } from "../../../primitives/MatriceMethods";
 
 
 
@@ -56,65 +57,18 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
 
 
-  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, cyclique} = useContext(GraphContext)
-
-  const isBiDirectionEdge = useStore((s: ReactFlowState) => {
-    const edgeExists = s.edges.some(
-      (e) =>
-        (e.source === target && e.target === source) || (e.target === source && e.source === target)
-    );
-
-    return edgeExists;
-  });
-
-
+  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, cyclique, adjMat,setAdjMat } = useContext(GraphContext)
 
   let path = '';
-
+  
   const {sx, sy, tx, ty} = getEdgeParams(sourceNode, targetNode);
 
-  if(isBiDirectionEdge) {
-    const previousEdge = edges.filter((edge) => edge.source !== source || edge.target !== target)
-    setEdges(previousEdge)
-  }
 
-  
-  const [cycle, setCycle] = useState(false)
-  const [visited, setVisited] = useState<string[]>([source])
-
-  if(source === target) return null
 
   if (!sourceNode || !targetNode) {
     return null;
   }
 
-  const nextEdgeToSource = (IDSource:string, IDFind:string) => {
-    if(!cycle) {
-      if(!cycle && !visited.find((elem) => elem===IDSource)) {
-        setVisited([...visited,IDSource])
-        const nextEdges = edges.filter((edge) => edge.source === IDSource)
-        nextEdges.forEach((edge) => {
-          if(!cycle) {
-            if(edge.target === IDFind ) {
-              setCycle(true)
-              console.log("Visited :" , visited)
-              return null
-            }
-            else if (!visited.find((edg) => edg==edge.source)) {
-              return nextEdgeToSource(edge.target,IDFind)
-            }
-          }
-        })
-      }
-    }
-    }
-
-  if(!cyclique) nextEdgeToSource(target,source)
-  if(cycle && !cyclique) {
-    const currentEdge = edges.filter((edge) => edge.id != id);
-    setEdges(currentEdge);
-  }
-  
 
 
   [path] = getStraightPath({
