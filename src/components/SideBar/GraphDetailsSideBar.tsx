@@ -28,7 +28,7 @@ const GraphDetailsSideBar = () => {
 
     const [editedTitle, setEditedTitle] = useState(graphTitle)
 
-    const [isExpanded, setIsExpanded] = useState<boolean>(true)
+    const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
     const [titleIsModif, setTitleIsModif] = useState(false)
 

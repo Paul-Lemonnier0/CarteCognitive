@@ -9,6 +9,7 @@ import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
 import NodeContextMenu from './Nodes/NodeContextMenu';
 import SelectorButton, { ToggleButton } from '../Buttons/SelectorButton';
+import AdjMatComponent from './AdjMatComponent';
 
 export type MenuType = {
     id: string,
@@ -21,11 +22,11 @@ export type MenuType = {
 export default function Graph() {
     const {
         isGraphModified, setIsGraphModified,
-        fitViewNodes,
+        fitViewNodes, adjMat,
         lastSelectedNodeID, setLastSelectedNodeID,
         selectedNodesIDs, setSelectedNodesIDs,
         nodes, setNodes, onNodesChange,
-        edges, setEdges, onEdgesChange,
+        edges, setEdges, onEdgesChange, addNewEdge,
         nodeTypes, edgeTypes,
         addNode, deleteSelectedNodes, groupSelectedNodes,
         lastSelectedEdgeID, setLastSelectedEdgeID,
@@ -46,8 +47,7 @@ export default function Graph() {
 
     const onConnect: OnConnect = useCallback((params) => {
         const id = "edge_" + params.source + "-" + params.target
-        setEdges((eds) => addEdge({ ...params, id }, eds))
-        setIsGraphModified(true)
+        addNewEdge({...params, id} as Edge)
     }, [setEdges]);
 
     //Shortcut
@@ -216,6 +216,8 @@ export default function Graph() {
                     }}
                 />
                 <Controls />
+                <AdjMatComponent adjMat={adjMat}/>
+
             </ReactFlow>
 
             <SelectorButton style={{

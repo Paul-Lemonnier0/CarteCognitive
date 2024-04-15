@@ -1,11 +1,12 @@
 import { Dispatch, ReactNode, createContext, useMemo, useState } from "react";
-import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState } from "reactflow";
+import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState, addEdge } from "reactflow";
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
 import FloatingEdge from "../components/graphs/Edges/FloatingEdge";
 import { PositionType } from "./AppContext";
 import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
+import { AdjMat, AdjMat_addEdge, AdjMat_addNode, AdjMat_breakNodeLinks, AdjMat_deleteMultipleEdges, AdjMat_deleteMultipleNodes, AdjMat_deleteNode, AdjMat_init } from "../primitives/MatriceMethods";
 
 interface GraphContextType {
     upgrade: boolean
@@ -26,6 +27,7 @@ interface GraphContextType {
     nodeTypes: Record<string, React.ComponentType<NodeProps>>,
     edgeTypes: Record<string, React.ComponentType<EdgeProps>>
     addNode: (label: string, position: PositionType,  type?: TypesNode, size?: SizeType) => void,
+    addNewEdge: (newEdge: Edge) => void,
     deleteSelectedNodes: () => void,
     updateNodeData: (nodeID: string, newNodeData: CustomNodeData) => void,
     duplicateNode: (nodeID: string) => void,
@@ -51,6 +53,8 @@ interface GraphContextType {
     setLastSelectedEdgeID : Dispatch<React.SetStateAction<string | null>>,
     cyclique: boolean,
     setCyclique: Dispatch<React.SetStateAction<boolean>>,
+    adjMat:AdjMat,
+    getNodeWithID: (nodeID: string) => Node | null
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -72,6 +76,7 @@ const GraphContext = createContext<GraphContextType>({
     nodeTypes: {customNode: CustomNode},
     edgeTypes: {floating: FloatingEdge},
     addNode: () => {},
+    addNewEdge: () => {},
     deleteSelectedNodes: () => {},
     updateNodeData: () => {},
     duplicateNode: () => {},
@@ -96,7 +101,9 @@ const GraphContext = createContext<GraphContextType>({
     setLastSelectedEdgeID: () => {},
     groupSelectedNodes: () => {},
     cyclique: true,
-    setCyclique: () => {}
+    setCyclique: () => {},
+    adjMat: {},
+    getNodeWithID: () => null
 })
 
 export interface SizeType {
@@ -122,9 +129,11 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     const [isGraphModified, setIsGraphModified] = useState(false)
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
-    const [changeColorWithField, setChangeColorWithField] = useState(false)
-    const [showEdge,setShowEdge] = useState(true)
-    const [cyclique,setCyclique] = useState(false)
+    const [changeColorWithField, setChangeColorWithField] = useState<boolean>(false)
+    const [showEdge,setShowEdge] = useState<boolean>(true)
+    const [cyclique,setCyclique] = useState<boolean>(false)
+
+    const [adjMat, setAdjMat] = useState<AdjMat>(AdjMat_init(defaultNodes, defaultEdges))
 
     const current = new Date();
     const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`
@@ -163,6 +172,8 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             return [...previousNodes, node];
         });
         setIsGraphModified(true)
+
+        setAdjMat(AdjMat_addNode(adjMat, node))
     }
 
     const deleteSelectedNodes = () => {
@@ -173,10 +184,15 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
                 !selectedNodeIDs.includes(edge.source) && 
                 !selectedNodeIDs.includes(edge.target))
 
+        const deletedEdges = edges.filter(edge => edge.selected)
+
         setNodes(updatedNodes)
         setEdges(updatedEdgesSecond)
         setIsGraphModified(true)
 
+        const newAdjMat = AdjMat_deleteMultipleNodes(adjMat, selectedNodeIDs)
+
+        setAdjMat(AdjMat_deleteMultipleEdges(newAdjMat, deletedEdges.map(edge => edge.id)))
     }   
 
     const updateNodeData = (nodeID: string, newNodeData: CustomNodeData) => {
@@ -184,8 +200,8 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             node.id === nodeID ?
                 { ...node, data: newNodeData as any} : node
         ))
-        setIsGraphModified(true)
 
+        setIsGraphModified(true)
     }
 
 
@@ -241,6 +257,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         setEdges(updatedEdges)
         setIsGraphModified(true)
 
+        setAdjMat(AdjMat_breakNodeLinks(adjMat, nodeID))
     }
 
 
@@ -251,6 +268,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         breakLinks(nodeID)
         setIsGraphModified(true)
 
+        setAdjMat(AdjMat_deleteNode(adjMat, nodeID))
     }
 
     const groupSelectedNodes = () => {
@@ -292,12 +310,27 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         addNode("Nouvelle zone", {x: x_left, y: y_top}, TypesNode.fieldsetNode, {w: x_right - x_left, h: y_bottom - y_top})
     }
 
+    const getNodeWithID = (nodeID: string): Node | null => {
+        const nodesWithID = nodes.filter(node => node.id === nodeID)
+    
+        if(nodesWithID.length > 0) {
+            return nodesWithID[0]
+        }
+
+        return null
+    }
+
+    const addNewEdge = (newEdge: Edge) => {
+        setEdges((prevEdge) => addEdge(newEdge, prevEdge))
+        setAdjMat(AdjMat_addEdge(adjMat, newEdge.source, newEdge.target, newEdge))
+        setIsGraphModified(true)
+    }
 
     return(
         <GraphContext.Provider value={{
             upgrade, setUpgrade,
             isGraphModified, setIsGraphModified,
-            id,
+            id, adjMat,
             graphTitle, setGraphTitle,
             fitViewNodes, setFitViewNodes,
             nodeID, setNodeID,
@@ -307,11 +340,13 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             edges, setEdges, onEdgesChange,
             nodeTypes, edgeTypes,
             addNode, deleteSelectedNodes, updateNodeData, duplicateNode, deleteNode, breakLinks,
+            addNewEdge,
             selectNodesInPositionRange, groupSelectedNodes,
             nodeColorField, setNodeColorField, changeColorWithField, setChangeColorWithField, colorField, setColorField,
             showEdge, setShowEdge,
             lastSelectedEdgeID, setLastSelectedEdgeID,
-            cyclique,setCyclique
+            cyclique,setCyclique,
+            getNodeWithID
         }}>
             {children}
         </GraphContext.Provider>

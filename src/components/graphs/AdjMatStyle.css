@@ -1,0 +1,22 @@
+.adjMatContainer {
+    position: absolute;
+    top: 30px;
+    left: 150px
+}
+
+.adjMatContainer table, td, th, tr, thead {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.adjMatContainer table {
+    border-collapse: collapse;
+}
+
+.adjMatContainer td {
+    max-width: 50px;
+    min-width: 50px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    background-color: lemonchiffon;
+}

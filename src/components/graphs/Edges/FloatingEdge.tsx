@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge, getBezierPath, MarkerType, Position } from 'reactflow';
+import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge, getBezierPath,  MarkerType, Position } from 'reactflow';
 import { getEdgeParams } from '../../../utils/utils';
 import { GraphContext } from '../../../context/GraphContext';
 
@@ -67,11 +67,6 @@ const FloatingEdge: React.FC<EdgeProps> = ({
     return edgeExists;
   });
 
-  if(source === target) return null
-
-  if (!sourceNode || !targetNode) {
-    return null;
-  }
 
 
   let path = '';
@@ -86,6 +81,13 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   
   const [cycle, setCycle] = useState(false)
   const [visited, setVisited] = useState<string[]>([source])
+
+  if(source === target) return null
+
+  if (!sourceNode || !targetNode) {
+    return null;
+  }
+
   const nextEdgeToSource = (IDSource:string, IDFind:string) => {
     if(!cycle) {
       if(!cycle && !visited.find((elem) => elem===IDSource)) {
