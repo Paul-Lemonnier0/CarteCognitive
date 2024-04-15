@@ -48,7 +48,7 @@ export default function Graph() {
     const onConnect: OnConnect = useCallback((params) => {
         const id = "edge_" + params.source + "-" + params.target
         addNewEdge({...params, id} as Edge)
-    }, [setEdges]);
+    }, [nodes, edges]);
 
     //Shortcut
 

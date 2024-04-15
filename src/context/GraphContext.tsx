@@ -191,6 +191,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     }
 
     const deleteSelectedNodes = () => {
+
         const updateEdgesFirst = edges.filter(edge => !edge.selected)
         const selectedNodeIDs = nodes.filter(node => node.selected).map(node => node.id)
         const updatedNodes = nodes.filter(node => !node.selected)
@@ -210,13 +211,18 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
     }   
 
     const updateNodeData = (nodeID: string, newNodeData: CustomNodeData) => {
-        setNodes((prevNodes) => prevNodes.map(node => 
+        setNodes((prevNodes) => [...prevNodes.map(node => 
             node.id === nodeID ?
                 { ...node, data: newNodeData as any} : node
-        ))
+        )])
 
         setIsGraphModified(true)
     }
+
+    
+    useEffect(() => {
+        console.log(nodes)
+    }, [nodes])
 
 
     const selectNodesInPositionRange = (x_left: number, x_right: number, y_top: number ,y_bottom: number, color = "white"): void => {
@@ -332,10 +338,8 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
         return null
     }
 
-    const addNewEdge = useCallback( (newEdge: Edge) => {
+    const addNewEdge = (newEdge: Edge) => {
         
-        console.log("Nodes 2 ", nodes)
-
         const isBiDirectionEdge = edges.find((edge) => edge.source === newEdge.target && edge.target === newEdge.source)
         let cycle = false
         let visited = [newEdge.source]
@@ -365,9 +369,7 @@ const GraphContextProvider = ({autoUpgrade, defaultNodes, defaultEdges, graphNam
             setIsGraphModified(true)
             setAdjMat(AdjMat_addEdge(adjMat, newEdge.source, newEdge.target, id))
         }
-        
-        
-    },[nodes,cyclique,edges])
+    }
 
 
     return(
