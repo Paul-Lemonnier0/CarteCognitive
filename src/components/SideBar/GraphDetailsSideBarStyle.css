@@ -1,4 +1,4 @@
-.graphDetailsSideBarContainer {
+/* .graphDetailsSideBarContainer {
     background-color: white;
 
     display: flex;
@@ -67,7 +67,6 @@
 
 .graphDetailsSideBarContainer #selectedOptions {
     padding-block: 0px;
-    /* padding-inline: 2.5px; */
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -162,7 +161,6 @@
 }
 
 .graphSideBarRow:hover{
-    /* transform: translateY(-3px); */
     cursor:pointer;
 }
 
@@ -201,7 +199,6 @@
 
 .graphSideBarRow #developIcon{
     user-select: none;
-    /* padding: 15px;*/
 
     transition: transform 0.5s ease;
     transform-origin: center center;
@@ -276,4 +273,4 @@
         }
     }	
 }
-	
+	 */

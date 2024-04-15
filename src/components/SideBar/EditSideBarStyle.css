@@ -1,77 +1,19 @@
-.graphDetailsSideBarContainer {
-    background-color: white;
 
-    display: flex;
-    flex-direction: column;
 
-    padding: 20px;
-    gap: 20px;
-
-    transition: width 0.5s ease;
-    overflow-x: hidden;
-    overflow: hidden;
-    max-height: 100%;
-    box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-}
-
-.graphDetailsSideBarContainer #searchListContainer {
-    flex-direction: column;
-    gap: 10px;
+.subSideBarContainer #searchListContainer {
     height: 200px;
     width: 100%;
     overflow: scroll;
     overflow-x: hidden;
-    margin-left: 0;
 }
 
-.graphDetailsSideBarContainerTitleInput {
-    font-weight: bolder;
-    font-family: "PoppinsBold";
-    font-size: 24px;
-    display:block;
-    min-width:0;
-    padding: 0;
-    margin: 0;
-    flex: 1;
-    text-align: left;    
-    white-space: nowrap;
-    user-select: none;
-    border: none;
-    outline: none;
-}
-
-.graphDetailsSideBarContainer #header {
-    display: flex; 
-    flex-direction: row;
-    align-items: center; 
-    padding-bottom: 20px;
-    gap: 20px;
-    margin-bottom: 10px;
-    padding-inline: 20px;
-    margin-inline: -20px;
-
-    border-bottom: 2px solid #ebedee
-}
-
-.graphDetailsSideBarContainer #body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-
-}
-
-.graphDetailsSideBarContainer #selectedOptions {
-    padding-block: 0px;
-    /* padding-inline: 2.5px; */
+.subSideBarContainer #selectedOptions {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.graphDetailsSideBarContainer #searchNodeContainer {
+.subSideBarContainer #searchNodeContainer {
     gap: 20px;
     padding-bottom: 30px;
     margin-inline: -20px;
@@ -81,11 +23,10 @@
     white-space: wrap;
     text-overflow: ellipsis;
     flex-direction: column;
-    box-sizing: initial;
     border-bottom: 2px solid #ebedee;
 }
 
-.graphDetailsSideBarContainer #selectedOptionsItem {
+.subSideBarContainer #selectedOptionsItem {
     display: flex; 
     overflow: hidden;
     white-space: nowrap;
@@ -102,137 +43,13 @@
     overflow: hidden;
 }
 
-.graphDetailsSideBarContainerTitleText {
-    font-weight: bolder;
-    font-family: "PoppinsBold";
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;    
-    font-size: 24px;
-    padding: 0;
-    margin: 0;
-    flex: 1;
-    text-align: left;    
-    white-space: nowrap;
-    user-select: none;
-}
-
-.graphDetailsSideBarContainerText {
-    font-family: "Poppins";
-    padding: 0;
-    margin: 0;
-    flex: 1;
-    font-size: 14px;
-    text-align: left;    
-    white-space: nowrap;
-    user-select: none;
-}
-
-
-
-.graphDetailsSideBarContainer #footer{
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: auto;
-    list-style-type: none;
-    margin-top: auto;
-    gap: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.graphDetailsSideBarContainer #footer h3 {
-    margin: 0;
-    padding: 0;
-}
-
-.graphSideBarRow{
-    border-radius: 10px;
-    width: auto;
-    height: 45px;
-    margin: 0;
-    margin: 5px 15px;
-    display: flex;
-    align-items: center;
-    transition: 0.3s;
-}
-
-.graphSideBarRow:hover{
-    /* transform: translateY(-3px); */
-    cursor:pointer;
-}
-
-.graphSideBarRow #icon{
-    user-select: none;
-    padding-left:10px;
-    padding-right:10px;
-    font-size: 24px;
-}
-
-.graphSideBarRow #title{
-    white-space: nowrap;
-    user-select: none;
-    padding-left: 5px;
-    margin: 0;
-    transition: opacity 0.5s ease;
-    font-family: "PoppinsMedium";
-}
-
-.graphDetailsSideBarContainer.expanded .graphSideBarRow #title {
-    opacity: 1;
-  }
-  
-.graphDetailsSideBarContainer:not(.expanded) .graphSideBarRow #title {
-    opacity: 0;
-}
-
-
-.graphSideBarRow #developIconContainer{
-    user-select: none;
-    padding: 15px;
-
-    margin-left: -20px;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-}
-
-.graphSideBarRow #developIcon{
-    user-select: none;
-    /* padding: 15px;*/
-
-    transition: transform 0.5s ease;
-    transform-origin: center center;
-}
-
-.graphDetailsSideBarContainer.expanded .graphSideBarRow #developIcon {
-    transform: rotate(180deg);
-}
-
-
-.graphDetailsSideBarContainer #colorBlockContainer {
+.subSideBarContainer #colorBlockContainer {
     cursor: pointer;
     transition: 0.3s;
 }
 
-.graphDetailsSideBarContainer #colorBlockContainer:hover {
+.subSideBarContainer #colorBlockContainer:hover {
     transform: translateY(-3px);
-}
-
-.graphDetailsSideBarContainer #baseButton {
-    min-width: 55px;
-    margin: auto;
-    transition: 0.3s;
-}
-
-.graphDetailsSideBarContainer #footer {
-    border-top: 2px solid #ebedee;
-    margin-inline: -20px;
-    padding-inline: 20px;
-    padding-top: 20px;
-    position: fixed;
-    bottom: 0;
-    margin-bottom: 10px;
 }
 
 .tooltip {

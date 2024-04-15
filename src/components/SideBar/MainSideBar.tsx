@@ -3,10 +3,13 @@ import "./MainSideBar.css"
 import { GoBackButton, IconButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
 import { IoChevronForward } from "react-icons/io5"
-import { FiEdit3 } from "react-icons/fi"
+import { FiEdit3, FiSettings } from "react-icons/fi"
 import { VscSymbolOperator } from "react-icons/vsc";
 import { HiOutlineCog } from "react-icons/hi";
 import EditSideBar from "./EditSideBar"
+import CalculSideBar from "./CalculSideBar"
+import SettingsSideBar from "./SettingsSideBar"
+import { SlCalculator } from "react-icons/sl"
 
 enum SideBarMenuType {
     Edit = "Edit",
@@ -58,14 +61,14 @@ const MainSideBar = () => {
                         <IconButton 
                             isSelected={selectedMenu === SideBarMenuType.Calcul} 
                             onPress={() => handleChangeMenu(SideBarMenuType.Calcul)}
-                            Icon={VscSymbolOperator}/>
+                            Icon={SlCalculator}/>
                         <span className="tooltip">Calculer</span>
                     </div>
                     <div className="mainSideBarListItem">
                         <IconButton 
                             isSelected={selectedMenu === SideBarMenuType.Settings} 
                             onPress={() => handleChangeMenu(SideBarMenuType.Settings)}
-                            Icon={HiOutlineCog} />
+                            Icon={FiSettings} />
                         <span className="tooltip">Paramètres</span>
                     </div>
                 </div>
@@ -88,6 +91,8 @@ const MainSideBar = () => {
 
             <div className={`mainSideBarContentContainer ${isExpanded ? "expanded" : ""}`}>
                 {(selectedMenu == SideBarMenuType.Edit) && <EditSideBar isExpanded={isExpanded}/>}
+                {(selectedMenu == SideBarMenuType.Calcul) && <CalculSideBar isExpanded={isExpanded}/>}
+                {(selectedMenu == SideBarMenuType.Settings) && <SettingsSideBar isExpanded={isExpanded}/>}
             </div>
         </div>
     )

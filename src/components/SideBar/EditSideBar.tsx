@@ -1,14 +1,12 @@
 import React, { FC, useContext, useEffect, useRef, useState } from "react"
 import { FiEdit3 } from "react-icons/fi";
-import "./GraphDetailsSideBarStyle.css"
 import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
 import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem"
 import { GraphContext } from "../../context/GraphContext"
 import { Edge, Node } from "reactflow"
-import { BackgroundIcon, GoBackButton, IconButton } from "../Buttons/IconButtons"
+import { BackgroundIcon, IconButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
-import { IoChevronForward } from "react-icons/io5"
 import { CustomZoneIcon } from "../graphs/Zones/CustomZoneIcon"
 import { CustomNodeIcon } from "../graphs/Nodes/CustomNodeIcon"
 import { CustomEdgeIcon } from "../graphs/Edges/CustomEdgeIcon"
@@ -19,9 +17,10 @@ import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
 import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { GraphType } from "../../types/Graph/GraphType";
-import { CiCalculator2 } from "react-icons/ci";
-import { FaCalculator } from "react-icons/fa6";
 import "./EditSideBarStyle.css"
+import "./SubSideBarStyle.css"
+
+import { NormalText, TitleText } from "../Text/CustomText";
 
 interface EditSideBarProps {
     isExpanded: boolean
@@ -122,8 +121,6 @@ const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
     }, [nodes, searchValue])
 
 
-
-
     const handlePressOnNode = (nodeID: string) => {
         setSelectedNodesIDs([nodeID])
         setLastSelectedNodeID(nodeID)
@@ -137,27 +134,23 @@ const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
 
     const navigate = useNavigate()
 
-    const handleGoBack = () => {
+    // const handleGoBack = () => {
+    //     let newGraph: GraphType = {
+    //         nodes: nodes,
+    //         edges: edges,
+    //         id: id,
+    //         title: editedTitle,
+    //         upgrade: upgrade
+    //     }
 
-        let newGraph: GraphType = {
-            nodes: nodes,
-            edges: edges,
-            id: id,
-            title: editedTitle,
-            upgrade: upgrade
-        }
-
-        if (isGraphModified) {
-            //ouvre une fenêtre demandant si l'utilisateur veut sauvegarder
-            const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications");
-            if (shouldSave) {
-
-                setDocument("Default", newGraph, newGraph.id)
-                console.log("graphe modifiée")
-            }
-        }
-        navigate(-1)
-    }
+    //     if (isGraphModified) {
+    //         const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications ?");
+    //         if (shouldSave) {
+    //             setDocument("Default", newGraph, newGraph.id)
+    //         }
+    //     }
+    //     navigate(-1)
+    // }
 
     const isSommetSelected = selectedNode && selectedNode.type && selectedNode.type === "customNode"
 
@@ -231,8 +224,6 @@ const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
 
     const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3]]
 
-    const [nodeAndField, setNodeAndField] = useState(true)
-
     const handleEditTitle = () => {
         setTitleIsModif(!titleIsModif)
     }
@@ -242,19 +233,18 @@ const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
         setIsGraphModified(true)
     }
 
-    const handleCalculate = () => {
-        setIsCalculating(!isCalculating)
-    }
-
     if(!isExpanded) return null
+    
+    const nodeProprietaire = "Paul"
+    const nodeDate = selectedNodeData.date ?? "Non Definis"
 
     return (
-        <div className={`graphDetailsSideBarContainer`}>
+        <div className={`subSideBarContainer`}>
             <div id="header">
                 {
                     titleIsModif ?
-                        <input autoFocus type="text" className="graphDetailsSideBarContainerTitleInput" value={editedTitle} onChange={onTitleChange}></input>
-                        : <p className="graphDetailsSideBarContainerTitleText">{editedTitle}</p>
+                        <input autoFocus type="text" className="subSideBarContainerTitleInput titleText" value={editedTitle} onChange={onTitleChange}></input>
+                        : <TitleText text={editedTitle} flex/> 
                 }
 
                 <div>
@@ -300,10 +290,9 @@ const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
                                     <CustomZoneIcon size={25} color="#ebedee" />
                             }
 
-                            {/* <BackgroundIcon Icon={IoGitMergeOutline} size={25}/> */}
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{ opacity: selectedNodeData.label ? 1 : 0 }}>{selectedNodeData.label === "" ? "A" : selectedNodeData.label}</p>
-                                <p className="graphDetailsSideBarContainerText">{selectedNodeTypeString} - Paul {selectedNodeData.date === "Non Definis" ? undefined : selectedNodeData.date}</p>
+                                <TitleText text={selectedNodeData.label === "" ? "A" : selectedNodeData.label}/>
+                                <NormalText text={selectedNodeTypeString + "-" + nodeProprietaire + "-" + nodeDate}/>
                             </div>
                         </div>
 
@@ -321,9 +310,8 @@ const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
                             </div>
                         </div>
 
-                        <div id="selectedOptionsItem" style={{ marginLeft: 2.5, marginBlock: -5, paddingBlock: 5 }}>
+                        <div id="selectedOptionsItem">
                             <div style={{ display: "inline", flex: 1 }}>
-
                                 <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                     <span style={{ cursor: "pointer" }}>
                                         <BackgroundIcon iconHover isSelected squared Icon={BiColorFill} size={25} color={selectedNodeData.couleur ?? "white"} />
@@ -346,31 +334,27 @@ const EditSideBar: FC<EditSideBarProps> = ({isExpanded}) => {
                     selectedEdge && !isSommetSelected &&
                     <div id="selectedOptions">
                         <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }}>
-                            {
-                                <CustomEdgeIcon size={25} color="#ebedee"/>
-                            }
+                            <CustomEdgeIcon size={25} color="#ebedee"/>
+    
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string }</p>
-                                <p className="graphDetailsSideBarContainerText"> Nicolas </p>
+                                <TitleText text={selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string }/>
+                                <NormalText text={nodeProprietaire}/>
                             </div>
                         </div>
 
                         <div id="selectedOptionsItem">
                             <div style={{display: "inline", flex: 1}}>
-                                <div style={{display: "flex"}} >
-                                    <IconTextInput 
-                                        iconHover
-                                        Icon={RxText} 
-                                        textValue={String(selectedEdgeLabel) ?? ""} 
-                                        onChangeCustom={handleWrittingEdge}
-                                        onBlur={handleUpdateEdgeLabel}
-                                        placeholder="Nom de l'arrete ..."
-                                    />
-                                </div>                                
+                                <IconTextInput 
+                                    iconHover
+                                    Icon={RxText} 
+                                    textValue={String(selectedEdgeLabel) ?? ""} 
+                                    onChangeCustom={handleWrittingEdge}
+                                    onBlur={handleUpdateEdgeLabel}
+                                    placeholder="Nom de l'arrete ..."
+                                />
                             </div>
                         </div>
                     </div>
-
                 }
             </div>
         </div>

@@ -2,7 +2,8 @@
     padding: 0;
     margin: 0;
     text-align: left;
-
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .smallText {
@@ -28,7 +29,9 @@
 
 .titleText {
     font-size: 24px;
-    font-family: "PoppinsMedium";
+    font-family: "PoppinsBold";
+    font-weight: bold;
+    
 }
 
 
@@ -42,4 +45,8 @@
 
 .bold {
     font-weight: bold;
+}
+
+.flex {
+    flex: 1
 }
