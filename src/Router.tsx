@@ -7,6 +7,8 @@ import NotFoundScreen from "./screens/NotFoundScreen";
 import GraphDetailsScreen from "./screens/GraphDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import FireBaseScreenTest from "./screens/FireBaseScreenTest";
+import LoginScreen from "./screens/LoginScreen";
+import SignUpScreen from "./screens/SignUpScreen";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path:"/Profile",
-    element : <ProfileScreen user="Default"/>
+    element : <ProfileScreen/>
   },
 
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
   {
     path:"FireBase",
     element: <FireBaseScreenTest/>
+  },
+  {
+    path:"SignIn",
+    element:<LoginScreen/>
+  },
+  {
+    path:"SignUp",
+    element:<SignUpScreen/>
   }
 ])
 

@@ -1,4 +1,4 @@
-import React, { Dispatch, FC } from "react"
+import React, { CSSProperties, Dispatch, FC } from "react"
 
 import "./TextInputStyle.css"
 import { CustomCard } from "../Card/CustomCard";
@@ -12,7 +12,9 @@ interface IconTextInputProps {
     onChangeCustom?:(e: React.ChangeEvent<HTMLInputElement>) => void,
     onBlur?: () => void,
     placeholder?: string,
-    iconHover?: boolean
+    iconHover?: boolean,
+    style?:CSSProperties,
+    passWord ? : boolean
 }
 
 const IconTextInput: FC<IconTextInputProps> = ({
@@ -23,7 +25,10 @@ const IconTextInput: FC<IconTextInputProps> = ({
     placeholder,
     Icon,
     onBlur,
-    iconHover
+    iconHover,
+    style,
+    passWord,
+
 }) => {
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +39,7 @@ const IconTextInput: FC<IconTextInputProps> = ({
     }
     
     return(
-        <div style={{minWidth: 50}}>
+        <div style={style? style :{minWidth:50}}>
             <CustomCard customPadding>
                 <div className="textInputSubContainer">
                     <div style={{display: "flex"}} className={iconHover ? "iconHover" : ""}>
@@ -42,6 +47,7 @@ const IconTextInput: FC<IconTextInputProps> = ({
                     </div>
                     
                     <input className="customInput"
+                        type={passWord? "password": "text"}
                         onChange={onChangeCustom ?? onChange}
                         value={textValue}
                         defaultValue={startingValue}
