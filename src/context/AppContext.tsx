@@ -1,4 +1,5 @@
 import React, { Dispatch, ReactNode, createContext, useState } from "react";
+import { User } from "firebase/auth";
 
 interface AppContextType {
     isDarkMode: boolean,
@@ -11,6 +12,8 @@ interface AppContextType {
     setWantSelectColor: Dispatch<React.SetStateAction<boolean>>,
     cyclique: boolean,
     setCyclique: Dispatch<React.SetStateAction<boolean>>,
+    user : User | null,
+    setUser : any,
     
 }
 
@@ -25,6 +28,8 @@ const AppContext = createContext<AppContextType>({
     setWantSelectColor: () => {},
     cyclique: true,
     setCyclique: () => {},
+    user : null,
+    setUser:()=>{},
 })
 
 interface AppContextProviderProps {
@@ -38,6 +43,7 @@ export interface PositionType {
 
 const AppContextProvider = ({children}: AppContextProviderProps) => {
 
+    const [user, setUser] = useState(null)
     const [isDarkMode, setIsDarkMode] = useState(false)
     const [isWriting, setIsWriting] = useState(false)
     const [colorNode,setColorNode] = useState("#ebedee")
@@ -45,7 +51,7 @@ const AppContextProvider = ({children}: AppContextProviderProps) => {
     const [cyclique,setCyclique] = useState<boolean>(false)
 
     return(
-        <AppContext.Provider value={{isDarkMode, isWriting, setIsDarkMode, setIsWriting, colorNode, setColorNode, wantSelectColor, setWantSelectColor,cyclique,setCyclique,}}>
+        <AppContext.Provider value={{isDarkMode, isWriting, setIsDarkMode, setIsWriting, colorNode, setColorNode, wantSelectColor, setWantSelectColor,cyclique,setCyclique, user, setUser}}>
             {children}
         </AppContext.Provider>
     )
