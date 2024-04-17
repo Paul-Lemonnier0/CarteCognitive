@@ -54,19 +54,20 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   selected }) => {
   const sourceNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(source), [source])) as Node;
   const targetNode = useStore(useCallback((store: ReactFlowState) => store.nodeInternals.get(target), [target])) as Node;
+  
+  
 
-
-
-<<<<<<< HEAD
-  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID } = useContext(GraphContext)
-=======
-  const {showEdge } = useContext(GraphContext)
->>>>>>> c9e454783abe84ab62cc4e373396f556a9555535
+  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, pathEdges } = useContext(GraphContext)
 
   let path = '';
   
   const {sx, sy, tx, ty} = getEdgeParams(sourceNode, targetNode);
+  const [colorEdge, setColorEdge] = useState("grey")
 
+  useEffect(() => {
+    if(pathEdges.find((edge) => edge.id === id)) setColorEdge("blue")
+    else setColorEdge("grey")
+  },[pathEdges])
 
 
   if (!sourceNode || !targetNode) {
@@ -86,13 +87,12 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   const labelX = (sx + tx) / 2; // Position X du label (milieu de l'edge)
   const labelY = (sy + ty) / 2; // Position Y du label (milieu de l'edge)
 
-
   return (
     <>
       <BaseEdge id={id} path={path} interactionWidth={25} style={{
         backgroundColor: "red",
         borderColor: "red",
-        stroke: "black",
+        stroke: colorEdge,
         strokeWidth: 2
         
       }} markerEnd={markerEnd}/>
