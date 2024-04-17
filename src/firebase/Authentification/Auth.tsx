@@ -12,6 +12,7 @@ async function SignUpEmailPassword(mail: string, password: string, navigate: any
         const user = userCredential.user
         console.log("création réussie ! :", user);
         navigate("/");
+        return user
 
     }catch(error : any){
             const errorCode = error.code;
