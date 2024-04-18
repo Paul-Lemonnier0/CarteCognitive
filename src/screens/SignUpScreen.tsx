@@ -8,6 +8,7 @@ import { IoMailOpenOutline } from 'react-icons/io5';
 import { TbPasswordUser } from "react-icons/tb";
 import { AppContext } from '../context/AppContext';
 
+//TODO créer un nouvelle utilisateur dans firestore quand je signUp
 
 
 const SignUpScreen = () => {
