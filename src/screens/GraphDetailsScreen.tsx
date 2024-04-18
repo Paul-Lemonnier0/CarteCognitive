@@ -6,7 +6,6 @@ import "./GraphDetailsScreen.css"
 import SideBar from "../components/SideBar/SibeBar";
 import { GraphContextProvider } from "../context/GraphContext";
 import Graph from "../components/graphs/Graph";
-import GraphDetailsSideBar from "../components/SideBar/GraphDetailsSideBar";
 import { GraphTopBar } from "../components/TopBar/TopBar";
 import MainSideBar from "../components/SideBar/MainSideBar";
 

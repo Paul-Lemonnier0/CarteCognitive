@@ -253,16 +253,6 @@ export default function Graph() {
                 onClick={() => {setUpgrade(!upgrade)}}
                 text='Sauvegarde Auto'
             />
-            <ToggleButton
-                isActive={upgrade}
-                setIsActive={setUpgrade}
-                style={{
-                    position: "absolute",
-                    marginTop: "30px",
-                    right: 110
-
-                }}
-            />
         </div>
     );
 }
