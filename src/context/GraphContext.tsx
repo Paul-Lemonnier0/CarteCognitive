@@ -60,6 +60,8 @@ interface GraphContextType {
     setIsCalculating: Dispatch<React.SetStateAction<boolean>>,
     influancePath: InfluancePathType | null,
     setInfluancePath: Dispatch<React.SetStateAction<InfluancePathType | null>>,
+    pathEdges: Edge[], 
+    setPathEdges: Dispatch<React.SetStateAction<Edge[]>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -110,7 +112,9 @@ const GraphContext = createContext<GraphContextType>({
     isCalculating: false,
     setIsCalculating: () => { },
     influancePath: null,
-    setInfluancePath: () => { },
+    setInfluancePath: () => {},
+    pathEdges: [],
+    setPathEdges: () => {}
 })
 
 export interface SizeType {
@@ -180,6 +184,8 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
     const [lastSelectedEdgeID, setLastSelectedEdgeID] = useState<string | null>(null)
 
     const [colorField, setColorField] = useState("white")
+
+    const [pathEdges, setPathEdges] = useEdgesState<Edge[]>([])
 
     const addNode = (label: string, position: PositionType, type?: TypesNode, size?: SizeType) => {
         const node = createNewNodeObject(nodeID, label, position, type ?? TypesNode.customNode, date, size)
@@ -416,7 +422,9 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             lastSelectedEdgeID, setLastSelectedEdgeID,
             getNodeWithID,
             isCalculating, setIsCalculating,
-            influancePath, setInfluancePath
+            influancePath, setInfluancePath,
+            pathEdges, setPathEdges,
+
         }}>
             {children}
         </GraphContext.Provider>
