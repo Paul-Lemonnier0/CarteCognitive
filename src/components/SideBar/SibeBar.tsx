@@ -12,7 +12,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { MdOutlineQuestionMark } from "react-icons/md";
 import HelpModal from "../Modal/HelpModal";
 import { GraphType } from "../../types/Graph/GraphType";
-import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB";
+import { setgraph } from "../../firebase/FireStore.tsx/FirestoreDB";
 import { GrUpgrade } from "react-icons/gr";
 import { TbFileExport } from "react-icons/tb";
 import { getRectOfNodes, getTransformForBounds, useReactFlow } from "reactflow";
@@ -22,7 +22,7 @@ import { RxValueNone,RxUpdate  } from "react-icons/rx";
 
 
 const SideBar = () => {
-    const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique } = useContext(AppContext)
+    const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique,user} = useContext(AppContext)
     const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified } = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
@@ -62,7 +62,7 @@ const SideBar = () => {
             upgrade : upgrade,
 
         }
-        setDocument("Default", newGraph, newGraph.id)
+        setgraph(user?user.uid : "", newGraph, newGraph.id)
         console.log("sauvegarde effectué")
         setIsGraphModified(false)
     }

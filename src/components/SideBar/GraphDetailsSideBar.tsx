@@ -17,10 +17,11 @@ import { RxText } from "react-icons/rx";
 import IconTextInput from "../TextInput/IconTextInput"
 import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
-import { setDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { setgraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { GraphType } from "../../types/Graph/GraphType";
 import { CiCalculator2 } from "react-icons/ci";
 import { FaCalculator } from "react-icons/fa6";
+import { AppContext } from "../../context/AppContext";
 
 const GraphDetailsSideBar = () => {
     const {
@@ -37,6 +38,8 @@ const GraphDetailsSideBar = () => {
         lastSelectedEdgeID, setLastSelectedEdgeID, 
         setIsCalculating, isCalculating
     } = useContext(GraphContext)
+
+    const {user} = useContext(AppContext)
 
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
@@ -75,7 +78,7 @@ const GraphDetailsSideBar = () => {
                 title: editedTitle,
                 upgrade: upgrade
             }
-            setDocument("Default", newGraph, newGraph.id)
+            setgraph(user? user.uid : "", newGraph, newGraph.id)
             setIsGraphModified(false)
 
         } 
@@ -149,7 +152,7 @@ const GraphDetailsSideBar = () => {
             const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications");
             if (shouldSave) {
 
-                setDocument("Default", newGraph, newGraph.id)
+                setgraph(user? user.uid : "", newGraph, newGraph.id)
                 console.log("graphe modifiée")
             }
         }
