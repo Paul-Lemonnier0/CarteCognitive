@@ -17,18 +17,10 @@ const HomeScreen = () => {
     const graphs = [graph1, graph2, graph3, graph4]
 
     //parie firestore
-    const {user} = useContext(AppContext)
+    const {user, graphsUser} = useContext(AppContext)
     const userid = user.uid
-    const [graphsUser, setGraphsUser] = useState<GraphType[]>([])
-    async function fetchGraphData(user : string) {
-        const graphCollection = await getUserGraphs(userid)
-        setGraphsUser(graphCollection)
-    }
+    
 
-    useEffect(() => {
-        //récupération des graph du User "Default" au chargement de la page
-        fetchGraphData("Default");
-    }, []);
 
     const [showComposants, setShowComposants] = useState<boolean>(false)
 

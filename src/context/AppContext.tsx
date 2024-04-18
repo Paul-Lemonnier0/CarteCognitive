@@ -1,5 +1,7 @@
-import React, { Dispatch, ReactNode, createContext, useState } from "react";
+import React, { Dispatch, ReactNode, createContext, useEffect, useState } from "react";
 import { User } from "firebase/auth";
+import { GraphType } from "../types/Graph/GraphType";
+import { getUserGraphs } from "../firebase/FireStore.tsx/FirestoreDB";
 
 interface AppContextType {
     isDarkMode: boolean,
@@ -17,12 +19,14 @@ interface AppContextType {
     setUser: any,
     personnalDataUser: personnalDataUserInterface
     setPersonnalDataUser: any,
-    Deconnection : () =>void,
+    Deconnection: () => void,
+    graphsUser: GraphType[],
+    setGraphsUser : Dispatch<React.SetStateAction<GraphType[]>>,
 }
 
-interface personnalDataUserInterface{
-    name : string,
-    firstName : string
+interface personnalDataUserInterface {
+    name: string,
+    firstName: string
 }
 
 interface CustomUser {
@@ -33,7 +37,7 @@ const defaultUser: CustomUser = {
     uid: 'Default',
     email: 'utilisateur@Default.com',
 };
-const personnalData : personnalDataUserInterface = {
+const personnalData: personnalDataUserInterface = {
     firstName: 'Default',
     name: '',
 };
@@ -53,7 +57,9 @@ const AppContext = createContext<AppContextType>({
     setUser: () => { },
     personnalDataUser: personnalData,
     setPersonnalDataUser: () => { },
-    Deconnection : () =>{}
+    Deconnection: () => { },
+    graphsUser: [],
+    setGraphsUser : () =>{},
 })
 
 interface AppContextProviderProps {
@@ -76,16 +82,34 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const [colorNode, setColorNode] = useState("#ebedee")
     const [wantSelectColor, setWantSelectColor] = useState<boolean>(false)
     const [cyclique, setCyclique] = useState<boolean>(false)
+    const [graphsUser, setGraphsUser] = useState<GraphType[]>([])
 
-    function Deconnection(){
+    function Deconnection() {
         setUser(defaultUser)
         setPersonnalDataUser(personnalData)
     }
 
+
+
+    useEffect(() => {
+        async function fetchGraphs() {
+
+            try {
+                const graphCollection = await getUserGraphs(user.uid);
+                setGraphsUser(graphCollection);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des graphiques de l'utilisateur :", error);
+            }
+
+        }
+        fetchGraphs();
+    }, [user]);
+
+
     return (
         <AppContext.Provider value={{
             isDarkMode, isWriting, setIsDarkMode, setIsWriting, colorNode, setColorNode, wantSelectColor,
-            setWantSelectColor, cyclique, setCyclique, user, setUser, personnalDataUser, setPersonnalDataUser, Deconnection
+            setWantSelectColor, cyclique, setCyclique, user, setUser, personnalDataUser, setPersonnalDataUser, Deconnection, graphsUser, setGraphsUser
         }}>
             {children}
         </AppContext.Provider>

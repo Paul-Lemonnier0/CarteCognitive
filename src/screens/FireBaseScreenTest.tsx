@@ -6,31 +6,27 @@ import ListGraph from "../components/graphs/ListGraph"
 import { GraphType } from "../types/Graph/GraphType"
 import { AppContext } from "../context/AppContext"
 
-const FireBaseScreenTest =() => {
+const FireBaseScreenTest = () => {
 
-    const {user} = useContext(AppContext)
+    const { user } = useContext(AppContext)
     const graphTest = getGraphFromJSON(require("../constantes/Graph/DefaultGraph2.json"))
-    const [listGraph, setListGraph] = useState<GraphType[]>([])
+    const { graphsUser, setGraphsUser } = useContext(AppContext)
 
 
-    async function fetchGraphData(userid : string) {
-        const graphCollection = await getUserGraphs(userid);
-        setListGraph(graphCollection);
-    }
-    useEffect(() => {
-        //récupération des graph du User "Default" au chargement de la page
-        fetchGraphData(user? user.uid : "Default");
-    }, []);
-    
-    return(
+
+    return (
         <div>
-        <AppTopBar/>
-        
-        <h1>FireBase Test</h1>
-        
-        <button onClick={()=>(CreateGraph(user? user.uid : "Default", graphTest))}>Ajout Graphe</button>
-        <button onClick={()=>(fetchGraphData("Default"))}>récupération Graphe</button>
-        <ListGraph graphs={listGraph} title={"Default"}/>
+            <AppTopBar />
+
+            <h1>FireBase Test</h1>
+
+            <button onClick={() => {
+                CreateGraph(user ? user.uid : "Default", graphTest)
+                const updateGraphsUser = [...graphsUser, graphTest]
+                
+                setGraphsUser(updateGraphsUser)
+            }}>Ajout Graphe</button>
+            <ListGraph graphs={graphsUser} title={"Default"} />
         </div>
     )
 }

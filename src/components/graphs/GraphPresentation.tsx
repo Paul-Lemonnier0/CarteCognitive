@@ -13,13 +13,16 @@ interface GraphPresentationProps {
 
 const GraphPresentation: FC<GraphPresentationProps> = ({ graph, style }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const {user} = useContext(AppContext)
+    const {user, graphsUser, setGraphsUser} = useContext(AppContext)
 
     const handleClickEffacer = () => {
         if (user?.uid === "")
             console.log("utilisateur introuvable")
         else{
         deleteGraph(user?user.uid : "", graph.id)
+        const updatedGraphsUser = graphsUser.filter((g)=>g.id !== graph.id)
+        setGraphsUser(updatedGraphsUser)
+
         console.log("id : ", graph.id, "effacée !")
         setIsSelect(false)
         }
