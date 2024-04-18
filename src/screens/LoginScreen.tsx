@@ -8,10 +8,11 @@ import { CheckButton, GoBackButton } from '../components/Buttons/IconButtons';
 import { TbPasswordUser } from "react-icons/tb";
 import "./LoginScreen.css"
 import { AppContext } from '../context/AppContext';
+import { getPersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
 
 
 const LoginScreen = () => {
-    const {setUser} = useContext(AppContext)
+    const {setUser, setPersonnalDataUser} = useContext(AppContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -44,6 +45,8 @@ const LoginScreen = () => {
             try {
                 const user = await SignInEmailPassword(email, password, navigate);
                 setUser(user);
+                const PersonnalData = await getPersonnalData(user.uid)
+                setPersonnalDataUser(PersonnalData)
                 console.log("user connecté : ", user);
             } catch (error) {
                 console.error("Erreur de connexion :", error);

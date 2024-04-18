@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { CSSProperties, FC } from "react"
 import "./CustomTextStyles.css"
 
 interface TextProps {
@@ -7,7 +7,8 @@ interface TextProps {
     center?: boolean,
     bold?: boolean,
     flex?: boolean,
-    color?: string
+    color?: string,
+    style?: CSSProperties,
 }
 
 export const SmallText: FC<TextProps> = ({text, wrap, center, bold, flex, color}) => {
@@ -58,7 +59,7 @@ export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold, flex, colo
     )
 }
 
-export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color}) => {
+export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color, style}) => {
     const classe = "baseText titleText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
@@ -66,6 +67,6 @@ export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color}
         + (flex ? " flex" : "" )
 
     return(
-        <p className={classe} style={{color: color}}>{text}</p>
+        <p className={classe} style={style? style :{color: color}}>{text}</p>
     )
 }

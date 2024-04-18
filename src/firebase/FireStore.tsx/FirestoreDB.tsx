@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc } from "firebase/firestore";
+import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getDoc } from "firebase/firestore";
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
 
@@ -16,7 +16,7 @@ const db = getFirestore(app);
  * @param graph un graph
  */
 async function CreateGraph(userid: string, graph: GraphType) {
-    const docRef = await addDoc(collection(db,"users", userid, "Graphs"), graph)
+    const docRef = await addDoc(collection(db, "users", userid, "Graphs"), graph)
     console.log("id du document : ", docRef.id)
 }
 
@@ -27,7 +27,7 @@ async function CreateGraph(userid: string, graph: GraphType) {
  */
 
 async function getUserGraphs(userid: string) {
-    const doc = await (getDocs(collection(db, "users",userid, "Graphs")))
+    const doc = await (getDocs(collection(db, "users", userid, "Graphs")))
     //parcours de toute la collection pour la stocker dans un tableau data
     const data = doc.docs.map((d: any) => {
         // Obtention des données du document Firestore
@@ -66,16 +66,37 @@ async function setgraph(userid: string, graph: GraphType, id: string) {
  * @param documentId id du graph
  */
 
-async function deleteGraph(userid : string, graphId : string){
-    try{
-        const docRef = doc(db,"users", userid,"Graphs", graphId)
+async function deleteGraph(userid: string, graphId: string) {
+    try {
+        const docRef = doc(db, "users", userid, "Graphs", graphId)
         await deleteDoc(docRef);
         console.log("Document supprimé")
-    } catch (error){
+    } catch (error) {
         console.log("erreur Suppression : ", error)
     }
 }
 
+async function setPersonnalData(userid: string, data: any) {
+    const docRef = doc(db, "users", userid)
+    await setDoc(docRef, data, {merge:true})
+}
+
+async function getPersonnalData(userid: string) {
+    try{
+        const docRef = doc(db, "users", userid)
+        const userDocSnapshot = await getDoc(docRef)
+        if(userDocSnapshot.exists()){
+            const dataUser = userDocSnapshot.data();
+            return dataUser
+        }
+        return null
+
+    } catch (error) {
+        console.log("erreur de récupération du firstName")
+        return""
+    }
+    
+}
 
 export default db
-export { CreateGraph, getUserGraphs, setgraph, deleteGraph }
+export { CreateGraph, getUserGraphs, setgraph, deleteGraph, setPersonnalData, getPersonnalData}

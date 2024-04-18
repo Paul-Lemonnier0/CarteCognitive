@@ -1,11 +1,12 @@
-import React, { FC } from 'react'
+import React, { CSSProperties, FC } from 'react'
 import './ButtonsStyle.css'
 import { NormalText } from '../Text/CustomText'
 
 interface ButtonProps {
     text: string,
     onPress: () => void,
-    disabled?: boolean
+    disabled?: boolean,
+    style ? : CSSProperties
 }
 
 export const UsualButton: FC<ButtonProps> = ({text, onPress}) => {
@@ -16,9 +17,9 @@ export const UsualButton: FC<ButtonProps> = ({text, onPress}) => {
   )
 }
 
-export const ValidationButton: FC<ButtonProps> = ({text, onPress, disabled}) => {
+export const ValidationButton: FC<ButtonProps> = ({text, onPress, disabled, style}) => {
     return(
-        <button disabled={disabled} className={`validation-button ${disabled ? "disabled" : ""}`} onClick={onPress}>
+        <button style={style} disabled={disabled} className={`validation-button ${disabled ? "disabled" : ""}`} onClick={onPress}>
             <NormalText center bold text={text}/>
         </button>
     )

@@ -1,24 +1,27 @@
-import React, { useContext } from "react"
+import React, { CSSProperties, useContext } from "react"
 import AppTopBar from "../components/TopBar/TopBar"
-import { TitleText } from "../components/Text/CustomText"
+import { NormalText, TitleText } from "../components/Text/CustomText"
 import CircleImage from "../components/Images/CircleImage"
-import "./ProfileScreen"
+import "./ProfileScreen.css"
 import { FaUser } from "react-icons/fa6"
-import { SignInEmailPassword, SignUpEmailPassword } from "../firebase/Authentification/Auth"
 import { Link } from "react-router-dom"
 import { AppContext } from "../context/AppContext"
+import { ValidationButton } from "../components/Buttons/Buttons"
+import { getPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB"
 
 
-interface ProfileScreenInterface {
-    user: string
+const ValidationButtonStyle: CSSProperties = {
+    flex: 1,
+    margin: "10px"
+
 }
 
-function GotoSingIn() {
-
+const TitleTextStyle: CSSProperties = {
+    textAlign: "center"
 }
 
 function ProfileScreen() {
-    const {user} = useContext(AppContext)
+    const { user, personnalDataUser, setPersonnalDataUser, Deconnection } = useContext(AppContext)
 
 
 
@@ -29,22 +32,29 @@ function ProfileScreen() {
             <div className="profile-container">
                 <div className="profile-header">
                     <div className="profile-picture">
-                        <CircleImage defaultIcon={FaUser} />
+                        {/*<CircleImage defaultIcon={FaUser} />*/}
                     </div>
-                    <h1>Utilisateur</h1>
-                    <p>{user? user.email : "pas d'email"}</p>
-                </div>
-                <div className="profile-actions">
-                    <Link to={"/SignIn"}><p>SignIn</p></Link>
-                    <Link to={"/SignUp"}><p>SignUp</p></Link>
-                </div>
-                <div className="profile-settings">
-                    <h2>Paramètres</h2>
-                    <ul>
-                        <li>Modifier le mot de passe</li>
-                        <li>Modifier l'email</li>
-                    
-                    </ul>
+                    <TitleText text="Utilisateur" style={TitleTextStyle} />
+                    {user.uid == "Default" ?
+                        (<div className="ConnectionButton">
+                            <Link to={"/SignIn"}><ValidationButton style={ValidationButtonStyle} text="SignIn" onPress={() => { }}></ValidationButton></Link>
+                            <Link to={"/SignUp"}><ValidationButton style={ValidationButtonStyle} text="SignUp" onPress={() => { }}></ValidationButton></Link>
+                        </div>) : 
+                        (
+                            <div className="ConnectionButton">
+                            <ValidationButton style={ValidationButtonStyle} text="Deconnection" onPress={Deconnection}></ValidationButton>
+                            
+                        </div>
+                        )
+
+                    }
+                    <div className="PersonnalInformation">
+                        <NormalText text={user.email ? user.email : ""}></NormalText>
+                        <NormalText bold text={"Prénom : " + personnalDataUser.name} />
+                        <NormalText bold text={"Nom : " + personnalDataUser.firstName} />
+
+                    </div>
+
                 </div>
             </div>
 
