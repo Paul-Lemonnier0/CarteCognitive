@@ -12,10 +12,19 @@ interface AppContextType {
     setWantSelectColor: Dispatch<React.SetStateAction<boolean>>,
     cyclique: boolean,
     setCyclique: Dispatch<React.SetStateAction<boolean>>,
-    user : User | null,
+    user : User | CustomUser,
     setUser : any,
     
 }
+
+interface CustomUser{
+    uid: string;
+    email : string | null;
+}
+const defaultUser: CustomUser = {
+    uid: 'Default',
+    email: 'example@example.com',
+  };
 
 const AppContext = createContext<AppContextType>({
     isDarkMode: false,
@@ -28,7 +37,7 @@ const AppContext = createContext<AppContextType>({
     setWantSelectColor: () => {},
     cyclique: true,
     setCyclique: () => {},
-    user : null,
+    user : defaultUser,
     setUser:()=>{},
 })
 
@@ -43,7 +52,7 @@ export interface PositionType {
 
 const AppContextProvider = ({children}: AppContextProviderProps) => {
 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(defaultUser)
     const [isDarkMode, setIsDarkMode] = useState(false)
     const [isWriting, setIsWriting] = useState(false)
     const [colorNode,setColorNode] = useState("#ebedee")

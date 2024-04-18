@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import AppTopBar from "../components/TopBar/TopBar"
-import { CreateDoc, deleteDocument, getCollection, setDocument } from "../firebase/FireStore.tsx/FirestoreDB"
+import { CreateGraph, deleteGraph, getUserGraphs, setgraph } from "../firebase/FireStore.tsx/FirestoreDB"
 import { getGraphFromJSON } from "../primitives/GraphMethods"
 import ListGraph from "../components/graphs/ListGraph"
 import { GraphType } from "../types/Graph/GraphType"
+import { AppContext } from "../context/AppContext"
 
 const FireBaseScreenTest =() => {
 
+    const {user} = useContext(AppContext)
     const graphTest = getGraphFromJSON(require("../constantes/Graph/DefaultGraph2.json"))
     const [listGraph, setListGraph] = useState<GraphType[]>([])
 
 
-    async function fetchGraphData(user : string) {
-        const graphCollection = await getCollection(user);
+    async function fetchGraphData(userid : string) {
+        const graphCollection = await getUserGraphs(userid);
         setListGraph(graphCollection);
     }
     useEffect(() => {
         //récupération des graph du User "Default" au chargement de la page
-        fetchGraphData("Default");
+        fetchGraphData(user? user.uid : "Default");
     }, []);
     
     return(
@@ -26,17 +28,8 @@ const FireBaseScreenTest =() => {
         
         <h1>FireBase Test</h1>
         
-        <button onClick={()=>(CreateDoc("Default", graphTest))}>Ajout Graphe</button>
+        <button onClick={()=>(CreateGraph(user? user.uid : "Default", graphTest))}>Ajout Graphe</button>
         <button onClick={()=>(fetchGraphData("Default"))}>récupération Graphe</button>
-        <button onClick={()=>{
-            //btrKTBaNdpHC8fDwrgN4
-            const newGraph = listGraph[1]
-            newGraph.title = "toto"
-            listGraph[1] = newGraph
-            setDocument("Default", newGraph, "btrKTBaNdpHC8fDwrgN4")
-            console.log(listGraph[1].title)
-        }}>modifier Graphe</button>
-        <button onClick={()=>(deleteDocument("Default", "9eUNJQ39ZKpJ65XFvMRq"))}>Suppression Graphe</button>
         <ListGraph graphs={listGraph} title={"Default"}/>
         </div>
     )

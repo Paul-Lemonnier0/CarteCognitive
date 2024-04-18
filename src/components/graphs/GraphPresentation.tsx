@@ -1,8 +1,9 @@
-import React, { FC, SyntheticEvent, useEffect, useState } from "react"
+import React, { FC, SyntheticEvent, useContext, useEffect, useState } from "react"
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { deleteDocument } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { AppContext } from "../../context/AppContext"
 
 interface GraphPresentationProps {
     graph: GraphType
@@ -12,11 +13,16 @@ interface GraphPresentationProps {
 
 const GraphPresentation: FC<GraphPresentationProps> = ({ graph, style }) => {
     const [isSelect, setIsSelect] = useState(false)
+    const {user} = useContext(AppContext)
 
     const handleClickEffacer = () => {
-        deleteDocument("Default", graph.id)
+        if (user?.uid === "")
+            console.log("utilisateur introuvable")
+        else{
+        deleteGraph(user?user.uid : "", graph.id)
         console.log("id : ", graph.id, "effacée !")
         setIsSelect(false)
+        }
     }
 
     useEffect(() => {
