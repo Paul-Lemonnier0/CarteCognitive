@@ -1,6 +1,10 @@
-import React, { CSSProperties, Dispatch } from "react"
+import React, { CSSProperties, useContext, Dispatch } from "react"
 import { GraphType } from "../../types/Graph/GraphType"
 import GraphPresentation from "./GraphPresentation"
+import { IconButton } from "../Buttons/IconButtons"
+import { FiRefreshCcw } from "react-icons/fi";
+import { getUserGraphs } from "../../firebase/FireStore.tsx/FirestoreDB";
+import { AppContext } from "../../context/AppContext";
 import { HugeText, TitleText } from "../Text/CustomText"
 
 
@@ -13,6 +17,8 @@ interface ListGraphInterface {
 }
 
 const ListGraph = ({graphs, title, style, favorites, setFavorites} : ListGraphInterface) => {
+    const {user, setGraphsUser} =useContext(AppContext)
+
     return (
     <div style={style} className="graphPresentationListContainer">
         <div style={{marginLeft: 20}}>

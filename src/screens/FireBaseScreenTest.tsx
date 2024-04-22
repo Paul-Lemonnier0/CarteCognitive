@@ -26,7 +26,7 @@ const FireBaseScreenTest = () => {
                 
                 setGraphsUser(updateGraphsUser)
             }}>Ajout Graphe</button>
-            <ListGraph graphs={graphsUser} title={"Default"} />
+            {/* <ListGraph graphs={graphsUser} title={"Default"} /> */}
         </div>
     )
 }
