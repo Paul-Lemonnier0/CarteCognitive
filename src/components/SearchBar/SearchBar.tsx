@@ -9,7 +9,8 @@ interface CustomSearchBarProps {
     setSearchValue: Dispatch<string>,
     startingValue?: string,
     placeholder?: string,
-    iconHover?: boolean
+    iconHover?: boolean,
+    isWhite?: boolean
 }
 
 const CustomSearchBar: FC<CustomSearchBarProps> = ({
@@ -17,7 +18,8 @@ const CustomSearchBar: FC<CustomSearchBarProps> = ({
     searchValue, 
     setSearchValue, 
     placeholder,
-    iconHover
+    iconHover,
+    isWhite
 }) => {
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +29,7 @@ const CustomSearchBar: FC<CustomSearchBarProps> = ({
     
     return(
         <IconTextInput 
+            isWhite={isWhite}
             iconHover={iconHover}
             Icon={FiSearch}
             startingValue={startingValue}

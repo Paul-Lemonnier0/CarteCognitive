@@ -70,3 +70,15 @@ export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color,
         <p className={classe} style={style? style :{color: color}}>{text}</p>
     )
 }
+
+export const HugeText: FC<TextProps> = ({text, wrap, center, bold, flex, color, style}) => {
+    const classe = "baseText hugeText" 
+        + (wrap ? " wrap" : "" )
+        + (center ? " center" : "" )
+        + (bold ? " bold" : "" )
+        + (flex ? " flex" : "" )
+
+    return(
+        <p className={classe} style={style? style :{color: color}}>{text}</p>
+    )
+}

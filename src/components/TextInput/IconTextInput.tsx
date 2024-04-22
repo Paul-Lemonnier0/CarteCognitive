@@ -14,7 +14,8 @@ interface IconTextInputProps {
     placeholder?: string,
     iconHover?: boolean,
     style?:CSSProperties,
-    passWord ? : boolean
+    passWord ? : boolean,
+    isWhite?: boolean
 }
 
 const IconTextInput: FC<IconTextInputProps> = ({
@@ -28,7 +29,7 @@ const IconTextInput: FC<IconTextInputProps> = ({
     iconHover,
     style,
     passWord,
-
+    isWhite
 }) => {
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,8 +40,8 @@ const IconTextInput: FC<IconTextInputProps> = ({
     }
     
     return(
-        <div style={style? style :{minWidth:50}}>
-            <CustomCard customPadding>
+        <div style={style? style :{minWidth:50, flex: 1}}>
+            <CustomCard customPadding isWhite={isWhite}>
                 <div className="textInputSubContainer">
                     <div style={{display: "flex"}} className={iconHover ? "iconHover" : ""}>
                         <Icon size={25}/>

@@ -1,34 +1,46 @@
-import React, { FC } from "react"
+import React, { FC, useContext } from "react"
 import "./TopBarStyle.css"
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useNavigation } from "react-router-dom"
 import { GrUserSettings} from "react-icons/gr";
 import { IoLogoFirebase } from "react-icons/io5";
+import ProfilButton from "../Profil/ProfilButton";
+import { AppContext } from "../../context/AppContext";
+import { FiBell } from "react-icons/fi";
+import { GoBackButton, IconButton } from "../Buttons/IconButtons";
+import { HugeText } from "../Text/CustomText";
 
 //barre de navigation
-const AppTopBar = () => {
+
+interface AppTopBarProps {
+    isHomeScreen?: boolean
+}
+
+const AppTopBar: FC<AppTopBarProps> = ({isHomeScreen}) => {
+    const {user} = useContext(AppContext)
+
+    const navigate = useNavigate()
+
     return (
         <div className="appTopBar" style={{
             backgroundColor: "#FFFFFF",
             display: 'flex',
             justifyContent: "space-between",
             alignItems: 'center',
-            paddingLeft: 20,
-            paddingRight: 20,
+            paddingLeft: 30,
+            paddingRight: 30,
             paddingTop: 0,
-            height: 40,
             zIndex: 100000
         }}>
-            <Link to={"/"} style={{ fontFamily: "PoppinsSemiBold" }}>
-                <p style={{
-                    fontSize: 14,
-                    textAlign: "left",
-                    fontFamily: "PoppinsMedium",
-                    color: "black",
-                }}>
-                    Accueil
-                </p>
-            </Link>
-            <Link to={"/FireBase"} style={{ fontFamily: "PoppinsSemiBold" }}>
+            {
+                !isHomeScreen ?
+                <Link to={"/"} style={{ fontFamily: "PoppinsSemiBold" }}>
+                    <GoBackButton small onPress={() => navigate(-1)}/>
+                </Link>
+                :
+                <HugeText text="Bienvenue !"/>
+            }
+
+            {/* <Link to={"/FireBase"} style={{ fontFamily: "PoppinsSemiBold" }}>
                 <IoLogoFirebase style={
                     {
                         fontSize: 20,
@@ -36,18 +48,21 @@ const AppTopBar = () => {
                         color: "black"
                     }
                 } />
-            </Link>
-                
-            <Link to={"/Profile"} style={{ fontFamily: "PoppinsSemiBold" }}>
-                <GrUserSettings style={
-                    {
-                        fontSize: 20,
-                        fontFamily: "PoppinsMedium",
-                        color: "black"
-                    }
-                } />
+            </Link> */}
 
-            </Link>
+            <div style={{
+                flexDirection: "row",
+                display: "flex",
+                gap: 10,
+                alignItems: "center"
+            }}>
+                <FiBell size={25}/>
+                <Link to={"/Profile"} style={{ fontFamily: "PoppinsSemiBold" }}>
+                    <ProfilButton name={user.email?.toLocaleUpperCase() ?? "A"}/>
+                </Link>
+            </div>
+                
+
         </div>
 
     )

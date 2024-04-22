@@ -3,10 +3,11 @@ import "./CustomCardStyle.css"
 
 interface CustomCardProps {
     children: ReactNode,
-    customPadding?: boolean
+    customPadding?: boolean,
+    isWhite?: boolean
 }
 
-export const CustomCard: FC<CustomCardProps> = ({children, customPadding}) => {
+export const CustomCard: FC<CustomCardProps> = ({children, customPadding, isWhite}) => {
   return (
     <div className='customCardContainer' 
       style={{
@@ -16,6 +17,7 @@ export const CustomCard: FC<CustomCardProps> = ({children, customPadding}) => {
         minHeight: 44,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: isWhite ? "white" : "#ebedee"
       }}>
         {children}
     </div>

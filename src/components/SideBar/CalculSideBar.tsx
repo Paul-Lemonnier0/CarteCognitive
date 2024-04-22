@@ -20,7 +20,6 @@ interface CalculSideBarProps {
 const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
     const {influancePath, setInfluancePath, getNodeWithID, edges, setPathEdges, adjMat} = useContext(GraphContext)
     
-    if(!isExpanded) return null
 
     const sourceNode = (influancePath && influancePath?.sourceID) ? getNodeWithID(influancePath?.sourceID) : null
     const targetNode = (influancePath && influancePath?.targetID) ? getNodeWithID(influancePath?.targetID) : null
@@ -66,7 +65,10 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                         }
                     }
                 })
-                if (currentCompteur < Compteur) {Chemin = chemin, Compteur = currentCompteur }
+                if (currentCompteur < Compteur) {
+                    Chemin = chemin;
+                    Compteur = currentCompteur 
+                }
             })
             console.log(Compteur)
             setPathEdges(Chemin)
@@ -74,6 +76,8 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         }
 
     },[edges])
+
+    if(!isExpanded) return null
 
     return (
         <div className={`subSideBarContainer`}>

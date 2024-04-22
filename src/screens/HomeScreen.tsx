@@ -8,6 +8,17 @@ import { getUserGraphs } from "../firebase/FireStore.tsx/FirestoreDB"
 import { ValidationButton } from "../components/Buttons/Buttons"
 import ComposantsModal from "../components/Modal/ComposantsModal"
 import { AppContext } from "../context/AppContext"
+import HomeSideBar from "../components/SideBar/HomeSideBar"
+import CustomSearchBar from "../components/SearchBar/SearchBar"
+import { IconButton } from "../components/Buttons/IconButtons"
+import { IoIosAdd } from "react-icons/io"
+import { IoReload } from "react-icons/io5"
+
+export enum HomeSideBarMenu {
+    Graphs = "Graphs",
+    Templates = "Templates",
+    Favorites = "Favorites"
+}
 
 const HomeScreen = () => {
     const graph1 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph1.json") as GraphType)
@@ -32,21 +43,78 @@ const HomeScreen = () => {
         setShowComposants(false)
     }
 
+    const [menu, setMenu] = useState<HomeSideBarMenu>(HomeSideBarMenu.Graphs)
+    const [searchValue, setSearchValue] = useState<string>("")
+
+    const [favorites, setFavorites] = useState<string[]>([])
+
     return (
-        <>
-            <AppTopBar />
+        <div style={{display: "flex", flexDirection: "row", maxHeight: "100%", flex: 1, boxSizing: "border-box"}}>
+            <HomeSideBar menu={menu} setMenu={setMenu}/>
             <div className="homeScreenContainer">
-                <ListGraph graphs={graphs} title={"Graphes d'exemple"}/>
-                <ListGraph graphs={graphsUser} title = {`Graphes de ${user.email}`}/>
+                <div style={{
+                    boxSizing: "border-box",
+                    marginInline: -20,
+                    paddingInline: 30,
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingBottom: 15,
+                    gap: 30,
+                    borderBottom: '2px solid #d9d7d7'
+                }}>
+                    <CustomSearchBar 
+                        isWhite
+                        placeholder="Chercher une carte..."
+                        searchValue={searchValue} setSearchValue={setSearchValue}/>
+                    <div style={{display: "flex", flexDirection: "row", gap: 10}}>
+                        <IconButton Icon={IoReload} onPress={() => {}}/>
+                        <IconButton secondary Icon={IoIosAdd} onPress={() => {}}/>
+                    </div>
+                </div>
+                <div style={{
+                    overflowY: 'scroll',
+                    marginBlock: -20,
+                    paddingBlock: 20,
+                    marginRight: -10,
+                    paddingRight: 10
+                }}>
+                {
+                    menu === HomeSideBarMenu.Graphs ?
+                        <ListGraph 
+                            favorites={favorites}
+                            setFavorites={setFavorites}
+                            graphs={graphsUser} 
+                            title = {"Vos cartes"}
+                        /> 
+                        
+                        :
+                    (
+                        menu === HomeSideBarMenu.Templates ? 
+                        <ListGraph 
+                            favorites={favorites}
+                            setFavorites={setFavorites}
+                            graphs={graphs} 
+                            title={"Modèles de cartes"}/> :
+                        <ListGraph 
+                            favorites={favorites}
+                            setFavorites={setFavorites}
+                            graphs={[]} 
+                            title={"Vos Favoris"}
+                        />
+                    )
+                }
+                </div>
             </div>
-            <div style={{padding: 20}}>
+            {/* <div style={{padding: 20}}>
                 <ValidationButton text="Composants" onPress={handleShowComposants}/>
             </div>
             {
                 showComposants &&
                 <ComposantsModal onClose={handleCloseComposants}/>
-            }
-        </>
+            } */}
+        </div>
     )
 }
 

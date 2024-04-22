@@ -10,6 +10,7 @@ import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
 import NodeContextMenu from './Nodes/NodeContextMenu';
 import SelectorButton, { ToggleButton } from '../Buttons/SelectorButton';
 import AdjMatComponent from './AdjMatComponent';
+import { createNodesAndEdges, createNodesAndEdgesStress } from '../../utils/utils';
 
 export type MenuType = {
     id: string,
@@ -33,6 +34,22 @@ export default function Graph() {
         lastSelectedEdgeID, setLastSelectedEdgeID,
         upgrade, setUpgrade,
     } = useContext(GraphContext)
+
+
+      
+    const updatePos = useCallback(() => {
+        setNodes((nds) => {
+        return nds.map((node) => {
+            return {
+            ...node,
+            position: {
+                x: Math.random() * 1500,
+                y: Math.random() * 1500,
+            },
+            };
+        });
+        });
+    }, []);
 
     //Data
 
@@ -240,7 +257,7 @@ export default function Graph() {
                     }}
                 />
                 <Controls />
-                <AdjMatComponent adjMat={adjMat}/>
+                {/* <AdjMatComponent adjMat={adjMat}/> */}
 
             </ReactFlow>
 

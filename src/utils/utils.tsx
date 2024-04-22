@@ -1,4 +1,4 @@
-import { Position, MarkerType, Node } from 'reactflow';
+import { Position, MarkerType, Node, Edge } from 'reactflow';
 
 interface Point {
   x: number;
@@ -84,6 +84,48 @@ export function getEdgeParams(source: Node, target: Node): { sx: number; sy: num
     targetPos,
   };
 }
+
+export function createNodesAndEdgesStress(xNodes = 10, yNodes = 10): {nodes: Node[], edges: Edge[]} {
+  const nodes = [];
+  const edges = [];
+  let nodeId = 1;
+  let recentNodeId = null;
+
+  for (let y = 0; y < yNodes; y++) {
+    for (let x = 0; x < xNodes; x++) {
+      const position = { x: x * 100, y: y * 50 };
+      const data = { label: `Node ${nodeId}` };
+      const node = {
+        id: `stress-${nodeId.toString()}`,
+        data,
+        position,
+        type: "customNode"
+      };
+      nodes.push(node);
+
+      if (recentNodeId && nodeId <= xNodes * yNodes) {
+        edges.push({
+          id: `${x}-${y}`,
+          source: `stress-${recentNodeId.toString()}`,
+          target: `stress-${nodeId.toString()}`,
+          type: "floating",
+          markerEnd: {
+            type: MarkerType.ArrowClosed, 
+            width: 20, 
+            height: 20,
+            color: "black"
+          },
+        });
+      }
+
+      recentNodeId = nodeId;
+      nodeId++;
+    }
+  }
+
+  return { nodes, edges };
+}
+
 
 export function createNodesAndEdges(): { nodes: Node[]; edges: any[]; } {
   const nodes: Node[] = [];

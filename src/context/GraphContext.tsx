@@ -10,6 +10,7 @@ import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 import { AdjMat, AdjMat_addEdge, AdjMat_addNode, AdjMat_breakNodeLinks, AdjMat_deleteMultipleEdges, AdjMat_deleteMultipleNodes, AdjMat_deleteNode, AdjMat_init } from "../primitives/MatriceMethods";
 import { GraphType } from "../types/Graph/GraphType";
 import { setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
+import { createNodesAndEdgesStress } from "../utils/utils";
 
 interface GraphContextType {
     upgrade: boolean
@@ -144,6 +145,12 @@ interface GraphContextProviderType {
 
 
 const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphName, id, children }: GraphContextProviderType) => {
+    
+    // const { nodes: initialNodes, edges: initialEdges } = createNodesAndEdgesStress(
+    //     15,
+    //     30,
+    // );
+    
     const [isGraphModified, setIsGraphModified] = useState(false)
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
     const [nodeColorField, setNodeColorField] = useState<string[]>([])

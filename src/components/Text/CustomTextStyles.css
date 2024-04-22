@@ -4,6 +4,7 @@
     text-align: left;
     text-overflow: ellipsis;
     overflow: hidden;
+    text-decoration: none;
 }
 
 .smallText {
@@ -31,7 +32,12 @@
     font-size: 24px;
     font-family: "PoppinsBold";
     font-weight: bold;
-    
+}
+
+.hugeText {
+    font-size: 30px;
+    font-family: "PoppinsBold";
+    font-weight: bold;
 }
 
 

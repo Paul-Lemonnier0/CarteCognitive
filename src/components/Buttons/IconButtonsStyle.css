@@ -10,6 +10,7 @@
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 
+
 .iconButton span {
     display: flex;
     transition: 0.3s;
@@ -19,4 +20,23 @@
 
 .iconButton:hover span {
     transform: translateY(-2px);
+}
+	
+
+.iconTextButton {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    padding: 12.5px;
+    transition: 0.3s;
+    cursor: pointer;
+    margin: 0;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+
+.iconTextButton span {
+    display: flex;
+    transition: 0.3s;
+    align-items: center;
 }
