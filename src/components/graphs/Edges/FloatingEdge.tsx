@@ -66,8 +66,21 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
   useEffect(() => {
     if(pathEdges.find((edge) => edge.id === id)) setColorEdge("blue")
-    else setColorEdge("grey")
+    else {
+      if(data.label !== "") setColorEdge("grey")
+        else setColorEdge("red")
+    }
   },[pathEdges])
+
+
+  useEffect(() => {
+    if(data.label) {
+      if(data.label !== "") setColorEdge("grey")
+      else setColorEdge("red")
+    }
+    else setColorEdge("red")
+    
+  },[data.label])
 
 
   if (!sourceNode || !targetNode) {
