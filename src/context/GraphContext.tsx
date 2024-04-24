@@ -63,6 +63,8 @@ interface GraphContextType {
     setInfluancePath: Dispatch<React.SetStateAction<InfluancePathType | null>>,
     pathEdges: Edge[], 
     setPathEdges: Dispatch<React.SetStateAction<Edge[]>>,
+    relationInt: boolean,
+    setRelationInt: Dispatch<React.SetStateAction<boolean>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -115,7 +117,9 @@ const GraphContext = createContext<GraphContextType>({
     influancePath: null,
     setInfluancePath: () => {},
     pathEdges: [],
-    setPathEdges: () => {}
+    setPathEdges: () => {},
+    relationInt: true,
+    setRelationInt: () => {}
 })
 
 export interface SizeType {
@@ -156,6 +160,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState<boolean>(false)
     const [showEdge, setShowEdge] = useState<boolean>(true)
+    const [relationInt, setRelationInt] = useState<boolean>(true)
 
     const { cyclique, user } = useContext(AppContext)
 
@@ -431,6 +436,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             isCalculating, setIsCalculating,
             influancePath, setInfluancePath,
             pathEdges, setPathEdges,
+            relationInt,setRelationInt
 
         }}>
             {children}

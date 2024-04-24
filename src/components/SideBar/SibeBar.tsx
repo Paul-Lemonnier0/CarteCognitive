@@ -8,7 +8,7 @@ import ColorIcon from "../Other/ColorIcon";
 import { baseColors } from "../../constantes/Colors";
 import { BackgroundIcon } from "../Buttons/IconButtons";
 import { BiColorFill } from "react-icons/bi";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff,FiItalic,FiTag } from "react-icons/fi";
 import { MdOutlineQuestionMark } from "react-icons/md";
 import HelpModal from "../Modal/HelpModal";
 import { GraphType } from "../../types/Graph/GraphType";
@@ -17,13 +17,13 @@ import { GrUpgrade } from "react-icons/gr";
 import { TbFileExport } from "react-icons/tb";
 import { getRectOfNodes, getTransformForBounds, useReactFlow } from "reactflow";
 import { toPng } from "html-to-image";
-import { RxValueNone,RxUpdate  } from "react-icons/rx";
+import { RxValueNone,RxUpdate,RxFontRoman  } from "react-icons/rx";
 
 
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique,user} = useContext(AppContext)
-    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified } = useContext(GraphContext)
+    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified, relationInt, setRelationInt } = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
 
@@ -51,6 +51,10 @@ const SideBar = () => {
 
     const clickCyclique = () => {
         setCyclique(!cyclique)
+    }
+
+    const clickRelationInt = () => {
+        setRelationInt(!relationInt)
     }
 
     const upGradeGraph = () =>{
@@ -165,6 +169,19 @@ const SideBar = () => {
                             Icon={cyclique ? RxUpdate : RxValueNone} 
                             size={25}/>
                         <span className="rightTooltip">Cyclique</span>
+                    </div>
+                </div>
+
+                <div id="tooltipContainer">
+                    <div className="sideBarItem" onClick={clickRelationInt}>
+                        <BackgroundIcon 
+                            Icon={relationInt ? RxFontRoman : FiTag} 
+                            size={25}/>
+                        {
+                            relationInt ? <span className="rightTooltip">Number</span>
+                            : <span className="rightTooltip">+/-/?</span>
+                        }
+                        
                     </div>
                 </div>
 

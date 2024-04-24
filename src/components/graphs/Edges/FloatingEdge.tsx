@@ -57,7 +57,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   
   
 
-  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, pathEdges } = useContext(GraphContext)
+  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, pathEdges, relationInt } = useContext(GraphContext)
 
   let path = '';
   
@@ -71,6 +71,22 @@ const FloatingEdge: React.FC<EdgeProps> = ({
         else setColorEdge("red")
     }
   },[pathEdges])
+
+  useEffect(() => {
+    if(data.label) {
+
+
+
+        if(relationInt) {
+          const numberPattern = /^-?\d*\.?\d+$/;
+          const fractionPattern = /^-?\d+\/\d+$/;
+          if(!numberPattern.test(data.label) && !fractionPattern.test(data.label)) data.label = ""
+        }
+        else {
+          if(data.label !== '+' && data.label !== '-' && data.label !== '?') data.label = ""
+        }
+    }
+  },[relationInt,data.label])
 
 
   useEffect(() => {

@@ -9,6 +9,9 @@ import "./EditSideBarStyle.css"
 import { ValidationButton } from "../Buttons/Buttons";
 import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem";
 import { Edge } from "reactflow";
+import ColorIcon from "../Other/ColorIcon"
+
+import { FiAlertTriangle } from "react-icons/fi";
 
 import { AdjMat, AdjMat_addEdge, AdjMat_addNode, AdjMat_breakNodeLinks, AdjMat_deleteMultipleEdges, AdjMat_deleteMultipleNodes, AdjMat_deleteNode, AdjMat_init, AdjMat_getNeighboors } from "../../primitives/MatriceMethods";
 import { useSearchParams } from "react-router-dom";
@@ -18,7 +21,7 @@ interface CalculSideBarProps {
 }
 
 const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
-    const {influancePath, setInfluancePath, getNodeWithID, edges, setPathEdges, adjMat} = useContext(GraphContext)
+    const {influancePath, setInfluancePath, getNodeWithID, edges, setPathEdges, adjMat, relationInt} = useContext(GraphContext)
     
     const [cheminNull, setCheminNull] = useState(false)
     const [erreurChemin, setErreurChemin] = useState(false)
@@ -31,9 +34,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
             const nextEdge = edges.filter((elem) => elem.source === source)
             nextEdge.forEach((elem) => {
                     if(!chemin.find((edge) => edge === elem)) {
-                        if(elem.data.label) {
-                            if(elem.data.label === "") setErreurChemin(true)}
-                        else setErreurChemin(true)
+
                     
                         if(elem.target === target) {
                             liste_chemin = [...liste_chemin, [...chemin,elem]]
@@ -44,21 +45,19 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                         }
                     }        
             })
-    },[edges,erreurChemin])
+        
+    },[edges,liste_chemin])
 
     const handleCalculate = useCallback((min:boolean) => {
         setCheminNull(false)
+        let testChemin = false
         liste_chemin = []
         if(sourceNode && targetNode) {
-            setErreurChemin(false)
             nextEdges(sourceNode.id, targetNode.id,[]) 
         }
-   
-        
-
-        
+        console.log(liste_chemin)
+     
             if(liste_chemin.length === 0) {
-                console.log("PAs de chemin")
                 setCheminNull(true)
                 setPathEdges([])
             }
@@ -73,6 +72,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                     chemin.forEach((edge) => {
                         if(edge.data.label === "") {
                             currentCompteur += 100
+                            testChemin = true
                         }
                         else  {
                             if (edge.data.label) {
@@ -89,7 +89,6 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                     if(test === 0) {Compteur = currentCompteur, Chemin = chemin, test = 1}
                     if(min) {
                         if (currentCompteur < Compteur) {
-                            console.log("Chermin" , chemin , "Compteur :" , currentCompteur)
                             Chemin = chemin;
                             Compteur = currentCompteur 
                         } 
@@ -104,12 +103,13 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                 })
                 
                 //Erreur : le erreurChemin ne se met pas a jour
-                if(!erreurChemin)setPathEdges(Chemin)
+                if(!testChemin) { setPathEdges(Chemin); setErreurChemin(false) }
+                else { setPathEdges([]); setErreurChemin(true) }
             
             } 
             
 
-    },[edges, erreurChemin])
+    },[edges])
 
     const handleCalculateMax = () => {
         
@@ -152,17 +152,22 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                         isSelected={true} />
                     </div>
                 }
-
-                <ValidationButton
-                    disabled={!sourceNode || !targetNode}
-                    text="Calculer Min" 
-                    onPress={handleCalculateMin}
-                />
-                <ValidationButton
-                    disabled={!sourceNode || !targetNode}
-                    text="Calculer Max" 
-                    onPress={handleCalculateMax}
-                />
+                {
+                    relationInt ? 
+                    <>
+                        <ValidationButton
+                            disabled={!sourceNode || !targetNode}
+                            text="Calculer Min" 
+                            onPress={handleCalculateMin}
+                        />
+                        <ValidationButton
+                            disabled={!sourceNode || !targetNode}
+                            text="Calculer Max" 
+                            onPress={handleCalculateMax}
+                        />
+                    </> : undefined
+                }
+                
                 {
                     cheminNull ? 
                     <MidTextBold bold text="Auncun chemin existant"/>
@@ -170,8 +175,11 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                 }
 
                 {
-                    erreurChemin?
-                    <MidTextBold bold text="Certaines arrêtes ne sont pas indexé"/>
+                    erreurChemin && !cheminNull?
+                        <>
+                             <FiAlertTriangle size={30} style={{marginLeft:"45%"}}/>
+                            <MidTextBold bold text="Certaines arrêtes ne sont pas indexé"/>
+                        </>
                      : undefined
                 }
                 
