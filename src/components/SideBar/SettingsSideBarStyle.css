@@ -61,7 +61,6 @@
     flex-direction: column;
     display: flex;
     gap: 20px;
-    flex: 1;
 }
 
 .settingsSideBarRadio {
@@ -100,4 +99,32 @@
     padding-top: 15px;
     gap: 30px;
     align-items: center;
+
 }
+
+
+#SelectedCalculWay {
+  margin-bottom: 10em;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border: 2px solid grey;
+  border-radius: 15%;
+}
+
+#SelectPropagation {
+  display: flex;
+  flex-direction: column;
+  justify-content:space-evenly;
+
+}
+
+#SelectAgregation {
+  display: flex;
+  flex-direction: column;
+  justify-content:space-evenly;
+}
+
+
+

@@ -192,12 +192,13 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         setSelectedEdgeLabel(e.target.value)
     }
 
+    
     useEffect(() => {
         setEdges((prevEdges) => prevEdges.map(edge =>
             edge.id === selectedEdge?.id ?
                 { ...edge, data: { label: selectedEdgeLabel } as any } : edge
         ))
-    }, [selectedEdgeLabel])
+    }, [selectedEdgeLabel]) 
 
     if (!isExpanded) return null
 
@@ -324,8 +325,8 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                                     <CustomCard customPadding>
                                         <select name="edgeBoolVals" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
                                             <option value=""></option>
-                                            <option value="0">Vrai</option>
-                                            <option value="1">Faux</option>
+                                            <option value="0">Faux</option>
+                                            <option value="1">Vrai</option>
                                         </select>
                                     </CustomCard>
                                 }
@@ -337,12 +338,13 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                                         <option value="+">+</option>
                                         <option value="-">-</option>
                                         <option value="?">?</option>
-                                        <option value="<>">{"<>"}</option>
                                     </select>
                                     </CustomCard>
                                 }
                             </div>
                         </div>
+
+                    
                     </div>
                 }
             </div>
