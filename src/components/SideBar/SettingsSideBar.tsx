@@ -5,7 +5,7 @@ import { MidTextBold, NormalText, TitleText } from "../Text/CustomText";
 
 import "./SettingsSideBarStyle.css"
 import "./EditSideBarStyle.css"
-import { FiSettings } from "react-icons/fi";
+import { FiAlertTriangle, FiSettings } from "react-icons/fi";
 
 interface SettingsSideBarProps {
     isExpanded: boolean
@@ -35,7 +35,7 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
     if(!isExpanded) return null
 
     return (
-        <div className={`subSideBarContainer`}>
+        <div className={`subSideBarContainer`} style={{ height: "100vh"}}>
             <div id="header"> 
                 <TitleText text="Settings" flex/> 
                 <IconButton Icon={FiSettings} onPress={() => {}}/> 
@@ -82,6 +82,10 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                         <MidTextBold text="Booléen"/>
                     </div>
                 </div>
+            </div>
+            <div id="settingsSideBarFooter" style={{height: 60}}>
+                <FiAlertTriangle size={65} color="#D44C47"/>
+                <NormalText color="#D44C47" bold text="Un changement de type entraîne une réinitilisation irréversible des valeurs des arrêtes"/>
             </div>
         </div>
     )

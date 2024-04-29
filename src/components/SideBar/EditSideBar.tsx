@@ -254,7 +254,7 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                             }
 
                             <div className="TitleAndSubtitleContainer">
-                                <TitleText text={selectedNodeData.label === "" ? "A" : selectedNodeData.label} />
+                                <TitleText text={selectedNodeData.label === "" ? "" : selectedNodeData.label} />
                                 <NormalText text={selectedNodeTypeString + "-" + nodeProprietaire + "-" + nodeDate} />
                             </div>
                         </div>
@@ -323,21 +323,21 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                                     (graphCalculType === GraphCalculType.Boolean) &&
                                     <CustomCard customPadding>
                                         <select name="edgeBoolVals" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
-                                            <option value="" selected={selectedEdgeLabel === ""}></option>
-                                            <option value="0" selected={selectedEdgeLabel === "0"}>Vrai</option>
-                                            <option value="1" selected={selectedEdgeLabel === "1"}>Faux</option>
+                                            <option value=""></option>
+                                            <option value="0">Vrai</option>
+                                            <option value="1">Faux</option>
                                         </select>
                                     </CustomCard>
                                 }
                                 {
                                     (graphCalculType === GraphCalculType.Symbolic) &&
                                     <CustomCard customPadding>
-                                    <select name="edgeBoolValsBis" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChangeBis}>
-                                        <option value="" selected={selectedEdgeLabel === ""}></option>
-                                        <option value="+" selected={selectedEdgeLabel === "+"}>+</option>
-                                        <option value="-" selected={selectedEdgeLabel === "-"}>-</option>
-                                        <option value="?" selected={selectedEdgeLabel === "?"}>?</option>
-                                        <option value="<>" selected={selectedEdgeLabel === "<>"}>{"<>"}</option>
+                                    <select name="edgeBoolValsBis" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
+                                        <option value="" ></option>
+                                        <option value="+">+</option>
+                                        <option value="-">-</option>
+                                        <option value="?">?</option>
+                                        <option value="<>">{"<>"}</option>
                                     </select>
                                     </CustomCard>
                                 }

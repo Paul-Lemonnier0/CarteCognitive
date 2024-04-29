@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useContext, useEffect, useState } from "react"
-import { GraphContext } from "../../context/GraphContext"
+import { GraphCalculType, GraphContext } from "../../context/GraphContext"
 import { IconButton } from "../Buttons/IconButtons"
 import { MidTextBold, NormalText, TitleText } from "../Text/CustomText";
 import { SlCalculator } from "react-icons/sl";
@@ -21,7 +21,7 @@ interface CalculSideBarProps {
 }
 
 const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
-    const {influancePath, setInfluancePath, getNodeWithID, edges, setPathEdges, adjMat, relationInt} = useContext(GraphContext)
+    const {influancePath, setInfluancePath, getNodeWithID, edges, setPathEdges, graphCalculType, adjMat, relationInt} = useContext(GraphContext)
     
     const [cheminNull, setCheminNull] = useState(false)
     const [erreurChemin, setErreurChemin] = useState(false)
@@ -47,6 +47,27 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
             })
         
     },[edges,liste_chemin])
+
+    const symbolicTable = {
+        ["x"]: {
+            ["x"]: "x",
+            ["-"]: "-",
+            ["?"]: "?",
+        },
+
+        ["-"]: {
+            ["x"]: "-",
+            ["-"]: "+",
+            ["?"]: "?",
+        },
+
+        ["?"]: {
+            ["x"]: "?",
+            ["-"]: "?",
+            ["?"]: "?",
+        },
+    }
+
 
     const handleCalculate = useCallback((min:boolean) => {
         setCheminNull(false)
@@ -86,7 +107,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                             }
                         }
                     })
-                    
+
                     if(test === 0) {
                         Compteur = currentCompteur;
                         Chemin = chemin;
@@ -129,7 +150,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
     if(!isExpanded) return null
 
     return (
-        <div className={`subSideBarContainer`}>
+        <div className={`subSideBarContainer`} style={{height: "100vh"}}>
             <div id="header"> 
                 <TitleText text="Calculs" flex/> 
                 <IconButton Icon={SlCalculator} onPress={() => {}}/> 
@@ -159,7 +180,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                     </div>
                 }
                 {
-                    relationInt ? 
+                    graphCalculType === GraphCalculType.Integer ? 
                     <div style={{display: "flex", flexDirection: "row", gap: 20}}>
                         <ValidationButton
                             disabled={!sourceNode || !targetNode}
@@ -171,7 +192,12 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                             text="Calculer Max" 
                             onPress={handleCalculateMax}
                         />
-                    </div> : undefined
+                    </div> : 
+                    <ValidationButton
+                        disabled={!sourceNode || !targetNode}
+                        text="Calculer" 
+                        onPress={() => {}}
+                    />
                 }
                 
                 {
@@ -179,19 +205,14 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                     <MidTextBold bold text="Auncun chemin existant"/>
                      : undefined
                 }
-
-                {
-                    erreurChemin && !cheminNull?
-                        <>
-                             <FiAlertTriangle size={30} style={{marginLeft:"45%"}}/>
-                            <MidTextBold bold text="Certaines arrêtes ne sont pas indexé"/>
-                        </>
-                     : undefined
-                }
-                
-
-                
             </div>
+            {
+                erreurChemin && !cheminNull &&
+                <div id="settingsSideBarFooter" style={{height: 60}}>
+                    <FiAlertTriangle size={30} color="#D44C47"/>
+                    <NormalText color="#D44C47" bold text="Certaines arrêtes ne sont pas indexées"/>
+                </div>
+            }
         </div>
     )
 }

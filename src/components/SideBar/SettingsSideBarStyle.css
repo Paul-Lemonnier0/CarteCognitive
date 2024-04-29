@@ -61,6 +61,7 @@
     flex-direction: column;
     display: flex;
     gap: 20px;
+    flex: 1;
 }
 
 .settingsSideBarRadio {
@@ -78,4 +79,25 @@
     background-color: white;
     display: inline-block;
     accent-color: #313443;
+}
+
+#settingsSideBarFooter {
+    margin-inline: -20px;
+    padding-inline: 20px;
+    border-top: 2px solid #ebedee;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    border-top: 2px solid #ebedee;
+    margin-inline: -20px;
+    padding-inline: 20px;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0px;
+    padding-top: 15px;
+    gap: 30px;
+    align-items: center;
 }

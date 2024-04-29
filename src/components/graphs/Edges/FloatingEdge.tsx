@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge, getBezierPath,  MarkerType, Position } from 'reactflow';
 import { getEdgeParams } from '../../../utils/utils';
-import { GraphContext } from '../../../context/GraphContext';
+import { GraphCalculType, GraphContext } from '../../../context/GraphContext';
 
 import { AppContext } from '../../../context/AppContext';
 import "./FloatingEdgeStyle.css"
@@ -57,7 +57,7 @@ const FloatingEdge: React.FC<EdgeProps> = ({
   
   
 
-  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, pathEdges, relationInt } = useContext(GraphContext)
+  const {showEdge,edges,setEdges, lastSelectedEdgeID, setLastSelectedEdgeID, pathEdges, graphCalculType } = useContext(GraphContext)
 
   let path = '';
   
@@ -74,19 +74,16 @@ const FloatingEdge: React.FC<EdgeProps> = ({
 
   useEffect(() => {
     if(data.label) {
-
-
-
-        if(relationInt) {
-          const numberPattern = /^-?\d*\.?\d+$/;
-          const fractionPattern = /^-?\d+\/\d+$/;
-          if(!numberPattern.test(data.label) && !fractionPattern.test(data.label)) data.label = ""
-        }
-        else {
-          if(data.label !== '+' && data.label !== '-' && data.label !== '?') data.label = ""
-        }
+        // if(graphCalculType === GraphCalculType.Integer) {
+        //   const numberPattern = /^-?\d*\.?\d+$/;
+        //   const fractionPattern = /^-?\d+\/\d+$/;
+        //   if(!numberPattern(data.label) && !fractionPattern.test(data.label)) data.label = ""
+        // }
+        // else {
+        //   if(data.label !== '+' && data.label !== '-' && data.label !== '?') data.label = ""
+        // }
     }
-  },[relationInt,data.label])
+  },[graphCalculType, data.label])
 
 
   useEffect(() => {
