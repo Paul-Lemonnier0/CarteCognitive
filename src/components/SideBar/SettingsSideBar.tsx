@@ -111,6 +111,7 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                                     <option value="max">max</option>
                                     <option value="*">*</option>
                                     <option value="+">+</option>
+                                    <option value="-">-</option>
                                     <option value="moyenne">moyenne</option>
                                 </>
                                 : 
@@ -137,6 +138,7 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                                     <option value="max">max</option>
                                     <option value="*">*</option>
                                     <option value="+">+</option>
+                                    <option value="-">-</option>
                                     <option value="moyenne">moyenne</option>
                                 </>
                                 : 
