@@ -12,6 +12,13 @@ import { GraphType } from "../types/Graph/GraphType";
 import { setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
 import { createNodesAndEdgesStress } from "../utils/utils";
 
+export enum GraphCalculType {
+    Boolean = "Boolean",
+    Symbolic = "Symbolic",
+    Integer = "Integer",
+}
+
+
 interface GraphContextType {
     upgrade: boolean
     setUpgrade: Dispatch<React.SetStateAction<boolean>>,
@@ -65,6 +72,9 @@ interface GraphContextType {
     setPathEdges: Dispatch<React.SetStateAction<Edge[]>>,
     relationInt: boolean,
     setRelationInt: Dispatch<React.SetStateAction<boolean>>,
+    graphCalculType: GraphCalculType,
+    setGraphCalculType: Dispatch<GraphCalculType>,
+    handleChangeCalculType: (type: GraphCalculType) => void
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -119,7 +129,10 @@ const GraphContext = createContext<GraphContextType>({
     pathEdges: [],
     setPathEdges: () => {},
     relationInt: true,
-    setRelationInt: () => {}
+    setRelationInt: () => {},
+    graphCalculType: GraphCalculType.Integer,
+    setGraphCalculType: () => {},
+    handleChangeCalculType: (type: GraphCalculType) => {}
 })
 
 export interface SizeType {
@@ -413,6 +426,18 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
         }, [upgrade,graphTitle, nodes, edges, id, lastSelectedNodeID, lastSelectedEdgeID, user])
 
 
+    const [graphCalculType, setGraphCalculType] = useState<GraphCalculType>(GraphCalculType.Integer)
+
+    const handleChangeCalculType = (type: GraphCalculType) => {
+        if(type !== graphCalculType) {
+            setEdges((prevEdges) => prevEdges.map(edge =>
+                ({ ...edge, data: { label: "" } as any })
+            ))    
+ 
+            setGraphCalculType(type)
+        }
+    }
+
     return (
         <GraphContext.Provider value={{
             upgrade, setUpgrade,
@@ -436,7 +461,8 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             isCalculating, setIsCalculating,
             influancePath, setInfluancePath,
             pathEdges, setPathEdges,
-            relationInt,setRelationInt
+            relationInt,setRelationInt,
+            graphCalculType, setGraphCalculType, handleChangeCalculType
 
         }}>
             {children}

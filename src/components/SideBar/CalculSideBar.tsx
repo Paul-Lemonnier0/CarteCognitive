@@ -86,7 +86,13 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                             }
                         }
                     })
-                    if(test === 0) {Compteur = currentCompteur, Chemin = chemin, test = 1}
+                    
+                    if(test === 0) {
+                        Compteur = currentCompteur;
+                        Chemin = chemin;
+                        test = 1
+                    }
+
                     if(min) {
                         if (currentCompteur < Compteur) {
                             Chemin = chemin;
@@ -154,7 +160,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                 }
                 {
                     relationInt ? 
-                    <>
+                    <div style={{display: "flex", flexDirection: "row", gap: 20}}>
                         <ValidationButton
                             disabled={!sourceNode || !targetNode}
                             text="Calculer Min" 
@@ -165,7 +171,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                             text="Calculer Max" 
                             onPress={handleCalculateMax}
                         />
-                    </> : undefined
+                    </div> : undefined
                 }
                 
                 {

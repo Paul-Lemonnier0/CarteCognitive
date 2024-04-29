@@ -15,7 +15,8 @@ interface IconTextInputProps {
     iconHover?: boolean,
     style?:CSSProperties,
     passWord ? : boolean,
-    isWhite?: boolean
+    isWhite?: boolean,
+    numeric?: boolean
 }
 
 const IconTextInput: FC<IconTextInputProps> = ({
@@ -29,7 +30,8 @@ const IconTextInput: FC<IconTextInputProps> = ({
     iconHover,
     style,
     passWord,
-    isWhite
+    isWhite,
+    numeric
 }) => {
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +50,7 @@ const IconTextInput: FC<IconTextInputProps> = ({
                     </div>
                     
                     <input className="customInput"
-                        type={passWord? "password": "text"}
+                        type={passWord ? "password": (numeric ? "number" : "text")}
                         onChange={onChangeCustom ?? onChange}
                         value={textValue}
                         defaultValue={startingValue}

@@ -3,7 +3,7 @@ import { FiEdit3 } from "react-icons/fi";
 import CustomSearchBar from "../SearchBar/SearchBar"
 import { CustomCard } from "../Card/CustomCard"
 import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem"
-import { GraphContext } from "../../context/GraphContext"
+import { GraphCalculType, GraphContext } from "../../context/GraphContext"
 import { Edge, Node } from "reactflow"
 import { BackgroundIcon, IconButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
@@ -37,6 +37,7 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         lastSelectedNodeID, setLastSelectedNodeID,
         updateNodeData,
         lastSelectedEdgeID,
+        graphCalculType
     } = useContext(GraphContext)
 
 
@@ -184,10 +185,21 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         setIsGraphModified(true);
     }
 
-    if (!isExpanded) return null
-
     const nodeProprietaire = "Paul"
     const nodeDate = selectedNodeData.date ?? "Non Definis"
+
+    const handleSelectMenuChange = (e: React.ChangeEvent<HTMLSelectElement>) => {        
+        setSelectedEdgeLabel(e.target.value)
+    }
+
+    useEffect(() => {
+        setEdges((prevEdges) => prevEdges.map(edge =>
+            edge.id === selectedEdge?.id ?
+                { ...edge, data: { label: selectedEdgeLabel } as any } : edge
+        ))
+    }, [selectedEdgeLabel])
+
+    if (!isExpanded) return null
 
     return (
         <div className={`subSideBarContainer`}>
@@ -295,14 +307,40 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
 
                         <div id="selectedOptionsItem">
                             <div style={{ display: "inline", flex: 1 }}>
-                                <IconTextInput
-                                    iconHover
-                                    Icon={RxText}
-                                    textValue={String(selectedEdgeLabel) ?? ""}
-                                    onChangeCustom={handleWrittingEdge}
-                                    onBlur={handleUpdateEdgeLabel}
-                                    placeholder="Nom de l'arrete ..."
-                                />
+                                {
+                                    (graphCalculType === GraphCalculType.Integer) &&
+                                    <IconTextInput
+                                        numeric
+                                        iconHover
+                                        Icon={RxText}
+                                        textValue={String(selectedEdgeLabel) ?? ""}
+                                        onChangeCustom={handleWrittingEdge}
+                                        onBlur={handleUpdateEdgeLabel}
+                                        placeholder="Nom de l'arrete ..."
+                                    />
+                                }
+                                {
+                                    (graphCalculType === GraphCalculType.Boolean) &&
+                                    <CustomCard customPadding>
+                                        <select name="edgeBoolVals" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
+                                            <option value="" selected={selectedEdgeLabel === ""}></option>
+                                            <option value="0" selected={selectedEdgeLabel === "0"}>Vrai</option>
+                                            <option value="1" selected={selectedEdgeLabel === "1"}>Faux</option>
+                                        </select>
+                                    </CustomCard>
+                                }
+                                {
+                                    (graphCalculType === GraphCalculType.Symbolic) &&
+                                    <CustomCard customPadding>
+                                    <select name="edgeBoolValsBis" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChangeBis}>
+                                        <option value="" selected={selectedEdgeLabel === ""}></option>
+                                        <option value="+" selected={selectedEdgeLabel === "+"}>+</option>
+                                        <option value="-" selected={selectedEdgeLabel === "-"}>-</option>
+                                        <option value="?" selected={selectedEdgeLabel === "?"}>?</option>
+                                        <option value="<>" selected={selectedEdgeLabel === "<>"}>{"<>"}</option>
+                                    </select>
+                                    </CustomCard>
+                                }
                             </div>
                         </div>
                     </div>
