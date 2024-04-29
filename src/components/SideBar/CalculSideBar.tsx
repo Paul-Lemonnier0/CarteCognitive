@@ -48,25 +48,23 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         
     },[edges,liste_chemin])
 
-    const symbolicTable = {
-        ["x"]: {
-            ["x"]: "x",
-            ["-"]: "-",
-            ["?"]: "?",
+    const symbolicTable: { [key: string]: { [key: string]: string } } = {
+        "+": {
+            "+": "+",
+            "-": "-",
+            "?": "?",
         },
-
-        ["-"]: {
-            ["x"]: "-",
-            ["-"]: "+",
-            ["?"]: "?",
+        "-": {
+            "+": "-",
+            "-": "+",
+            "?": "?",
         },
-
-        ["?"]: {
-            ["x"]: "?",
-            ["-"]: "?",
-            ["?"]: "?",
+        "?": {
+            "+": "?",
+            "-": "?",
+            "?": "?",
         },
-    }
+    };
 
 
     const handleCalculate = useCallback((min:boolean) => {
@@ -147,15 +145,136 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         handleCalculate(true)
     }
 
+    const calculPropAgreg = (comparison:string, previousValue:number, nextValue:number) => {
+        let result = 0
+        switch (comparison){
+            case "+":
+                result = previousValue + nextValue
+                break;
+            case "-":
+                result = previousValue - nextValue
+                break;
+            case "moyenne":
+                result = (previousValue + nextValue)/2
+                break;
+            case "*":
+                result = previousValue * nextValue
+                break;
+            case "min":
+                if(previousValue > nextValue) result = nextValue
+                else result = previousValue
+                break;
+            case "max":
+                if(previousValue < nextValue) result = nextValue
+                else result = previousValue
+                break;
+        } 
+        return result
+    }
+
     const handleCalculateInt = () => {
-        setResultAgregation("")
+        setCheminNull(false)
+        setPathEdges([])
+        let testChemin = false
+        liste_chemin = []
+        if(sourceNode && targetNode) {
+            nextEdges(sourceNode.id, targetNode.id,[]) 
+
+            if(liste_chemin.length === 0) {
+                setCheminNull(true)
+            }
+
+            else {
+                let Chemin: number[] = []
+                liste_chemin.forEach((chemin) => {
+                    let test = 0
+                    let currentValue = 0
+                    chemin.forEach((edge) => {
+                        if(edge.data.label === "") {
+                            testChemin = true
+                        }
+                        else {
+                            if(test===0) {currentValue = parseFloat(edge.data.label); test=1}
+                            else {
+                                currentValue = calculPropAgreg(propagationValue,currentValue,parseFloat(edge.data.label))
+                                    
+                            }
+                        }
+                    })
+                    Chemin.push(currentValue)
+                })
+
+                let value = 0
+                let test = 0
+                Chemin.forEach((cheminValue) => {
+                    if(test === 0) {
+                        value = cheminValue
+                        test = 1
+                    }
+                    else {
+                        value = calculPropAgreg(agregationValue,value,cheminValue)
+
+                    }
+
+                })
+                
+                if(!testChemin) { setResultAgregation(value.toString()); setErreurChemin(false) }
+                else { setResultAgregation(""); setErreurChemin(true) }
+            }
+        }
     }
     const handleCalculateSymb = () => {
-        setResultAgregation("")
+        setCheminNull(false)
+        setPathEdges([])
+        let testChemin = false
+        liste_chemin = []
+        if(sourceNode && targetNode) {
+            nextEdges(sourceNode.id, targetNode.id,[]) 
+
+            if(liste_chemin.length === 0) {
+                setCheminNull(true)
+            }
+
+            else {
+                let Chemin: string[] = []
+                liste_chemin.forEach((chemin) => {
+                    let test = 0
+                    let currentValue = ""
+                    chemin.forEach((edge) => {
+                        if(edge.data.label === "") {
+                            testChemin = true
+                        }
+                        else {
+                            if(test===0) {currentValue = edge.data.label; test=1}
+                            else {
+                                currentValue = symbolicTable[currentValue][edge.data.label]
+                            }
+                        }
+                    })
+                    Chemin.push(currentValue)
+                })
+
+                let value = ""
+                let test = 0
+                Chemin.forEach((cheminValue) => {
+                    if(test === 0) {
+                        value = cheminValue
+                        test = 1
+                    }
+                    else {
+                        if(value != "") value = symbolicTable[value][cheminValue]
+
+                    }
+
+                })
+                
+                if(!testChemin) { setResultAgregation(value); setErreurChemin(false) }
+                else { setResultAgregation(""); setErreurChemin(true) }
+            }
+        }
+                
     }
-    const handleCalculateBool = () => {
-        console.log("Prop", propagationValue)
-        console.log("Agreg", agregationValue)
+    const handleCalculateBool = () => { 
         setCheminNull(false)
         setPathEdges([])
         let testChemin = false
@@ -208,8 +327,12 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                     }
 
                 })
-                if(value) setResultAgregation("True")
-                else setResultAgregation("False")
+                if(!testChemin) { 
+                    if(value) setResultAgregation("True")
+                    else setResultAgregation("False")
+                    setErreurChemin(false) }
+                else { setResultAgregation(""); setErreurChemin(true) }
+         
             }
         }
                 
