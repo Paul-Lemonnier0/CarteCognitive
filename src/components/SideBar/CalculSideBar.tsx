@@ -8,7 +8,7 @@ import "./CalculSideBarStyle.css"
 import "./EditSideBarStyle.css"
 import { ValidationButton } from "../Buttons/Buttons";
 import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem";
-import { Edge } from "reactflow";
+import { Edge, Node } from "reactflow";
 import ColorIcon from "../Other/ColorIcon"
 
 import { FiAlertTriangle } from "react-icons/fi";
@@ -342,6 +342,15 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
 
     if(!isExpanded) return null
 
+    let nodePaths: Node[] = []
+    if(influancePath && influancePath?.nodesID) {
+        const nodePathsTemp = influancePath?.nodesID.map(nodeID => {
+            return getNodeWithID(nodeID)
+        })
+
+        nodePaths = nodePathsTemp.filter(node => node !== null)
+    }
+
     return (
         <div className={`subSideBarContainer`} style={{height: "100vh"}}>
             <div id="header"> 
@@ -349,28 +358,37 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                 <IconButton Icon={SlCalculator} onPress={() => {}}/> 
             </div>
 
-            <div id="body">
+            <div id="body" style={{
+                    overflowY: "scroll", 
+                    marginTop: -30, 
+                    paddingTop: 30,
+                    marginBottom: -20, 
+                    paddingBottom: 20,
+                    marginInline: -10,
+                    paddingInline: 10
+                }}>
+
                 {
-                    sourceNode && 
-                    <div style={{flexDirection: "column", display: "flex"}}>
-                        <MidTextBold bold text="Source"/>
-                        <CustomNodeListItem
-                        isVisible
-                        node={sourceNode}
-                        onPress={() => {}}
-                        isSelected={true} />
-                    </div>
-                }
-                {
-                    targetNode && 
-                    <div style={{flexDirection: "column", display: "flex"}}>
-                        <MidTextBold bold text="Cible"/>
-                        <CustomNodeListItem
-                        isVisible
-                        node={targetNode}
-                        onPress={() => {}}
-                        isSelected={true} />
-                    </div>
+                    nodePaths.map((node, index) => {
+                    
+                        const isSource = index === 0
+                        const isTarget = nodePaths.length > 1 && index === nodePaths.length - 1
+                        
+                        const label = isTarget ? "Target" :
+                                        isSource ? "Source" : 
+                                            "Noeud " + index
+
+                        return (
+                            <div style={{flexDirection: "column", display: "flex"}}>
+                                <MidTextBold bold text={label}/>
+                                <CustomNodeListItem
+                                isVisible
+                                node={node}
+                                onPress={() => {}}
+                                isSelected={true} />
+                            </div>
+                        )
+                    })
                 }
                 {
                     graphCalculType === GraphCalculType.Integer ? 

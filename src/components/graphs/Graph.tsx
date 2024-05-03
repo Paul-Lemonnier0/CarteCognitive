@@ -94,85 +94,65 @@ export default function Graph() {
     useOnSelectionChange({
         onChange: ({ nodes: nds, edges }: onSelectionChangeProps) => {
             const nodeIDs = nds.map((node) => node.id)
-
-            if(isCalculating && nodeIDs.length > 0) {
-                
-                    // if(prevInfluancePath) {
-                    //     if(prevInfluancePath?.sourceID) {
-                    //         if(prevInfluancePath.targetID) {
-                    //             prevInfluancePath.sourceID = nodeIDs[0]
-                    //             return {...prevInfluancePath, targetID: undefined, sourceID: nodeIDs[0]} as InfluancePathType
-                    //         }
-        
-                    //         else return {...prevInfluancePath, targetID: nodeIDs[0]} as InfluancePathType
-                    //     }
-        
-                    //     else return {...prevInfluancePath, sourceID: nodeIDs[0]} as InfluancePathType
-                    // }
-
-                    // else return {sourceID: nodeIDs[0]} as InfluancePathType
-
-
-
-                    setInfluancePath(prevInfluancePath => {
-                        const prevNodesID = prevInfluancePath?.nodesID ? [...prevInfluancePath?.nodesID] : []
-
-                        if(prevNodesID.includes(nodeIDs[0])) {
-                            return {
-                                nodesID: prevNodesID.filter(nodeID => nodeID !== nodeIDs[0]), 
-                                edges: []
-                           }
-                        }
-
-                        return {
-                             nodesID: [...prevNodesID, ...nodeIDs], 
-                             edges: []
-                        }
-                    })
-
-
-            }
-   
-
             const newSelectedNodeIds = nds.filter(node => node.selected).map(node => node.id)
 
-            const lastSelectedNodeArray = newSelectedNodeIds.filter(node => !selectedNodesIDs.includes(node))
-            const lastSelectEdgeArray = edges.filter((edge) => edge.selected)
+            console.log(newSelectedNodeIds)
 
-            if (lastSelectedNodeID && !newSelectedNodeIds.includes(lastSelectedNodeID)) {
-                setLastSelectedNodeID(null)
-            }
+            if(isCalculating) {
+                if(nodeIDs.length === 0)  {
+                    setInfluancePath({nodesID: [], edges: []})
 
-            if (lastSelectedNodeArray.length > 0) {
-                setLastSelectedNodeID(lastSelectedNodeArray[0])
-            }
-            else setLastSelectedNodeID(null)
+                    setSelectedNodesIDs([])
 
-            if (lastSelectEdgeArray.length > 0) {
-                setLastSelectedEdgeID(lastSelectEdgeArray[0].id)
-            }
-            else setLastSelectedEdgeID(null)
-
-            setSelectedNodesIDs(newSelectedNodeIds)
-
-            setNodes((previousNodes) => (previousNodes.map((node) => {
-
-                if (nodeIDs.includes(node.id)) {
-                    return { ...node, selected: true }
+                    // setNodes((previousNodes) => (previousNodes.map((node) => {
+                    //     return { ...node, selected: false }
+                    // })));
                 }
+            }
 
-                return { ...node, selected: false }
-            })));
-
-            const edgeIDs = edges.map((edge) => edge.id)
-
-            setEdges((previousEdges) => (previousEdges.map((edge) => {
-                if (edgeIDs.includes(edge.id)) {
-                    return { ...edge, selected: true }
+            else {
+                const lastSelectedNodeArray = newSelectedNodeIds.filter(node => !selectedNodesIDs.includes(node))
+                const lastSelectEdgeArray = edges.filter((edge) => edge.selected)
+    
+                if (lastSelectedNodeID && !newSelectedNodeIds.includes(lastSelectedNodeID)) {
+                    setLastSelectedNodeID(null)
                 }
+    
+                if (lastSelectedNodeArray.length > 0) {
+                    setLastSelectedNodeID(lastSelectedNodeArray[0])
+                }
+                else setLastSelectedNodeID(null)
+    
+                if (lastSelectEdgeArray.length > 0) {
+                    setLastSelectedEdgeID(lastSelectEdgeArray[0].id)
+                }
+                else setLastSelectedEdgeID(null)
+    
+                setSelectedNodesIDs(newSelectedNodeIds)
+    
+                setNodes((previousNodes) => (previousNodes.map((node) => {
+    
+                    if (nodeIDs.includes(node.id)) {
+                        return { ...node, selected: true }
+                    }
+    
+                    return { ...node, selected: false }
+                })));
+    
+                const edgeIDs = edges.map((edge) => edge.id)
+    
+                setEdges((previousEdges) => (previousEdges.map((edge) => {
+                    if (edgeIDs.includes(edge.id)) {
+                        return { ...edge, selected: true }
+                    }
+    
+                    return { ...edge, selected: false }
+                })));
+            }
+   
+            
 
-                return { ...edge, selected: false }
-            })));
+            
         },
     });
 

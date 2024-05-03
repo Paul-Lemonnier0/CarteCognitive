@@ -35,7 +35,10 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     duplicateNode,
     deleteNode,
     breakLinks,
-    influancePath
+    influancePath,
+    setInfluancePath,
+    setSelectedNodesIDs,
+    setNodes
   } = useContext(GraphContext)
 
   const [label, setLabel] = useState(data.label ?? "")
@@ -131,8 +134,46 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     if(isHighLighted) borderColor = "black"
   }
 
+  const handleOnClick = () => {
+    if(isCalculating) {
+      if(influancePath && influancePath.nodesID && influancePath.nodesID.includes(id)) {
+        const prevNodesID = influancePath?.nodesID ? [...influancePath?.nodesID] : []
+        const newSelectedNodeIds = prevNodesID.filter(nodeID => nodeID !== id)
+
+        setInfluancePath({nodesID: newSelectedNodeIds, edges: []})
+
+        setSelectedNodesIDs(newSelectedNodeIds)
+
+        // setNodes((previousNodes) => (previousNodes.map((node) => {
+        //     if (node.id === id) {
+        //         return { ...node, selected: false }
+        //     }
+
+        //     return { ...node }
+        // })));
+      }
+
+      else {
+        const prevNodesID = influancePath?.nodesID ? [...influancePath?.nodesID] : []
+        const newSelectedNodeIds = [...prevNodesID, id]
+
+        setInfluancePath({nodesID: newSelectedNodeIds, edges: []})
+
+        setSelectedNodesIDs(newSelectedNodeIds)
+
+        // setNodes((previousNodes) => (previousNodes.map((node) => {
+        //     if (node.id === id) {
+        //         return { ...node, selected: true }
+        //     }
+
+        //     return { ...node }
+        // })));
+      }
+    }
+  }
+
   return (
-    <div className="customNodeContainer" >  
+    <div className="customNodeContainer" onClick={handleOnClick}>  
       {
         <NodeToolbar nodeId={id} offset={50} align="start" isVisible={isToolbarVisible}> 
          { 
