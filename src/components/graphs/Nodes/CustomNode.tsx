@@ -109,12 +109,27 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     setIsSelectingColor(false)
   }
 
-  const isSourceOfInfluanceCalcul = (isCalculating && influancePath && influancePath.sourceID && influancePath.sourceID === id) as boolean
-  const isTargetOfInfluanceCalcul = (isCalculating && influancePath && influancePath.targetID && influancePath.targetID === id) as boolean
-  const isPartOfInfluanceCalcul = isSourceOfInfluanceCalcul || isTargetOfInfluanceCalcul
+  const isSourceOfInfluanceCalcul =  ((isCalculating && influancePath && influancePath.nodesID && influancePath.nodesID.length > 0) && influancePath.nodesID[0] === id) as boolean
+  const isTargetOfInfluanceCalcul = ((isCalculating && influancePath && influancePath.nodesID && influancePath.nodesID.length > 1) && influancePath.nodesID[influancePath.nodesID.length - 1] === id) as boolean
+  const isInInfluanceCalcul = !isSourceOfInfluanceCalcul && !isTargetOfInfluanceCalcul && ((isCalculating && influancePath && influancePath.nodesID) && influancePath.nodesID.includes(id)) as boolean
+  const indexOfNodeInInflancePath = (isCalculating && influancePath && influancePath.nodesID) ? influancePath.nodesID.indexOf(id) : 0
+
+  const isPartOfInfluanceCalcul = isSourceOfInfluanceCalcul || isTargetOfInfluanceCalcul || isInInfluanceCalcul
 
   const isHighLighted = (isCalculating && isPartOfInfluanceCalcul) || selected
   const isToolbarVisible = (isCalculating && isPartOfInfluanceCalcul) || lastSelectedNodeID === id
+
+  const middleInfluantePathNodeName = "Noeud " + indexOfNodeInInflancePath
+
+  let borderColor = "transparent"
+
+  if(isCalculating) {
+    if(isPartOfInfluanceCalcul) borderColor = "black"
+  }
+
+  else {
+    if(isHighLighted) borderColor = "black"
+  }
 
   return (
     <div className="customNodeContainer" >  
@@ -124,8 +139,10 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
           isCalculating ?
 
           <div className={`customNodeToolbar ${isPartOfInfluanceCalcul ? '' : 'customNodeToolbarHidden'}`}
-            style={{backgroundColor: "#313443"}}>
-            <MidTextBold text={isSourceOfInfluanceCalcul ? "Source" : "Cible"} color="white"/>
+            style={{backgroundColor: "#313443", width: 90}}>
+            <MidTextBold text={
+                isSourceOfInfluanceCalcul ? "Source" : 
+                isTargetOfInfluanceCalcul ? "Cible" : middleInfluantePathNodeName} color="white"/>
           </div>
         
          :

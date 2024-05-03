@@ -141,8 +141,7 @@ export interface SizeType {
 }
 
 export interface InfluancePathType {
-    sourceID?: string,
-    targetID?: string,
+    nodesID?: string[],
     edges: Edge[]
 }
 

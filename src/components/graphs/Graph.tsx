@@ -96,22 +96,40 @@ export default function Graph() {
             const nodeIDs = nds.map((node) => node.id)
 
             if(isCalculating && nodeIDs.length > 0) {
-                setInfluancePath((prevInfluancePath) => {
-                    if(prevInfluancePath) {
-                        if(prevInfluancePath?.sourceID) {
-                            if(prevInfluancePath.targetID) {
-                                prevInfluancePath.sourceID = nodeIDs[0]
-                                return {...prevInfluancePath, targetID: undefined, sourceID: nodeIDs[0]} as InfluancePathType
-                            }
+                
+                    // if(prevInfluancePath) {
+                    //     if(prevInfluancePath?.sourceID) {
+                    //         if(prevInfluancePath.targetID) {
+                    //             prevInfluancePath.sourceID = nodeIDs[0]
+                    //             return {...prevInfluancePath, targetID: undefined, sourceID: nodeIDs[0]} as InfluancePathType
+                    //         }
         
-                            else return {...prevInfluancePath, targetID: nodeIDs[0]} as InfluancePathType
-                        }
+                    //         else return {...prevInfluancePath, targetID: nodeIDs[0]} as InfluancePathType
+                    //     }
         
-                        else return {...prevInfluancePath, sourceID: nodeIDs[0]} as InfluancePathType
-                    }
+                    //     else return {...prevInfluancePath, sourceID: nodeIDs[0]} as InfluancePathType
+                    // }
 
-                    else return {sourceID: nodeIDs[0]} as InfluancePathType
-                })
+                    // else return {sourceID: nodeIDs[0]} as InfluancePathType
+
+
+
+                    setInfluancePath(prevInfluancePath => {
+                        const prevNodesID = prevInfluancePath?.nodesID ? [...prevInfluancePath?.nodesID] : []
+
+                        if(prevNodesID.includes(nodeIDs[0])) {
+                            return {
+                                nodesID: prevNodesID.filter(nodeID => nodeID !== nodeIDs[0]), 
+                                edges: []
+                           }
+                        }
+
+                        return {
+                             nodesID: [...prevNodesID, ...nodeIDs], 
+                             edges: []
+                        }
+                    })
+
 
             }
    

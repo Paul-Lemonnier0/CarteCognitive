@@ -25,8 +25,8 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
     
     const [cheminNull, setCheminNull] = useState(false)
     const [erreurChemin, setErreurChemin] = useState(false)
-    const sourceNode = (influancePath && influancePath?.sourceID) ? getNodeWithID(influancePath?.sourceID) : null
-    const targetNode = (influancePath && influancePath?.targetID) ? getNodeWithID(influancePath?.targetID) : null
+    const sourceNode = (influancePath && influancePath?.nodesID && influancePath.nodesID.length > 0) ? getNodeWithID(influancePath.nodesID[0]) : null
+    const targetNode = (influancePath && influancePath?.nodesID && influancePath.nodesID.length > 1) ? getNodeWithID(influancePath.nodesID[influancePath.nodesID.length - 1]) : null
 
 
     let liste_chemin:Edge[][] = []
