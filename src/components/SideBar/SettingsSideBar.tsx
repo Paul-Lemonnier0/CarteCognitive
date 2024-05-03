@@ -2,6 +2,7 @@ import React, { FC, useContext, useState } from "react"
 import { GraphCalculType, GraphContext } from "../../context/GraphContext"
 import { IconButton } from "../Buttons/IconButtons"
 import { MidTextBold, NormalText, TitleText } from "../Text/CustomText";
+import { CustomCard } from "../Card/CustomCard";
 
 import "./SettingsSideBarStyle.css"
 import "./EditSideBarStyle.css"
@@ -12,24 +13,40 @@ interface SettingsSideBarProps {
 }
 
 const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
-    const {handleChangeCalculType, graphCalculType} = useContext(GraphContext)
+    const {handleChangeCalculType, graphCalculType, setAgregationValue, setPropagationValue, propagationValue, agregationValue, setResultAgregation} = useContext(GraphContext)
     
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {        
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {   
+        setResultAgregation("")     
         switch(e.target.value) {
             case GraphCalculType.Boolean:
                 handleChangeCalculType(GraphCalculType.Boolean)
+                setPropagationValue("∧")
+                setAgregationValue("∧")
                 break;
             case GraphCalculType.Symbolic:
                 handleChangeCalculType(GraphCalculType.Symbolic)
+                setPropagationValue("∧")
+                setAgregationValue("∧")
                 break;
             default:
                 handleChangeCalculType(GraphCalculType.Integer)
+                setPropagationValue("min")
+                setAgregationValue("max")
                 break;
         } 
     }
 
     const isChecked = (val: GraphCalculType) => {
         return graphCalculType === val
+    }
+
+    const changePropagation = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setPropagationValue(e.target.value)
+        setResultAgregation("")
+    }
+    const changeAgregation = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setAgregationValue(e.target.value)
+        setResultAgregation("")
     }
 
     if(!isExpanded) return null
@@ -82,11 +99,76 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                         <MidTextBold text="Booléen"/>
                     </div>
                 </div>
+
+                {
+                
+                graphCalculType === "Symbolic" ?
+                    undefined : 
+                    
+                    <div id="SelectedCalculWay">
+                        <div id="SelectPropagation">
+                            <MidTextBold text="Propagation" />
+                            <CustomCard customPadding>
+                                <select name="PropagationVal" id="edgeBoolVals" value={propagationValue} onChange={changePropagation}>
+                                    
+                                    {
+                                        graphCalculType==="Integer" ? 
+                                        <>
+                                            <option value="min">min</option>
+                                            <option value="max">max</option>
+                                            <option value="*">*</option>
+                                            <option value="+">+</option>
+                                            <option value="-">-</option>
+                                            <option value="moyenne">moyenne</option>
+                                        </>
+                                        : 
+                                        <>
+                                            <option value="∧">∧</option>
+                                            <option value="V">V</option>
+                                        </>
+
+                                    }
+                                
+                                    
+                                </select>
+                            </CustomCard>
+                        </div>
+                        <div id="SelectAgregation">
+                            <MidTextBold text="Agregation" />
+                            <CustomCard customPadding >
+                                <select name="AgregationVal" id="edgeBoolVals" value={agregationValue}onChange={changeAgregation}>
+                                    
+                                    {
+                                        graphCalculType==="Integer" ? 
+                                        <>
+                                            <option value="min">min</option>
+                                            <option value="max">max</option>
+                                            <option value="*">*</option>
+                                            <option value="+">+</option>
+                                            <option value="-">-</option>
+                                            <option value="moyenne">moyenne</option>
+                                        </>
+                                        : 
+                                        <>
+                                            <option value="∧" >∧</option>
+                                            <option value="V">V</option>
+                                        </>
+
+                                    }
+                                </select>
+                            </CustomCard>
+                        </div>
+                    </div>
+      
+        } 
             </div>
-            <div id="settingsSideBarFooter" style={{height: 60}}>
-                <FiAlertTriangle size={65} color="#D44C47"/>
-                <NormalText color="#D44C47" bold text="Un changement de type entraîne une réinitilisation irréversible des valeurs des arrêtes"/>
-            </div>
+
+            
+            
+        <div id="settingsSideBarFooter" style={{height: 60}}>
+                        <FiAlertTriangle size={65} color="#D44C47"/>
+                        <NormalText color="#D44C47" bold text="Un changement de type entraîne une réinitilisation irréversible des valeurs des arrêtes"/>
+        </div>
         </div>
     )
 }

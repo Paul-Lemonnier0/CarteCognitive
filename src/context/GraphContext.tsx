@@ -74,7 +74,13 @@ interface GraphContextType {
     setRelationInt: Dispatch<React.SetStateAction<boolean>>,
     graphCalculType: GraphCalculType,
     setGraphCalculType: Dispatch<GraphCalculType>,
-    handleChangeCalculType: (type: GraphCalculType) => void
+    handleChangeCalculType: (type: GraphCalculType) => void,
+    propagationValue: string,
+    setPropagationValue: Dispatch<React.SetStateAction<string>>,
+    agregationValue: string,
+    setAgregationValue: Dispatch<React.SetStateAction<string>>,
+    resultAgregation: string,
+    setResultAgregation: Dispatch<React.SetStateAction<string>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -132,7 +138,13 @@ const GraphContext = createContext<GraphContextType>({
     setRelationInt: () => {},
     graphCalculType: GraphCalculType.Integer,
     setGraphCalculType: () => {},
-    handleChangeCalculType: (type: GraphCalculType) => {}
+    handleChangeCalculType: (type: GraphCalculType) => {},
+    propagationValue: "",
+    setPropagationValue: () => {},
+    agregationValue: "",
+    setAgregationValue: () => {},
+    resultAgregation: "",
+    setResultAgregation: () => {},
 })
 
 export interface SizeType {
@@ -173,6 +185,10 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
     const [changeColorWithField, setChangeColorWithField] = useState<boolean>(false)
     const [showEdge, setShowEdge] = useState<boolean>(true)
     const [relationInt, setRelationInt] = useState<boolean>(true)
+    const [propagationValue, setPropagationValue] = useState<string>("min")
+    const [agregationValue, setAgregationValue] = useState<string>("max")
+
+    const [resultAgregation, setResultAgregation] = useState<string>("")
 
     const { cyclique, user } = useContext(AppContext)
 
@@ -428,6 +444,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
     const [graphCalculType, setGraphCalculType] = useState<GraphCalculType>(GraphCalculType.Integer)
 
     const handleChangeCalculType = (type: GraphCalculType) => {
+
         if(type !== graphCalculType) {
             setEdges((prevEdges) => prevEdges.map(edge =>
                 ({ ...edge, data: { label: "" } as any })
@@ -461,7 +478,10 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             influancePath, setInfluancePath,
             pathEdges, setPathEdges,
             relationInt,setRelationInt,
-            graphCalculType, setGraphCalculType, handleChangeCalculType
+            graphCalculType, setGraphCalculType, handleChangeCalculType,
+            propagationValue, setPropagationValue,
+            agregationValue,setAgregationValue,
+            resultAgregation,setResultAgregation,
 
         }}>
             {children}

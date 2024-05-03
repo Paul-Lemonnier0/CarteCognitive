@@ -21,7 +21,7 @@ interface CalculSideBarProps {
 }
 
 const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
-    const {influancePath, setInfluancePath, getNodeWithID, edges, setPathEdges, graphCalculType, adjMat, relationInt} = useContext(GraphContext)
+    const {influancePath, setInfluancePath, getNodeWithID, edges, setPathEdges, graphCalculType, adjMat, relationInt, propagationValue, agregationValue,resultAgregation,setResultAgregation } = useContext(GraphContext)
     
     const [cheminNull, setCheminNull] = useState(false)
     const [erreurChemin, setErreurChemin] = useState(false)
@@ -48,25 +48,23 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         
     },[edges,liste_chemin])
 
-    const symbolicTable = {
-        ["x"]: {
-            ["x"]: "x",
-            ["-"]: "-",
-            ["?"]: "?",
+    const symbolicTable: { [key: string]: { [key: string]: string } } = {
+        "+": {
+            "+": "+",
+            "-": "-",
+            "?": "?",
         },
-
-        ["-"]: {
-            ["x"]: "-",
-            ["-"]: "+",
-            ["?"]: "?",
+        "-": {
+            "+": "-",
+            "-": "+",
+            "?": "?",
         },
-
-        ["?"]: {
-            ["x"]: "?",
-            ["-"]: "?",
-            ["?"]: "?",
+        "?": {
+            "+": "?",
+            "-": "?",
+            "?": "?",
         },
-    }
+    };
 
 
     const handleCalculate = useCallback((min:boolean) => {
@@ -139,13 +137,208 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
     },[edges])
 
     const handleCalculateMax = () => {
-        
         handleCalculate(false)
+        setResultAgregation("")
     }
     const handleCalculateMin = () => {
-
+        setResultAgregation("")
         handleCalculate(true)
     }
+
+    const calculPropAgreg = (comparison:string, previousValue:number, nextValue:number) => {
+        let result = 0
+        switch (comparison){
+            case "+":
+                result = previousValue + nextValue
+                break;
+            case "-":
+                result = previousValue - nextValue
+                break;
+            case "moyenne":
+                result = (previousValue + nextValue)/2
+                break;
+            case "*":
+                result = previousValue * nextValue
+                break;
+            case "min":
+                if(previousValue > nextValue) result = nextValue
+                else result = previousValue
+                break;
+            case "max":
+                if(previousValue < nextValue) result = nextValue
+                else result = previousValue
+                break;
+        } 
+        return result
+    }
+
+    const handleCalculateInt = () => {
+        setCheminNull(false)
+        setPathEdges([])
+        let testChemin = false
+        liste_chemin = []
+        if(sourceNode && targetNode) {
+            nextEdges(sourceNode.id, targetNode.id,[]) 
+
+            if(liste_chemin.length === 0) {
+                setCheminNull(true)
+            }
+
+            else {
+                let Chemin: number[] = []
+                liste_chemin.forEach((chemin) => {
+                    let test = 0
+                    let currentValue = 0
+                    chemin.forEach((edge) => {
+                        if(edge.data.label === "") {
+                            testChemin = true
+                        }
+                        else {
+                            if(test===0) {currentValue = parseFloat(edge.data.label); test=1}
+                            else {
+                                currentValue = calculPropAgreg(propagationValue,currentValue,parseFloat(edge.data.label))
+                                    
+                            }
+                        }
+                    })
+                    Chemin.push(currentValue)
+                })
+
+                let value = 0
+                let test = 0
+                Chemin.forEach((cheminValue) => {
+                    if(test === 0) {
+                        value = cheminValue
+                        test = 1
+                    }
+                    else {
+                        value = calculPropAgreg(agregationValue,value,cheminValue)
+
+                    }
+
+                })
+                
+                if(!testChemin) { setResultAgregation(value.toString()); setErreurChemin(false) }
+                else { setResultAgregation(""); setErreurChemin(true) }
+            }
+        }
+    }
+    const handleCalculateSymb = () => {
+        setCheminNull(false)
+        setPathEdges([])
+        let testChemin = false
+        liste_chemin = []
+        if(sourceNode && targetNode) {
+            nextEdges(sourceNode.id, targetNode.id,[]) 
+
+            if(liste_chemin.length === 0) {
+                setCheminNull(true)
+            }
+
+            else {
+                let Chemin: string[] = []
+                liste_chemin.forEach((chemin) => {
+                    let test = 0
+                    let currentValue = ""
+                    chemin.forEach((edge) => {
+                        if(edge.data.label === "") {
+                            testChemin = true
+                        }
+                        else {
+                            if(test===0) {currentValue = edge.data.label; test=1}
+                            else {
+                                currentValue = symbolicTable[currentValue][edge.data.label]
+                            }
+                        }
+                    })
+                    Chemin.push(currentValue)
+                })
+
+                let value = ""
+                let test = 0
+                Chemin.forEach((cheminValue) => {
+                    if(test === 0) {
+                        value = cheminValue
+                        test = 1
+                    }
+                    else {
+                        if(value != "") value = symbolicTable[value][cheminValue]
+
+                    }
+
+                })
+                
+                if(!testChemin) { setResultAgregation(value); setErreurChemin(false) }
+                else { setResultAgregation(""); setErreurChemin(true) }
+            }
+        }
+                
+    }
+    const handleCalculateBool = () => { 
+        setCheminNull(false)
+        setPathEdges([])
+        let testChemin = false
+        liste_chemin = []
+        if(sourceNode && targetNode) {
+            nextEdges(sourceNode.id, targetNode.id,[]) 
+
+            if(liste_chemin.length === 0) {
+                setCheminNull(true)
+            }
+
+            else {
+                let Chemin: boolean[] = []
+                liste_chemin.forEach((chemin) => {
+                    let test = 0
+                    let currentValue = false
+                    chemin.forEach((edge) => {
+                        if(edge.data.label === "") {
+                            testChemin = true
+                        }
+                        else {
+                            let currentEdge = false
+                            if(edge.data.label === "1") currentEdge=true
+
+                            if(test===0) {currentValue = currentEdge; test=1}
+                            else {
+                                if(propagationValue==="V") {
+                                    currentValue = currentValue || currentEdge
+                                }
+                                else {
+                                    currentValue = currentValue && currentEdge
+                                }
+                            }
+                        }
+                    })
+                    Chemin.push(currentValue)
+                })
+
+                let value:boolean = false 
+                let test = 0
+                Chemin.forEach((cheminValue) => {
+                    if(test === 0) {
+                        value = cheminValue
+                        test = 1
+                    }
+                    else {
+                        if(agregationValue === "V") value = value || cheminValue
+                        else value = value && cheminValue
+
+                    }
+
+                })
+                if(!testChemin) { 
+                    if(value) setResultAgregation("True")
+                    else setResultAgregation("False")
+                    setErreurChemin(false) }
+                else { setResultAgregation(""); setErreurChemin(true) }
+         
+            }
+        }
+                
+    }
+
+
 
     if(!isExpanded) return null
 
@@ -181,7 +374,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                 }
                 {
                     graphCalculType === GraphCalculType.Integer ? 
-                    <div style={{display: "flex", flexDirection: "row", gap: 20}}>
+                    <div style={{display: "flex", flexDirection: "row", justifyContent: "center", gap: 20}}>
                         <ValidationButton
                             disabled={!sourceNode || !targetNode}
                             text="Calculer Min" 
@@ -192,18 +385,37 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                             text="Calculer Max" 
                             onPress={handleCalculateMax}
                         />
-                    </div> : 
-                    <ValidationButton
-                        disabled={!sourceNode || !targetNode}
-                        text="Calculer" 
-                        onPress={() => {}}
-                    />
+                    </div> : undefined
+                    
                 }
+                {
+                    graphCalculType === GraphCalculType.Integer ?
+                        <ValidationButton
+                            disabled={!sourceNode || !targetNode}
+                            text="Calculer" 
+                            onPress={handleCalculateInt}
+                        />
+
+                        :
+                            graphCalculType === GraphCalculType.Symbolic ?
+                            <ValidationButton
+                            disabled={!sourceNode || !targetNode}
+                            text="Calculer" 
+                            onPress={handleCalculateSymb}
+                            />
+                            :
+                            <ValidationButton
+                            disabled={!sourceNode || !targetNode}
+                            text="Calculer" 
+                            onPress={handleCalculateBool}
+                            />
+                }
+                
                 
                 {
                     cheminNull ? 
                     <MidTextBold bold text="Auncun chemin existant"/>
-                     : undefined
+                     : <MidTextBold bold text={resultAgregation} />
                 }
             </div>
             {
