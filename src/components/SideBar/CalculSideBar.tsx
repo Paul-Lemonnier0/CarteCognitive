@@ -156,7 +156,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
             } 
             
 
-    },[edges])
+    },[edges,sourceNode,targetNode])
 
     const handleCalculateMax = () => {
         handleCalculate(false)
@@ -391,7 +391,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
                         
                         const label = isTarget ? "Target" :
                                         isSource ? "Source" : 
-                                            "Noeud " + index
+                                            "Noeud" + index
 
                         return (
                             <div style={{flexDirection: "column", display: "flex"}}>

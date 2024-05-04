@@ -70,8 +70,6 @@ interface GraphContextType {
     setInfluancePath: Dispatch<React.SetStateAction<InfluancePathType | null>>,
     pathEdges: Edge[], 
     setPathEdges: Dispatch<React.SetStateAction<Edge[]>>,
-    relationInt: boolean,
-    setRelationInt: Dispatch<React.SetStateAction<boolean>>,
     graphCalculType: GraphCalculType,
     setGraphCalculType: Dispatch<GraphCalculType>,
     handleChangeCalculType: (type: GraphCalculType) => void,
@@ -134,8 +132,6 @@ const GraphContext = createContext<GraphContextType>({
     setInfluancePath: () => {},
     pathEdges: [],
     setPathEdges: () => {},
-    relationInt: true,
-    setRelationInt: () => {},
     graphCalculType: GraphCalculType.Integer,
     setGraphCalculType: () => {},
     handleChangeCalculType: (type: GraphCalculType) => {},
@@ -184,7 +180,6 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState<boolean>(false)
     const [showEdge, setShowEdge] = useState<boolean>(true)
-    const [relationInt, setRelationInt] = useState<boolean>(true)
     const [propagationValue, setPropagationValue] = useState<string>("min")
     const [agregationValue, setAgregationValue] = useState<string>("max")
 
@@ -477,7 +472,6 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             isCalculating, setIsCalculating,
             influancePath, setInfluancePath,
             pathEdges, setPathEdges,
-            relationInt,setRelationInt,
             graphCalculType, setGraphCalculType, handleChangeCalculType,
             propagationValue, setPropagationValue,
             agregationValue,setAgregationValue,

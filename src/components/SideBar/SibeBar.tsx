@@ -23,7 +23,7 @@ import { RxValueNone,RxUpdate,RxFontRoman  } from "react-icons/rx";
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique,user} = useContext(AppContext)
-    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified, relationInt, setRelationInt } = useContext(GraphContext)
+    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified } = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
 
@@ -53,9 +53,7 @@ const SideBar = () => {
         setCyclique(!cyclique)
     }
 
-    const clickRelationInt = () => {
-        setRelationInt(!relationInt)
-    }
+
 
     const upGradeGraph = () =>{
         let newGraph: GraphType = {
@@ -172,18 +170,7 @@ const SideBar = () => {
                     </div>
                 </div>
 
-                <div id="tooltipContainer">
-                    <div className="sideBarItem" onClick={clickRelationInt}>
-                        <BackgroundIcon 
-                            Icon={relationInt ? RxFontRoman : FiTag} 
-                            size={25}/>
-                        {
-                            relationInt ? <span className="rightTooltip">Number</span>
-                            : <span className="rightTooltip">+/-/?</span>
-                        }
-                        
-                    </div>
-                </div>
+                
 
                 
                 
