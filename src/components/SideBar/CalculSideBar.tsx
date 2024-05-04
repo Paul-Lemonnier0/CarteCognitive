@@ -29,19 +29,41 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
     const targetNode = (influancePath && influancePath?.nodesID && influancePath.nodesID.length > 1) ? getNodeWithID(influancePath.nodesID[influancePath.nodesID.length - 1]) : null
 
 
+    let nodePaths: Node[] = []
+    if(influancePath && influancePath?.nodesID) {
+        const nodePathsTemp = influancePath?.nodesID.map(nodeID => {
+            return getNodeWithID(nodeID)
+        })
+
+        nodePaths = nodePathsTemp.filter(node => node !== null) as Node[]
+    }
+
+    let nodeShouldVisit:Node[] =[]
+    nodePaths.map((node, index) => {                
+        const isSource = index === 0
+        const isTarget = nodePaths.length > 1 && index === nodePaths.length - 1
+        
+        isTarget ? undefined :
+            isSource ? undefined : 
+                nodeShouldVisit.push(node)})
+
+
+
     let liste_chemin:Edge[][] = []
-    const nextEdges = useCallback((source:string, target:string, chemin:Edge[])=> {
+    const nextEdges = useCallback((source:string, target:string, chemin:Edge[], nodeVisited: Node[])=> {
             const nextEdge = edges.filter((elem) => elem.source === source)
             nextEdge.forEach((elem) => {
                     if(!chemin.find((edge) => edge === elem)) {
 
                     
                         if(elem.target === target) {
-                            liste_chemin = [...liste_chemin, [...chemin,elem]]
+
+                            if(nodeVisited.length === 0 ) liste_chemin = [...liste_chemin, [...chemin,elem]]
                             return null
                         }
                         else {
-                            return nextEdges(elem.target,target,[...chemin,elem])
+                            
+                            return nextEdges(elem.target,target,[...chemin,elem],nodeVisited.filter((node) => node.id !== elem.source && node.id!== elem.target))
                         }
                     }        
             })
@@ -71,10 +93,10 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         setCheminNull(false)
         let testChemin = false
         liste_chemin = []
-        if(sourceNode && targetNode) {
-            nextEdges(sourceNode.id, targetNode.id,[]) 
-        }
-        console.log(liste_chemin)
+        console.log("should : ", targetNode)
+        nextEdges(sourceNode?.id as string, targetNode?.id as string,[],nodeShouldVisit) 
+        
+        
      
             if(liste_chemin.length === 0) {
                 setCheminNull(true)
@@ -178,7 +200,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         let testChemin = false
         liste_chemin = []
         if(sourceNode && targetNode) {
-            nextEdges(sourceNode.id, targetNode.id,[]) 
+            nextEdges(sourceNode.id, targetNode.id,[],nodeShouldVisit) 
 
             if(liste_chemin.length === 0) {
                 setCheminNull(true)
@@ -229,7 +251,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         let testChemin = false
         liste_chemin = []
         if(sourceNode && targetNode) {
-            nextEdges(sourceNode.id, targetNode.id,[]) 
+            nextEdges(sourceNode.id, targetNode.id,[],nodeShouldVisit) 
 
             if(liste_chemin.length === 0) {
                 setCheminNull(true)
@@ -280,7 +302,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
         let testChemin = false
         liste_chemin = []
         if(sourceNode && targetNode) {
-            nextEdges(sourceNode.id, targetNode.id,[]) 
+            nextEdges(sourceNode.id, targetNode.id,[],nodeShouldVisit) 
 
             if(liste_chemin.length === 0) {
                 setCheminNull(true)
@@ -342,14 +364,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({isExpanded}) => {
 
     if(!isExpanded) return null
 
-    let nodePaths: Node[] = []
-    if(influancePath && influancePath?.nodesID) {
-        const nodePathsTemp = influancePath?.nodesID.map(nodeID => {
-            return getNodeWithID(nodeID)
-        })
-
-        nodePaths = nodePathsTemp.filter(node => node !== null)
-    }
+     
 
     return (
         <div className={`subSideBarContainer`} style={{height: "100vh"}}>
