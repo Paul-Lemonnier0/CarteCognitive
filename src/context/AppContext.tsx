@@ -26,7 +26,8 @@ interface AppContextType {
 
 export interface personnalDataUserInterface {
     name: string,
-    firstName: string
+    firstName: string,
+    favorites : string[],
 }
 
 interface CustomUser {
@@ -40,6 +41,7 @@ const defaultUser: CustomUser = {
 const personnalData: personnalDataUserInterface = {
     firstName: '',
     name: '',
+    favorites : []
 };
 
 const AppContext = createContext<AppContextType>({

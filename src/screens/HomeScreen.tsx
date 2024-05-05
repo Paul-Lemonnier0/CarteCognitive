@@ -4,7 +4,7 @@ import AppTopBar from "../components/TopBar/TopBar";
 import { GraphType } from "../types/Graph/GraphType";
 import { getGraphFromJSON } from "../primitives/GraphMethods";
 import ListGraph from "../components/graphs/ListGraph";
-import { CreateGraph, getLocalStoragePersonnalData, getUserGraphs, setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
+import { CreateGraph, getLocalStoragePersonnalData, getUserGraphs, setPersonnalData, setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
 import { ValidationButton } from "../components/Buttons/Buttons";
 import ComposantsModal from "../components/Modal/ComposantsModal";
 import { AppContext } from "../context/AppContext";
@@ -27,7 +27,7 @@ const HomeScreen = () => {
     const graph3 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph3.json") as GraphType);
     const graph4 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph4.json") as GraphType);
     const graphs = [graph1, graph2, graph3, graph4];
-    const { user, graphsUser, setGraphsUser, setPersonnalDataUser } = useContext(AppContext);
+    const { user,personnalDataUser, graphsUser, setGraphsUser, setPersonnalDataUser } = useContext(AppContext);
 
 
     // Partie Firestore
@@ -50,7 +50,7 @@ const HomeScreen = () => {
     const [menu, setMenu] = useState<HomeSideBarMenu>(HomeSideBarMenu.Graphs);
     const [searchValue, setSearchValue] = useState<string>("");
 
-    const [favorites, setFavorites] = useState<string[]>([]);
+    const [favorites, setFavorites] = useState<string[]>(personnalDataUser.favorites);
     const [favoritesGraphs, setFavoritesGraphs] = useState<GraphType[]>([]);
 
     useEffect(() => {
@@ -67,7 +67,6 @@ const HomeScreen = () => {
                 newFavoritesGraphs.push(graphs.find(graph => graph.id === graphID)!);
             }
         });
-
         setFavoritesGraphs(newFavoritesGraphs);
     }, [favorites, graphs, graphsUser]);
 

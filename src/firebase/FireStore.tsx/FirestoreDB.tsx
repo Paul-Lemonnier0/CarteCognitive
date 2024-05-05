@@ -71,6 +71,7 @@ export function saveLocalStoragePersonnalData(PersonnalData: personnalDataUserIn
     localStorage.setItem("personnalDataUser", JSON.stringify(PersonnalData))
 }
 
+
 export function getLocalStoragePersonnalData() {
     // Récupérez les données de `localStorage`
     const storedData = localStorage.getItem("personnalDataUser");

@@ -69,7 +69,7 @@ const SignUpScreen = () => {
             try {
                 const user = await SignUpEmailPassword(email, password, navigate)
                 setUser(user);
-                const userData : personnalDataUserInterface= {firstName , name} 
+                const userData : personnalDataUserInterface= {firstName , name, favorites : []} 
                 setPersonnalData(user.uid, userData)
                 setPersonnalDataUser(userData)
                 console.log("user connecté : ", user);

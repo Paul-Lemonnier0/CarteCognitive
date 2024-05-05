@@ -17,7 +17,6 @@ interface ListGraphInterface {
 }
 
 const ListGraph = ({graphs, title, style, favorites, setFavorites} : ListGraphInterface) => {
-    const {user, setGraphsUser} =useContext(AppContext)
 
     return (
     <div style={style} className="graphPresentationListContainer">

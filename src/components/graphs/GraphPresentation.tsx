@@ -2,7 +2,7 @@ import React, { Dispatch, FC, SyntheticEvent, useContext, useEffect, useMemo, us
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { addFavorite, delFavorite, deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext } from "../../context/AppContext"
 import ReactFlow, { Background, BackgroundVariant } from "reactflow"
 import { defaultEdgeOptions } from "../../styles/Graphes/Edge"
@@ -27,25 +27,25 @@ interface GraphPresentationProps {
 }
 
 
-const GraphPresentation: FC<GraphPresentationProps> = ({ 
-    graph, 
+const GraphPresentation: FC<GraphPresentationProps> = ({
+    graph,
     style,
     favorites,
-    setFavorites 
+    setFavorites
 }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const {user, graphsUser, setGraphsUser} = useContext(AppContext)
+    const { user, graphsUser, setGraphsUser, personnalDataUser} = useContext(AppContext)
 
     const handleClickEffacer = () => {
         if (user?.uid === "")
             console.log("utilisateur introuvable")
-        else{
-        deleteGraph(user?user.uid : "", graph.id)
-        const updatedGraphsUser = graphsUser.filter((g)=>g.id !== graph.id)
-        setGraphsUser(updatedGraphsUser)
+        else {
+            deleteGraph(user ? user.uid : "", graph.id)
+            const updatedGraphsUser = graphsUser.filter((g) => g.id !== graph.id)
+            setGraphsUser(updatedGraphsUser)
 
-        console.log("id : ", graph.id, "effacée !")
-        setIsSelect(false)
+            console.log("id : ", graph.id, "effacée !")
+            setIsSelect(false)
         }
     }
 
@@ -62,71 +62,74 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         }
     }
     const handleSelectClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        setIsSelect(!isSelect); 
+        setIsSelect(!isSelect);
     };
 
     const isFavorite = favorites.includes(graph.id)
 
-    const handleFavoriteState = () => {
-        if(isFavorite) {
+    const handleFavoriteState = async () => {
+        if (isFavorite) {
             setFavorites(favorites.filter(fav => fav !== graph.id))
         }
 
-        else setFavorites([...favorites, graph.id])
+        else {
+            setFavorites([...favorites, graph.id])
+        }
+
     }
-    
-    return (         
+
+    return (
         <div className={`graphPresentationContainer ${isSelect ? 'selected' : ""}`} style={{
-            flex: 1, 
+            flex: 1,
             borderRadius: 15,
             display: "flex",
         }} onClick={handleSelectClick}>
             <div style={{
-                display: "flex", 
-                flexDirection: "column", 
+                display: "flex",
+                flexDirection: "column",
                 justifyContent: "space-between",
                 gap: 40,
                 flex: 1,
                 alignItems: "flex-start",
             }}>
                 <div style={{
-                    display: "flex", 
-                    flexDirection: "row", 
+                    display: "flex",
+                    flexDirection: "row",
                     justifyContent: "space-between",
                     gap: 10,
                     flex: 1,
                     width: "100%",
                     alignItems: "flex-start",
-                }}>                        
+                }}>
                     <div style={{ flex: 1, boxSizing: "border-box" }} tabIndex={0}>
-                        <TitleText text={graph.title}/>
-                        <NormalText bold text={graph.title}/>
+                        <TitleText text={graph.title} />
+                        <NormalText bold text={graph.title} />
                     </div>
 
                     <Link to={'/graphDetails'} state={{ ...graph }}>
-                        <IconButton Icon={IoChevronForward} onPress={() => {}}/>
+                        <IconButton Icon={IoChevronForward} onPress={() => { }} />
                     </Link>
                 </div>
 
                 <div style={{
-                    display: "flex", 
-                    flexDirection: "row", 
-                    justifyContent: "space-between", 
-                    gap: 10, 
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    gap: 10,
                     width: "100%"
                 }}>
-                    <div style={{display: "flex", flexDirection: "row", gap: 10}}>
-                        <IconText secondary Icon={AiOutlineNodeIndex} text={graph.nodes.length.toString()}/>
-                        <IconText secondary Icon={PiFlowArrowDuotone} text={graph.edges.length.toString()}/>
+                    <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+                        <IconText secondary Icon={AiOutlineNodeIndex} text={graph.nodes.length.toString()} />
+                        <IconText secondary Icon={PiFlowArrowDuotone} text={graph.edges.length.toString()} />
                     </div>
 
-                    <IconButton Icon={isFavorite ? FaStar : FaRegStar} 
-                        color={isFavorite ? "#313443" : "black"} 
-                        onPress={handleFavoriteState} stopPropagation/>
+                    <IconButton Icon={isFavorite ? FaStar : FaRegStar}
+                        color={isFavorite ? "#313443" : "black"}
+                        onPress={handleFavoriteState} stopPropagation />
 
                 </div>
             </div>
-        </div>        
+        </div>
     )
 }
 
