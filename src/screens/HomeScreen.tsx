@@ -105,12 +105,20 @@ const HomeScreen = () => {
                 }}>
                     {
                         menu === HomeSideBarMenu.Graphs ?
+                        <div>
                             <ListGraph
                                 favorites={favorites}
                                 setFavorites={setFavorites}
                                 graphs={graphsUser}
                                 title="Vos cartes"
                             />
+                            <ListGraph
+                                favorites={favorites}
+                                setFavorites={setFavorites}
+                                graphs={graphsUser}
+                                title="cartes partagées"
+                            />
+                            </div>
                             :
                             (
                                 menu === HomeSideBarMenu.Templates ?

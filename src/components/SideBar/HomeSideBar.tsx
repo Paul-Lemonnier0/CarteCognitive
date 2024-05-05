@@ -22,6 +22,7 @@ import { PiGraph } from "react-icons/pi"
 import { FaRegStar } from "react-icons/fa6"
 import { TbTemplate } from "react-icons/tb"
 import { HomeSideBarMenu } from "../../screens/HomeScreen"
+import { UsualButton } from "../Buttons/Buttons"
 
 enum SideBarMenuType {
     Edit = "Edit",
@@ -39,10 +40,10 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
     setMenu
 }) => {
 
-    const {isCalculating, setIsCalculating, isGraphModified, nodes, edges, id, graphTitle, upgrade} = useContext(GraphContext)
-    const {user} = useContext(AppContext)
+    const { isCalculating, setIsCalculating, isGraphModified, nodes, edges, id, graphTitle, upgrade } = useContext(GraphContext)
+    const { user, personnalDataUser } = useContext(AppContext)
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
-
+    const navigation = useNavigate()
     const handleChangeExpandState = () => {
         setIsExpanded(!isExpanded)
     }
@@ -54,25 +55,40 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
     return (
 
         <div className={`homeSideBarContainer ${isExpanded ? "expanded" : ""}`}>
-            <div id="header" style={{userSelect: "none"}}>
-                <ProfilButton name={"Paul"}/>
-                <div style={{display: "flex", flexDirection: "column", justifyContent: "center", gap: 0}}>
-                    <MidText bold text="Paul"/>
-                    <NormalText bold text="Lemonnier"/>
+            {personnalDataUser.name === "Default" ? (
+                //cas ou connecté
+                <div onClick={() => {
+                    //TODO voyage vers le page de connection
+
+
+                }} id="header" style={{ userSelect: "none", cursor: "pointer" }}>
+                    <ProfilButton name={"Paul"} />
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 0 }}>
+                        <MidText bold text={personnalDataUser.name} />
+                        <NormalText bold text={personnalDataUser.firstName} />
+                    </div>
+
                 </div>
-            </div>
+            ) :
+                //cas non connecté
+                //TODO faire un composant SignIn SignUp
+                <div id="header" style={{ userSelect: "none" }}>
+                    <UsualButton text="Connection" onPress={() => navigation("SignIn")}></UsualButton>
+                    <UsualButton text="Inscription" onPress={() => navigation("SignUp")}></UsualButton>
+                </div>}
+
 
             <div id="body">
                 <div className="homeSideBarListItem">
-                    <IconTextButton 
+                    <IconTextButton
                         text="Vos cartes"
-                        isSelected={menu === HomeSideBarMenu.Graphs} 
+                        isSelected={menu === HomeSideBarMenu.Graphs}
                         onPress={() => handleChangeMenu(HomeSideBarMenu.Graphs)}
-                        Icon={PiGraph}/>
+                        Icon={PiGraph} />
                 </div>
 
                 <div className="homeSideBarListItem">
-                    <IconTextButton 
+                    <IconTextButton
                         text="Modèles"
                         isSelected={menu === HomeSideBarMenu.Templates}
                         onPress={() => handleChangeMenu(HomeSideBarMenu.Templates)}
@@ -80,9 +96,9 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
                 </div>
 
                 <div className="homeSideBarListItem">
-                    <IconTextButton 
+                    <IconTextButton
                         text="Favoris"
-                        isSelected={menu === HomeSideBarMenu.Favorites} 
+                        isSelected={menu === HomeSideBarMenu.Favorites}
                         onPress={() => handleChangeMenu(HomeSideBarMenu.Favorites)}
                         Icon={FaRegStar} />
                 </div>
@@ -91,17 +107,17 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
             <div id="footer">
                 <li className="utilsSideBarItem" onClick={handleChangeExpandState}>
                     <span style={{ marginLeft: -15 }}>
-                        <IconButton Icon={IoSettingsOutline} onPress={() => {}}/>
+                        <IconButton Icon={IoSettingsOutline} onPress={() => { }} />
                     </span>
-                    <MidText bold text="Paramètres"/>
+                    <MidText bold text="Paramètres" />
 
 
                 </li>
                 <li className="utilsSideBarItem" onClick={handleChangeExpandState}>
                     <span style={{ marginLeft: -15 }}>
-                        <IconButton Icon={MdLogout} onPress={() => {}}/>
+                        <IconButton Icon={MdLogout} onPress={() => { }} />
                     </span>
-                    <MidText bold text="Déconnexion"/>
+                    <MidText bold text="Déconnexion" />
 
                 </li>
             </div>
