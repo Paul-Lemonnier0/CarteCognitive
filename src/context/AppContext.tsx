@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactNode, createContext, useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { GraphType } from "../types/Graph/GraphType";
-import { getUserGraphs } from "../firebase/FireStore.tsx/FirestoreDB";
+import { getLocalStoragePersonnalData, getUserGraphs, saveLocalStoragePersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
 
 interface AppContextType {
     isDarkMode: boolean,
@@ -24,7 +24,7 @@ interface AppContextType {
     setGraphsUser : Dispatch<React.SetStateAction<GraphType[]>>,
 }
 
-interface personnalDataUserInterface {
+export interface personnalDataUserInterface {
     name: string,
     firstName: string
 }
@@ -38,7 +38,7 @@ const defaultUser: CustomUser = {
     email: 'utilisateur@Default.com',
 };
 const personnalData: personnalDataUserInterface = {
-    firstName: 'Default',
+    firstName: '',
     name: '',
 };
 
@@ -87,8 +87,10 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     function Deconnection() {
         setUser(defaultUser)
         setPersonnalDataUser(personnalData)
+        saveLocalStoragePersonnalData(personnalData)
     }
-
+    
+    
 
 
     useEffect(() => {

@@ -41,7 +41,7 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
 }) => {
 
     const { isCalculating, setIsCalculating, isGraphModified, nodes, edges, id, graphTitle, upgrade } = useContext(GraphContext)
-    const { user, personnalDataUser } = useContext(AppContext)
+    const { user, personnalDataUser, Deconnection } = useContext(AppContext)
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
     const navigation = useNavigate()
     const handleChangeExpandState = () => {
@@ -55,11 +55,11 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
     return (
 
         <div className={`homeSideBarContainer ${isExpanded ? "expanded" : ""}`}>
-            {personnalDataUser.name === "Default" ? (
+            {personnalDataUser.name !== "" ? (
                 //cas ou connecté
                 <div onClick={() => {
                     //TODO voyage vers le page de connection
-
+                    console.log(personnalDataUser)
 
                 }} id="header" style={{ userSelect: "none", cursor: "pointer" }}>
                     <ProfilButton name={"Paul"} />
@@ -115,7 +115,9 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
                 </li>
                 <li className="utilsSideBarItem" onClick={handleChangeExpandState}>
                     <span style={{ marginLeft: -15 }}>
-                        <IconButton Icon={MdLogout} onPress={() => { }} />
+                        <IconButton Icon={MdLogout} onPress={() => {
+                            Deconnection()
+                        }} />
                     </span>
                     <MidText bold text="Déconnexion" />
 

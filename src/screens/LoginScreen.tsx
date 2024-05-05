@@ -7,8 +7,8 @@ import { IoMailOpenOutline } from 'react-icons/io5';
 import { CheckButton, GoBackButton } from '../components/Buttons/IconButtons';
 import { TbPasswordUser } from "react-icons/tb";
 import "./LoginScreen.css"
-import { AppContext } from '../context/AppContext';
-import { getPersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
+import { AppContext, personnalDataUserInterface } from '../context/AppContext';
+import { getPersonnalData, saveLocalStoragePersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
 
 
 const LoginScreen = () => {
@@ -45,8 +45,9 @@ const LoginScreen = () => {
             try {
                 const user = await SignInEmailPassword(email, password, navigate);
                 setUser(user);
-                const PersonnalData = await getPersonnalData(user.uid)
+                const PersonnalData = await getPersonnalData(user.uid) as personnalDataUserInterface
                 setPersonnalDataUser(PersonnalData)
+                saveLocalStoragePersonnalData(PersonnalData)
                 console.log("user connecté : ", user);
             } catch (error) {
                 console.error("Erreur de connexion :", error);

@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getDoc } from "firebase/firestore";
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
+import { personnalDataUserInterface } from "../../context/AppContext";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -66,6 +67,24 @@ async function setgraph(userid: string, graph: GraphType, id: string) {
  * @param documentId id du graph
  */
 
+export function saveLocalStoragePersonnalData(PersonnalData: personnalDataUserInterface) {
+    localStorage.setItem("personnalDataUser", JSON.stringify(PersonnalData))
+}
+
+export function getLocalStoragePersonnalData() {
+    // Récupérez les données de `localStorage`
+    const storedData = localStorage.getItem("personnalDataUser");
+
+    // Vérifiez si les données existent
+    if (storedData !== null) {
+        // Convertissez la chaîne JSON en objet `personnalDataUserInterface`
+        const personnalDataUser: personnalDataUserInterface = JSON.parse(storedData);
+        return personnalDataUser;
+    } else {
+        // Si aucune donnée n'existe, renvoyez null
+        return null;
+    }
+}
 async function deleteGraph(userid: string, graphId: string) {
     try {
         const docRef = doc(db, "users", userid, "Graphs", graphId)
@@ -78,14 +97,14 @@ async function deleteGraph(userid: string, graphId: string) {
 
 async function setPersonnalData(userid: string, data: any) {
     const docRef = doc(db, "users", userid)
-    await setDoc(docRef, data, {merge:true})
+    await setDoc(docRef, data, { merge: true })
 }
 
 async function getPersonnalData(userid: string) {
-    try{
+    try {
         const docRef = doc(db, "users", userid)
         const userDocSnapshot = await getDoc(docRef)
-        if(userDocSnapshot.exists()){
+        if (userDocSnapshot.exists()) {
             const dataUser = userDocSnapshot.data();
             return dataUser
         }
@@ -93,10 +112,10 @@ async function getPersonnalData(userid: string) {
 
     } catch (error) {
         console.log("erreur de récupération du firstName")
-        return""
+        return ""
     }
-    
+
 }
 
 export default db
-export { CreateGraph, getUserGraphs, setgraph, deleteGraph, setPersonnalData, getPersonnalData}
+export { CreateGraph, getUserGraphs, setgraph, deleteGraph, setPersonnalData, getPersonnalData }

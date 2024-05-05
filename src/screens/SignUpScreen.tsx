@@ -7,12 +7,15 @@ import IconTextInput from '../components/TextInput/IconTextInput';
 import { IoMailOpenOutline } from 'react-icons/io5';
 import { TbPasswordUser } from "react-icons/tb";
 import { AppContext } from '../context/AppContext';
-
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+import { personnalDataUserInterface } from '../context/AppContext';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { setPersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
 //TODO créer un nouvelle utilisateur dans firestore quand je signUp
 
 
 const SignUpScreen = () => {
-    const {setUser} = useContext(AppContext)
+    const {setUser, setPersonnalDataUser} = useContext(AppContext)
 
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
@@ -26,6 +29,8 @@ const SignUpScreen = () => {
     const [passwordClassVerif, setPasswordClassVerif] = useState('MessageErrorHidden');
     const [PasswordValide, setPasswordValide] = useState(false);
     const [emailValide, setemailValide] = useState(false);
+    const [name, setName] = useState("")
+    const [firstName, setFirstName] = useState("")
 
 
     const styleInput: CSSProperties = {
@@ -34,7 +39,7 @@ const SignUpScreen = () => {
         margin: "10px",
     }
 
-    function Validation() {
+    async function Validation() {
         if (password === "") {
             setPasswordMessage('Mot de passe manquant')
             setPasswordMessageClass("MessageError")
@@ -62,8 +67,11 @@ const SignUpScreen = () => {
 
         if (PasswordValide && emailValide) {
             try {
-                const user = SignUpEmailPassword(email, password, navigate)
+                const user = await SignUpEmailPassword(email, password, navigate)
                 setUser(user);
+                const userData : personnalDataUserInterface= {firstName , name} 
+                setPersonnalData(user.uid, userData)
+                setPersonnalDataUser(userData)
                 console.log("user connecté : ", user);
             } catch (error) {
                 console.error("Erreur de connexion :", error);
@@ -83,6 +91,8 @@ return (
         <TitleText text='Sign Up' />
         <div className={mailMessageClass}><SmallText text={mailMessage} color='red' /></div>
         <IconTextInput textValue={email} Icon={IoMailOpenOutline} placeholder='Entrez votre mail...' setTextValue={setEmail} style={styleInput} />
+        <IconTextInput textValue={name} Icon={MdOutlineDriveFileRenameOutline} placeholder='Prénom...' setTextValue={setName} style={styleInput} />
+        <IconTextInput textValue={firstName} Icon={MdOutlineDriveFileRenameOutline} placeholder='Nom...' setTextValue={setFirstName} style={styleInput} />
         <div className={passwordMessageClass}><SmallText text={passwordMessage} color='red' /></div>
         <IconTextInput textValue={password} Icon={TbPasswordUser} placeholder='Mot de Passe...' setTextValue={setPassword} style={styleInput} passWord />
         <div className={passwordClassVerif}><SmallText text={passwordMessageVerif} color='red' /></div>

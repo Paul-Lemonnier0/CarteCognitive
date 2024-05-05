@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential, User } from "firebase/auth";
 import { app } from "../FireBaseConnexion";
 import { useNavigate } from "react-router-dom";
 const auth = getAuth(app);
@@ -9,7 +9,7 @@ async function SignUpEmailPassword(mail: string, password: string, navigate: any
 
     try{
         const userCredential = await createUserWithEmailAndPassword(auth, mail, password)
-        const user = userCredential.user
+        const user = userCredential.user as User
         console.log("création réussie ! :", user);
         navigate("/");
         return user
