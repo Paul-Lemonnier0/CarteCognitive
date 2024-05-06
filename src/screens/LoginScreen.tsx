@@ -46,6 +46,7 @@ const LoginScreen = () => {
                 const user = await SignInEmailPassword(email, password, navigate);
                 setUser(user);
                 const PersonnalData = await getPersonnalData(user.uid) as personnalDataUserInterface
+                console.log( "toto: ", PersonnalData.ListGraphsPartage)
                 setPersonnalDataUser(PersonnalData)
                 saveLocalStoragePersonnalData(PersonnalData)
                 console.log("user connecté : ", user);

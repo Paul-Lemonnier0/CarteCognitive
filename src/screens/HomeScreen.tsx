@@ -4,7 +4,7 @@ import AppTopBar from "../components/TopBar/TopBar";
 import { GraphType } from "../types/Graph/GraphType";
 import { getGraphFromJSON } from "../primitives/GraphMethods";
 import ListGraph from "../components/graphs/ListGraph";
-import { CreateGraph, getLocalStoragePersonnalData, getUserGraphs, setPersonnalData, setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
+import { CreateGraph, getGraphPartageUser, getListUtilisateur, getLocalStoragePersonnalData, getUserGraphs, setListUtilisateur, setPersonnalData, setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
 import { ValidationButton } from "../components/Buttons/Buttons";
 import ComposantsModal from "../components/Modal/ComposantsModal";
 import { AppContext } from "../context/AppContext";
@@ -27,15 +27,38 @@ const HomeScreen = () => {
     const graph3 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph3.json") as GraphType);
     const graph4 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph4.json") as GraphType);
     const graphs = [graph1, graph2, graph3, graph4];
-    const { user,personnalDataUser, graphsUser, setGraphsUser, setPersonnalDataUser } = useContext(AppContext);
+    const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, setPersonnalDataUser, setListUtilisateurs } = useContext(AppContext);
 
 
     // Partie Firestore
-    useEffect(()=>{
+    useEffect(() => {
         const storagePersonnalData = getLocalStoragePersonnalData()
         if (storagePersonnalData) setPersonnalDataUser(storagePersonnalData)
-    },[])
-    
+        const getListFun = async () => {
+            try {
+                // Attendre le résultat de getListUtilisateur
+                const list = await getListUtilisateur();
+
+                // Vérifier que la liste n'est pas null
+                if (list !== null) {
+                    setListUtilisateurs(list);
+                } else {
+                    console.warn("La liste d'utilisateurs est vide ou n'a pas pu être récupérée.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération de la liste d'utilisateurs :", error);
+            }
+        }
+        getListFun()
+        const getGraphPartageFun=(async () => {
+            console.log("list graph : ", personnalDataUser.ListGraphsPartage)
+            const graphCollectionPartage = await getGraphPartageUser(personnalDataUser.ListGraphsPartage)
+            setGraphsPartage(graphCollectionPartage)
+        })
+        getGraphPartageFun()
+
+    }, [])
+
 
     const [showComposants, setShowComposants] = useState<boolean>(false);
 
@@ -50,7 +73,7 @@ const HomeScreen = () => {
     const [menu, setMenu] = useState<HomeSideBarMenu>(HomeSideBarMenu.Graphs);
     const [searchValue, setSearchValue] = useState<string>("");
 
-    const [favorites, setFavorites] = useState<string[]>(personnalDataUser.favorites);
+    const [favorites, setFavorites] = useState<string[]>(personnalDataUser.favorites ?? []);
     const [favoritesGraphs, setFavoritesGraphs] = useState<GraphType[]>([]);
 
     useEffect(() => {
@@ -103,7 +126,7 @@ const HomeScreen = () => {
                             const updatedGraphsUser = graphsUser
                             updatedGraphsUser.push(graph1)
                             setGraphsUser(updatedGraphsUser)
-                            }} />
+                        }} />
                     </div>
                 </div>
                 <div style={{
@@ -115,19 +138,19 @@ const HomeScreen = () => {
                 }}>
                     {
                         menu === HomeSideBarMenu.Graphs ?
-                        <div>
-                            <ListGraph
-                                favorites={favorites}
-                                setFavorites={setFavorites}
-                                graphs={graphsUser}
-                                title="Vos cartes"
-                            />
-                            <ListGraph
-                                favorites={favorites}
-                                setFavorites={setFavorites}
-                                graphs={graphsUser}
-                                title="cartes partagées"
-                            />
+                            <div>
+                                <ListGraph
+                                    favorites={favorites}
+                                    setFavorites={setFavorites}
+                                    graphs={graphsUser}
+                                    title="Vos cartes"
+                                />
+                                <ListGraph
+                                    favorites={favorites}
+                                    setFavorites={setFavorites}
+                                    graphs={graphsPartage}
+                                    title="cartes partagées"
+                                />
                             </div>
                             :
                             (

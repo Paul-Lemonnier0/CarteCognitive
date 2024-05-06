@@ -10,12 +10,12 @@ import { AppContext } from '../context/AppContext';
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { personnalDataUserInterface } from '../context/AppContext';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setPersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
+import { saveLocalStoragePersonnalData, setListUtilisateur, setPersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
 //TODO créer un nouvelle utilisateur dans firestore quand je signUp
 
 
 const SignUpScreen = () => {
-    const {setUser, setPersonnalDataUser} = useContext(AppContext)
+    const {setUser, setPersonnalDataUser, ListUtilisateurs} = useContext(AppContext)
 
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
@@ -69,9 +69,13 @@ const SignUpScreen = () => {
             try {
                 const user = await SignUpEmailPassword(email, password, navigate)
                 setUser(user);
-                const userData : personnalDataUserInterface= {firstName , name, favorites : []} 
+                const userData : personnalDataUserInterface= {firstName , name, favorites : [], ListGraphsPartage : []} 
                 setPersonnalData(user.uid, userData)
                 setPersonnalDataUser(userData)
+                saveLocalStoragePersonnalData(userData)
+                const newListUtilisateurs = ListUtilisateurs
+                newListUtilisateurs.List.push({name : userData.name, firstName : userData.firstName, uid : user.uid})
+                setListUtilisateur(newListUtilisateurs)
                 console.log("user connecté : ", user);
             } catch (error) {
                 console.error("Erreur de connexion :", error);

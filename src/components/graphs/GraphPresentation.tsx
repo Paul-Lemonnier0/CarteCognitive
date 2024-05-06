@@ -18,6 +18,8 @@ import { AiOutlineNodeIndex } from "react-icons/ai";
 import { PiFlowArrowDuotone } from "react-icons/pi";
 import { IoChevronForward } from "react-icons/io5"
 import { FaRegStar, FaStar } from "react-icons/fa6"
+import OtherUserProfile from "../Profil/OtherUserProfile"
+import { UsualButton } from "../Buttons/Buttons"
 
 interface GraphPresentationProps {
     graph: GraphType
@@ -34,7 +36,8 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     setFavorites
 }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const { user, graphsUser, setGraphsUser, personnalDataUser} = useContext(AppContext)
+    const { user, graphsUser, setGraphsUser, ListUtilisateurs} = useContext(AppContext)
+    const [showUserListModal, setShowUserListModal] = useState(false);
 
     const handleClickEffacer = () => {
         if (user?.uid === "")
@@ -45,6 +48,17 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
             setGraphsUser(updatedGraphsUser)
 
             console.log("id : ", graph.id, "effacée !")
+            setIsSelect(false)
+        }
+    }
+
+    const handleClickPartage = () => {
+        if (user?.uid === "")
+            console.log("utilisateur introuvable")
+        else {
+            //TODO fair la fonction partagé
+            setShowUserListModal(true);
+            console.log("id : ", graph.id, "partagé !")
             setIsSelect(false)
         }
     }
@@ -60,12 +74,15 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         if ((e.key === "Delete" || e.key === "Backspace") && isSelect) {
             handleClickEffacer();
         }
+        if((e.key === "p" && isSelect)){
+            handleClickPartage()
+        }
     }
     const handleSelectClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         setIsSelect(!isSelect);
     };
 
-    const isFavorite = favorites.includes(graph.id)
+    const isFavorite = !favorites ?? favorites.includes(graph.id)
 
     const handleFavoriteState = async () => {
         if (isFavorite) {
@@ -77,6 +94,9 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         }
 
     }
+    const closeUserListModal = () => {
+        setShowUserListModal(false);
+    };
 
     return (
         <div className={`graphPresentationContainer ${isSelect ? 'selected' : ""}`} style={{
@@ -129,6 +149,24 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
 
                 </div>
             </div>
+            {showUserListModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>Liste des utilisateurs</h3>
+                        {/* Parcourez la liste des utilisateurs et affichez leur profil */}
+                        {ListUtilisateurs.List.map((u : any) => (
+                            <OtherUserProfile
+                                key={u.uid}
+                                name={u.name}
+                                firstName={u.firstName}
+                                uid={u.uid}
+                                onClick={() => {}}
+                            />
+                        ))}
+                        <UsualButton onPress={closeUserListModal} text="Fermer"></UsualButton>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

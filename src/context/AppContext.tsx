@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactNode, createContext, useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { GraphType } from "../types/Graph/GraphType";
-import { getLocalStoragePersonnalData, getUserGraphs, saveLocalStoragePersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
+import { getGraphPartageUser, getLocalStoragePersonnalData, getUserGraphs, saveLocalStoragePersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
 
 interface AppContextType {
     isDarkMode: boolean,
@@ -21,13 +21,25 @@ interface AppContextType {
     setPersonnalDataUser: any,
     Deconnection: () => void,
     graphsUser: GraphType[],
-    setGraphsUser : Dispatch<React.SetStateAction<GraphType[]>>,
+    graphsPartage: GraphType[],
+    setGraphsUser: Dispatch<React.SetStateAction<GraphType[]>>,
+    setGraphsPartage: Dispatch<React.SetStateAction<GraphType[]>>,
+    ListUtilisateurs: ListUtilisateurInterface,
+    setListUtilisateurs: Dispatch<React.SetStateAction<ListUtilisateurInterface>>,
 }
 
+export interface ListUtilisateurInterface {
+    List : {
+        name : string,
+        firstName : string,
+        uid : string,
+    }[]
+}
 export interface personnalDataUserInterface {
     name: string,
     firstName: string,
-    favorites : string[],
+    favorites: string[],
+    ListGraphsPartage : any[],
 }
 
 interface CustomUser {
@@ -38,10 +50,15 @@ const defaultUser: CustomUser = {
     uid: 'Default',
     email: 'utilisateur@Default.com',
 };
+
+const defaultListUser : ListUtilisateurInterface ={
+    List : []
+}
 const personnalData: personnalDataUserInterface = {
     firstName: '',
     name: '',
-    favorites : []
+    favorites: [],
+    ListGraphsPartage : [],
 };
 
 const AppContext = createContext<AppContextType>({
@@ -61,7 +78,11 @@ const AppContext = createContext<AppContextType>({
     setPersonnalDataUser: () => { },
     Deconnection: () => { },
     graphsUser: [],
-    setGraphsUser : () =>{},
+    graphsPartage : [],
+    setGraphsUser: () => { },
+    setGraphsPartage: () => { },
+    ListUtilisateurs: defaultListUser,
+    setListUtilisateurs: ()=>{},
 })
 
 interface AppContextProviderProps {
@@ -85,14 +106,16 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const [wantSelectColor, setWantSelectColor] = useState<boolean>(false)
     const [cyclique, setCyclique] = useState<boolean>(false)
     const [graphsUser, setGraphsUser] = useState<GraphType[]>([])
+    const [ListUtilisateurs, setListUtilisateurs] = useState(defaultListUser)
+    const [graphsPartage, setGraphsPartage] = useState<GraphType[]>([])
 
     function Deconnection() {
         setUser(defaultUser)
         setPersonnalDataUser(personnalData)
         saveLocalStoragePersonnalData(personnalData)
     }
-    
-    
+
+
 
 
     useEffect(() => {
@@ -101,6 +124,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
             try {
                 const graphCollection = await getUserGraphs(user.uid);
                 setGraphsUser(graphCollection);
+                
             } catch (error) {
                 console.error("Erreur lors de la récupération des graphiques de l'utilisateur :", error);
             }
@@ -112,8 +136,9 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
     return (
         <AppContext.Provider value={{
-            isDarkMode, isWriting, setIsDarkMode, setIsWriting, colorNode, setColorNode, wantSelectColor,
-            setWantSelectColor, cyclique, setCyclique, user, setUser, personnalDataUser, setPersonnalDataUser, Deconnection, graphsUser, setGraphsUser
+            isDarkMode, isWriting, setIsDarkMode, setIsWriting, colorNode, setColorNode, wantSelectColor, ListUtilisateurs,
+            setWantSelectColor, cyclique, setCyclique, user, setUser, personnalDataUser, setPersonnalDataUser, Deconnection,
+            graphsUser, setGraphsUser, setListUtilisateurs, graphsPartage, setGraphsPartage,
         }}>
             {children}
         </AppContext.Provider>

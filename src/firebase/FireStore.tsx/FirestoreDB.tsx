@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getDoc } from "firebase/firestore";
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
-import { personnalDataUserInterface } from "../../context/AppContext";
+import { ListUtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -45,7 +45,6 @@ async function getUserGraphs(userid: string) {
 
         return modifiedData;
     })
-    console.log(data)
     return data as GraphType[]
 }
 
@@ -117,6 +116,84 @@ async function getPersonnalData(userid: string) {
     }
 
 }
+
+export async function getListUtilisateur(): Promise<ListUtilisateurInterface | null> {
+    try {
+        // Référencer le document Firestore
+        const docRef = doc(db, "users", "ListUtilisateurs");
+
+        // Récupérer le document
+        const docSnapshot = await getDoc(docRef);
+
+        // Vérifier si le document existe
+        if (!docSnapshot.exists()) {
+            console.error("Le document ListUtilisateurs n'existe pas");
+            return null;
+        }
+
+        // Récupérer les données du document
+        const data = docSnapshot.data() as ListUtilisateurInterface;
+
+        // Vérifier les données récupérées pour la sécurité de type
+        if (!data) {
+            console.error("Les données récupérées ne sont pas valides");
+            return null;
+        }
+
+        // Retourner les données
+        return data;
+    } catch (error) {
+        // Gestion des erreurs
+        console.error("Erreur lors de la récupération de la liste des utilisateurs :", error);
+        return null;
+    }
+}
+export async function setListUtilisateur(Listdata: ListUtilisateurInterface) {
+    const docRef = doc(db, "users", "ListUtilisateurs")
+    const newdata = Listdata as ListUtilisateurInterface
+    await setDoc(docRef, newdata, { merge: true })
+
+}
+
+
+export async function getGraphPartageUser(ListGraph: any[]): Promise<GraphType[]> {
+    try {
+        // Utilisez map pour créer un tableau de promesses
+        const graphPromises = ListGraph.map(async (item) => {
+            try {
+                console.log(item)
+                const docRef = doc(db, item);
+                const docSnapshot = await getDoc(docRef);
+                
+
+                if (docSnapshot.exists()) {
+                    // Si le document existe, retournez les données en tant que GraphType
+                    return docSnapshot.data() as GraphType;
+                } else {
+                    // Si le document n'existe pas, retournez undefined
+                    console.warn(`Le document avec ID '${item}' n'existe pas.`);
+                    return undefined;
+                }
+            } catch (error) {
+                // Gérez les erreurs de l'accès au document ici
+                console.error(`Erreur lors de l'accès au document avec ID '${item}':`, error);
+                return undefined;
+            }
+        });
+
+        // Attendez que toutes les promesses se résolvent et obtenez un tableau de GraphType
+        const resolvedGraphs = await Promise.all(graphPromises);
+
+        // Filtrez les valeurs undefined pour obtenir uniquement les GraphType valides
+        const validGraphs = resolvedGraphs.filter((graph): graph is GraphType => graph !== undefined);
+        console.log(validGraphs)
+        return validGraphs;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des graphes partagés des utilisateurs :', error);
+        return []
+    }
+}
+
 
 export default db
 export { CreateGraph, getUserGraphs, setgraph, deleteGraph, setPersonnalData, getPersonnalData }
