@@ -1,7 +1,7 @@
 {
   "name": "cartecognitive",
   "version": "0.1.0",
-  "homepage": "https://test.com",
+  "homepage": "/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -22,6 +22,7 @@
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "reactflow": "^11.10.4",
+    "serve": "^14.2.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
