@@ -73,7 +73,7 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
                 //cas non connecté
                 //TODO faire un composant SignIn SignUp
                 <div id="header" style={{ userSelect: "none" }}>
-                    <UsualButton text="Connection" onPress={() => navigation("SignIn")}></UsualButton>
+                    <UsualButton text="Connexion" onPress={() => navigation("SignIn")}></UsualButton>
                     <UsualButton text="Inscription" onPress={() => navigation("SignUp")}></UsualButton>
                 </div>}
 
