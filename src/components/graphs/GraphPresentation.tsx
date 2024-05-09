@@ -2,7 +2,7 @@ import React, { Dispatch, FC, SyntheticEvent, useContext, useEffect, useMemo, us
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { addFavorite, delFavorite, deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext } from "../../context/AppContext"
 import ReactFlow, { Background, BackgroundVariant } from "reactflow"
 import { defaultEdgeOptions } from "../../styles/Graphes/Edge"
