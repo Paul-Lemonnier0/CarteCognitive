@@ -28,18 +28,20 @@ interface AppContextType {
     setListUtilisateurs: Dispatch<React.SetStateAction<ListUtilisateurInterface>>,
 }
 
+export interface UtilisateurInterface {
+    name: string,
+    firstName: string,
+    uid: string,
+}
+
 export interface ListUtilisateurInterface {
-    List : {
-        name : string,
-        firstName : string,
-        uid : string,
-    }[]
+    List: UtilisateurInterface[]
 }
 export interface personnalDataUserInterface {
     name: string,
     firstName: string,
     favorites: string[],
-    ListGraphsPartage : any[],
+    ListGraphsPartage: any[],
 }
 
 export interface CustomUser {
@@ -51,14 +53,14 @@ const defaultUser: CustomUser = {
     email: 'utilisateur@Default.com',
 };
 
-const defaultListUser : ListUtilisateurInterface ={
-    List : []
+const defaultListUser: ListUtilisateurInterface = {
+    List: []
 }
 const personnalData: personnalDataUserInterface = {
     firstName: '',
     name: '',
     favorites: [],
-    ListGraphsPartage : [],
+    ListGraphsPartage: [],
 };
 
 const AppContext = createContext<AppContextType>({
@@ -78,11 +80,11 @@ const AppContext = createContext<AppContextType>({
     setPersonnalDataUser: () => { },
     Deconnection: () => { },
     graphsUser: [],
-    graphsPartage : [],
+    graphsPartage: [],
     setGraphsUser: () => { },
     setGraphsPartage: () => { },
     ListUtilisateurs: defaultListUser,
-    setListUtilisateurs: ()=>{},
+    setListUtilisateurs: () => { },
 })
 
 interface AppContextProviderProps {
@@ -125,7 +127,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
             try {
                 const graphCollection = await getGraphtest(user.uid);
                 setGraphsUser(graphCollection);
-                
+
             } catch (error) {
                 console.error("Erreur lors de la récupération des graphiques de l'utilisateur :", error);
             }
@@ -133,7 +135,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         }
         fetchGraphs();
 
-        
+
     }, [user]);
 
 

@@ -2,8 +2,8 @@ import React, { Dispatch, FC, useContext, useEffect, useState } from "react"
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { deleteGraph, deleteGraphTest } from "../../firebase/FireStore.tsx/FirestoreDB"
-import { AppContext } from "../../context/AppContext"
+import { addPartageOtherUser, deleteGraph, deleteGraphTest } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { AppContext, ListUtilisateurInterface, UtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext"
 import { NormalText, TitleText } from "../Text/CustomText"
 import { IconButton, IconText } from "../Buttons/IconButtons"
 import { AiOutlineNodeIndex } from "react-icons/ai";
@@ -28,7 +28,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     setFavorites
 }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const { user, graphsUser, setGraphsUser, ListUtilisateurs} = useContext(AppContext)
+    const { user, graphsUser, setGraphsUser, ListUtilisateurs } = useContext(AppContext)
     const [showUserListModal, setShowUserListModal] = useState(false);
 
     const handleClickEffacer = () => {
@@ -66,7 +66,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         if ((e.key === "Delete" || e.key === "Backspace") && isSelect) {
             handleClickEffacer();
         }
-        if((e.key === "p" && isSelect)){
+        if ((e.key === "p" && isSelect)) {
             handleClickPartage()
         }
     }
@@ -89,6 +89,10 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     const closeUserListModal = () => {
         setShowUserListModal(false);
     };
+
+    const handleClickOtherUser = (u : UtilisateurInterface) => {
+        addPartageOtherUser(graph.id, u.uid)
+    }
 
     return (
         <div className={`graphPresentationContainer ${isSelect ? 'selected' : ""}`} style={{
@@ -143,17 +147,19 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
             </div>
             {showUserListModal && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
+                    <div className="modal-content" onClick={(e)=>{e.stopPropagation()}}>
                         <h3>Liste des utilisateurs</h3>
                         {/* Parcourez la liste des utilisateurs et affichez leur profil */}
-                        {ListUtilisateurs.List.map((u : any) => (
-                            <OtherUserProfile
-                                key={u.uid}
-                                name={u.name}
-                                firstName={u.firstName}
-                                uid={u.uid}
-                                onClick={() => {}}
-                            />
+                        {ListUtilisateurs.List.map((u) => (
+                            <div className="OtherUser" onClick={()=>{handleClickOtherUser(u)}}>
+                                <OtherUserProfile
+                                    key={u.uid}
+                                    name={u.name}
+                                    firstName={u.firstName}
+                                    uid={u.uid}
+                                />
+                            </div>
+
                         ))}
                         <UsualButton onPress={closeUserListModal} text="Fermer"></UsualButton>
                     </div>

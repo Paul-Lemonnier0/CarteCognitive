@@ -16,3 +16,8 @@
 .graphPresentationContainer.selected {
     border: 2px solid black;
 }
+
+
+.OtherUser :hover{
+    border: 2px solid black;
+}
