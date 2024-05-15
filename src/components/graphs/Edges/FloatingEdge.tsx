@@ -1,14 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge, getBezierPath,  MarkerType, Position } from 'reactflow';
+import { useStore, getStraightPath, Node, ReactFlowState, EdgeProps, EdgeLabelRenderer, BaseEdge} from 'reactflow';
 import { getEdgeParams } from '../../../utils/utils';
-import { GraphCalculType, GraphContext } from '../../../context/GraphContext';
+import {GraphContext } from '../../../context/GraphContext';
 
-import { AppContext } from '../../../context/AppContext';
 import "./FloatingEdgeStyle.css"
 
 import CustomEdgeLabel from './CustomEdgeLabel';
 
-import { AdjMat_addEdge } from "../../../primitives/MatriceMethods";
 
 
 

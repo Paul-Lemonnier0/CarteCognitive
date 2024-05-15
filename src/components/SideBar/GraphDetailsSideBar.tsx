@@ -17,7 +17,7 @@ import { RxText } from "react-icons/rx";
 import IconTextInput from "../TextInput/IconTextInput"
 import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
-import { setgraph } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { setGraphtest } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { GraphType } from "../../types/Graph/GraphType";
 import { CiCalculator2 } from "react-icons/ci";
 import { FaCalculator } from "react-icons/fa6";
@@ -36,10 +36,10 @@ const GraphDetailsSideBar = () => {
         lastSelectedNodeID, setLastSelectedNodeID, 
         updateNodeData, 
         lastSelectedEdgeID, setLastSelectedEdgeID, 
-        setIsCalculating, isCalculating
+        setIsCalculating, isCalculating, users
     } = useContext(GraphContext)
 
-    const {user} = useContext(AppContext)
+    const {user, personnalDataUser} = useContext(AppContext)
 
     const [filteredNodes, setFilteredNodes] = useState<Node[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
@@ -50,14 +50,6 @@ const GraphDetailsSideBar = () => {
 
     const [titleIsModif, setTitleIsModif] = useState(false)
 
-    // Utilisation de useRef pour maintenir une valeur constante pour startGraph
-    const startGraph = useRef<GraphType>({
-        nodes: nodes,
-        edges: edges,
-        id: id,
-        title: graphTitle,
-        upgrade : upgrade,
-    })
 
     const [selectedNode, setSelectedNode] = useState<Node | undefined>(lastSelectedNodeID ? nodes.filter(node => node.id === lastSelectedNodeID)[0] : undefined)
     const [selectedNodeData, setSelectedNodeData] = useState<CustomNodeData>(selectedNode ? (selectedNode.data ?? {}) : {})
@@ -76,9 +68,10 @@ const GraphDetailsSideBar = () => {
                 edges: edges,
                 id: id,
                 title: editedTitle,
-                upgrade: upgrade
+                upgrade: upgrade,
+                users : users
             }
-            setgraph(user? user.uid : "", newGraph, newGraph.id)
+            setGraphtest(newGraph, personnalDataUser )
             setIsGraphModified(false)
 
         } 
@@ -144,7 +137,8 @@ const GraphDetailsSideBar = () => {
             edges: edges,
             id: id,
             title: editedTitle,
-            upgrade: upgrade
+            upgrade: upgrade,
+            users: users
         }
 
         if (isGraphModified) {
@@ -152,7 +146,7 @@ const GraphDetailsSideBar = () => {
             const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications");
             if (shouldSave) {
 
-                setgraph(user? user.uid : "", newGraph, newGraph.id)
+                setGraphtest( newGraph, personnalDataUser)
                 console.log("graphe modifiée")
             }
         }

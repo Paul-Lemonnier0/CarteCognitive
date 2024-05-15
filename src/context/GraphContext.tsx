@@ -1,5 +1,5 @@
-import { Dispatch, ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState, addEdge, useStore, ReactFlowState } from "reactflow";
+import { Dispatch, ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
+import { Edge, EdgeProps, Node, NodeProps, OnEdgesChange, OnNodesChange, useEdgesState, useNodesState, addEdge } from "reactflow";
 
 import React from "react";
 import { CustomNode, CustomNodeData } from "../components/graphs/Nodes/CustomNode";
@@ -9,8 +9,7 @@ import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 import { AdjMat, AdjMat_addEdge, AdjMat_addNode, AdjMat_breakNodeLinks, AdjMat_deleteMultipleEdges, AdjMat_deleteMultipleNodes, AdjMat_deleteNode, AdjMat_init } from "../primitives/MatriceMethods";
 import { GraphType } from "../types/Graph/GraphType";
-import { setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
-import { createNodesAndEdgesStress } from "../utils/utils";
+import { setGraphtest } from "../firebase/FireStore.tsx/FirestoreDB";
 
 export enum GraphCalculType {
     Boolean = "Boolean",
@@ -79,6 +78,8 @@ interface GraphContextType {
     setAgregationValue: Dispatch<React.SetStateAction<string>>,
     resultAgregation: string,
     setResultAgregation: Dispatch<React.SetStateAction<string>>,
+    users : string[],
+    setUsers : Dispatch<React.SetStateAction<string[]>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -141,6 +142,8 @@ const GraphContext = createContext<GraphContextType>({
     setAgregationValue: () => {},
     resultAgregation: "",
     setResultAgregation: () => {},
+    users : [],
+    setUsers : ()=>{},
 })
 
 export interface SizeType {
@@ -164,11 +167,12 @@ interface GraphContextProviderType {
     defaultEdges: Edge[],
     graphName: string,
     id: string,
-    children: ReactNode
+    children: ReactNode,
+    listusers : string[]
 }
 
 
-const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphName, id, children }: GraphContextProviderType) => {
+const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphName, id, children, listusers }: GraphContextProviderType) => {
     
     // const { nodes: initialNodes, edges: initialEdges } = createNodesAndEdgesStress(
     //     15,
@@ -185,7 +189,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
 
     const [resultAgregation, setResultAgregation] = useState<string>("")
 
-    const { cyclique, user } = useContext(AppContext)
+    const { cyclique, user, personnalDataUser } = useContext(AppContext)
 
     const [adjMat, setAdjMat] = useState<AdjMat>(AdjMat_init(defaultNodes, defaultEdges))
 
@@ -210,6 +214,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
     const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(defaultNodes_zIndexed)
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(defaultEdges)
     const [upgrade, setUpgrade] = useState(autoUpgrade)
+    const [users, setUsers] = useState(listusers)
 
     const [influancePath, setInfluancePath] = useState<InfluancePathType | null>(null)
     const [isCalculating, setIsCalculating] = useState<boolean>(false)
@@ -426,10 +431,10 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
                     edges: edges,
                     id: id,
                     title: graphTitle,
-                    upgrade: upgrade
+                    upgrade: upgrade,
+                    users : users,
                 }
-                console.log(graphTitle)
-                setgraph(user? user.uid : "", newGraph, newGraph.id)
+                setGraphtest(newGraph,personnalDataUser)
                 setIsGraphModified(false)
     
             } 
@@ -476,6 +481,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             propagationValue, setPropagationValue,
             agregationValue,setAgregationValue,
             resultAgregation,setResultAgregation,
+            users, setUsers
 
         }}>
             {children}

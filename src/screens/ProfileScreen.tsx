@@ -1,13 +1,10 @@
 import React, { CSSProperties, useContext } from "react"
 import AppTopBar from "../components/TopBar/TopBar"
 import { NormalText, TitleText } from "../components/Text/CustomText"
-import CircleImage from "../components/Images/CircleImage"
 import "./ProfileScreen.css"
-import { FaUser } from "react-icons/fa6"
 import { Link } from "react-router-dom"
 import { AppContext } from "../context/AppContext"
 import { ValidationButton } from "../components/Buttons/Buttons"
-import { getPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB"
 
 
 const ValidationButtonStyle: CSSProperties = {
@@ -21,7 +18,7 @@ const TitleTextStyle: CSSProperties = {
 }
 
 function ProfileScreen() {
-    const { user, personnalDataUser, setPersonnalDataUser, Deconnection } = useContext(AppContext)
+    const { user, personnalDataUser, Deconnection } = useContext(AppContext)
 
 
 
@@ -35,7 +32,7 @@ function ProfileScreen() {
                         {/*<CircleImage defaultIcon={FaUser} />*/}
                     </div>
                     <TitleText text="Utilisateur" style={TitleTextStyle} />
-                    {user.uid == "Default" ?
+                    {user.uid === "Default" ?
                         (<div className="ConnectionButton">
                             <Link to={"/SignIn"}><ValidationButton style={ValidationButtonStyle} text="SignIn" onPress={() => { }}></ValidationButton></Link>
                             <Link to={"/SignUp"}><ValidationButton style={ValidationButtonStyle} text="SignUp" onPress={() => { }}></ValidationButton></Link>

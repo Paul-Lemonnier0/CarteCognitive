@@ -12,7 +12,7 @@ import { FiEye, FiEyeOff,FiItalic,FiTag } from "react-icons/fi";
 import { MdOutlineQuestionMark } from "react-icons/md";
 import HelpModal from "../Modal/HelpModal";
 import { GraphType } from "../../types/Graph/GraphType";
-import { setgraph } from "../../firebase/FireStore.tsx/FirestoreDB";
+import { setGraphtest } from "../../firebase/FireStore.tsx/FirestoreDB";
 import { GrUpgrade } from "react-icons/gr";
 import { TbFileExport } from "react-icons/tb";
 import { getRectOfNodes, getTransformForBounds, useReactFlow } from "reactflow";
@@ -22,8 +22,8 @@ import { RxValueNone,RxUpdate,RxFontRoman  } from "react-icons/rx";
 
 
 const SideBar = () => {
-    const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique,user} = useContext(AppContext)
-    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified } = useContext(GraphContext)
+    const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique,user, personnalDataUser} = useContext(AppContext)
+    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified, users, setUsers } = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
 
@@ -62,9 +62,10 @@ const SideBar = () => {
             id: id,
             title: graphTitle,
             upgrade : upgrade,
+            users : users
 
         }
-        setgraph(user?user.uid : "", newGraph, newGraph.id)
+        setGraphtest(newGraph, personnalDataUser)
         console.log("sauvegarde effectué")
         setIsGraphModified(false)
     }

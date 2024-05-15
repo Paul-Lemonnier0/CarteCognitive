@@ -8,7 +8,7 @@ import { CheckButton, GoBackButton } from '../components/Buttons/IconButtons';
 import { TbPasswordUser } from "react-icons/tb";
 import "./LoginScreen.css"
 import { AppContext, personnalDataUserInterface } from '../context/AppContext';
-import { getGraphPartageUser, getPersonnalData, saveLocalStoragePersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
+import { getGraphPartageUser, getPersonnalData, saveLocalStoragePersonnalData, saveLocalStorageUser } from '../firebase/FireStore.tsx/FirestoreDB';
 
 
 const LoginScreen = () => {
@@ -44,6 +44,7 @@ const LoginScreen = () => {
         else {
             try {
                 const user = await SignInEmailPassword(email, password, navigate);
+                saveLocalStorageUser(user)
                 setUser(user);
                 const PersonnalData = await getPersonnalData(user.uid) as personnalDataUserInterface
                 console.log( "toto: ", PersonnalData.ListGraphsPartage)

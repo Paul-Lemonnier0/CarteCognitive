@@ -1,19 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./HomeScreen.css";
-import AppTopBar from "../components/TopBar/TopBar";
 import { GraphType } from "../types/Graph/GraphType";
 import { getGraphFromJSON } from "../primitives/GraphMethods";
 import ListGraph from "../components/graphs/ListGraph";
-import { CreateGraph, getGraphPartageUser, getListUtilisateur, getLocalStoragePersonnalData, getUserGraphs, setListUtilisateur, setPersonnalData, setgraph } from "../firebase/FireStore.tsx/FirestoreDB";
-import { ValidationButton } from "../components/Buttons/Buttons";
-import ComposantsModal from "../components/Modal/ComposantsModal";
+import { CreateGraph, addGraphtest, deleteGraphTest, getGraphtest, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs } from "../firebase/FireStore.tsx/FirestoreDB";
 import { AppContext } from "../context/AppContext";
 import HomeSideBar from "../components/SideBar/HomeSideBar";
 import CustomSearchBar from "../components/SearchBar/SearchBar";
 import { IconButton } from "../components/Buttons/IconButtons";
 import { IoReload } from "react-icons/io5";
 import { IoIosAdd } from "react-icons/io";
-import { defaultGraphs } from "../constantes/Graph/DefaultGraphs";
 
 export enum HomeSideBarMenu {
     Graphs = "Graphs",
@@ -27,13 +23,19 @@ const HomeScreen = () => {
     const graph3 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph3.json") as GraphType);
     const graph4 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph4.json") as GraphType);
     const graphs = [graph1, graph2, graph3, graph4];
-    const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, setPersonnalDataUser, setListUtilisateurs } = useContext(AppContext);
+    const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setPersonnalDataUser, setListUtilisateurs, setUser } = useContext(AppContext);
 
 
     // Partie Firestore
     useEffect(() => {
         const storagePersonnalData = getLocalStoragePersonnalData()
-        if (storagePersonnalData) setPersonnalDataUser(storagePersonnalData)
+        const userData = getLocalStorageUser()
+        if (storagePersonnalData) {
+            setPersonnalDataUser(storagePersonnalData)
+        }
+        if (userData) {
+            setUser(userData)
+        }
         const getListFun = async () => {
             try {
                 // Attendre le résultat de getListUtilisateur
@@ -52,17 +54,6 @@ const HomeScreen = () => {
         getListFun()
 
     }, [])
-
-
-    const [showComposants, setShowComposants] = useState<boolean>(false);
-
-    const handleShowComposants = () => {
-        setShowComposants(true);
-    };
-
-    const handleCloseComposants = () => {
-        setShowComposants(false);
-    };
 
     const [menu, setMenu] = useState<HomeSideBarMenu>(HomeSideBarMenu.Graphs);
     const [searchValue, setSearchValue] = useState<string>("");
@@ -88,7 +79,7 @@ const HomeScreen = () => {
     }, [favorites, graphs, graphsUser]);
 
     const handleRefresh = async () => {
-        const graphCollection = await getUserGraphs(user.uid);
+        const graphCollection = await getGraphtest(user.uid);
         setGraphsUser(graphCollection);
     };
 
@@ -115,12 +106,17 @@ const HomeScreen = () => {
                         searchValue={searchValue} setSearchValue={setSearchValue} />
                     <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                         <IconButton Icon={IoReload} onPress={handleRefresh} />
+        
                         <IconButton secondary Icon={IoIosAdd} onPress={() => {
-                            CreateGraph(user.uid, graph1)
+
+                            let newgraph = { ...graph1, users: [...graph1.users, user.uid] } as GraphType
+                            addGraphtest(newgraph, user.uid, personnalDataUser)
                             const updatedGraphsUser = graphsUser
                             updatedGraphsUser.push(graph1)
                             setGraphsUser(updatedGraphsUser)
+
                         }} />
+
                     </div>
                 </div>
                 <div style={{

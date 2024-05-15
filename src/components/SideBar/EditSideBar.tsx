@@ -6,7 +6,6 @@ import CustomNodeListItem from "../graphs/Nodes/CustomNodeListItem"
 import { GraphCalculType, GraphContext } from "../../context/GraphContext"
 import { Edge, Node } from "reactflow"
 import { BackgroundIcon, IconButton } from "../Buttons/IconButtons"
-import { useNavigate } from "react-router-dom"
 import { CustomZoneIcon } from "../graphs/Zones/CustomZoneIcon"
 import { CustomNodeIcon } from "../graphs/Nodes/CustomNodeIcon"
 import { CustomEdgeIcon } from "../graphs/Edges/CustomEdgeIcon"
@@ -15,13 +14,10 @@ import { RxText } from "react-icons/rx";
 import IconTextInput from "../TextInput/IconTextInput"
 import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
-import { setgraph } from "../../firebase/FireStore.tsx/FirestoreDB"
-import { GraphType } from "../../types/Graph/GraphType";
 import "./EditSideBarStyle.css"
 import "./SubSideBarStyle.css"
 
 import { NormalText, TitleText } from "../Text/CustomText";
-import { AppContext } from "../../context/AppContext";
 
 interface EditSideBarProps {
     isExpanded: boolean

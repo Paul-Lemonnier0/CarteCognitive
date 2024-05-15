@@ -9,8 +9,7 @@ import { TbPasswordUser } from "react-icons/tb";
 import { AppContext } from '../context/AppContext';
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { personnalDataUserInterface } from '../context/AppContext';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { saveLocalStoragePersonnalData, setListUtilisateur, setPersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
+import { saveLocalStoragePersonnalData, saveLocalStorageUser, setListUtilisateur, setPersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
 //TODO créer un nouvelle utilisateur dans firestore quand je signUp
 
 
@@ -69,6 +68,7 @@ const SignUpScreen = () => {
             try {
                 const user = await SignUpEmailPassword(email, password, navigate)
                 setUser(user);
+                saveLocalStorageUser(user)
                 const userData : personnalDataUserInterface= {firstName , name, favorites : [], ListGraphsPartage : []} 
                 setPersonnalData(user.uid, userData)
                 setPersonnalDataUser(userData)

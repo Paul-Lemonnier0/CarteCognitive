@@ -2,7 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getDoc, DocumentReference } from "firebase/firestore";
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
-import { ListUtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext";
+import { CustomUser, ListUtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext";
+import { User } from "firebase/auth";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -54,6 +55,7 @@ async function getUserGraphs(userid: string) {
  * @param graph le nouveau graphe
  * @param id id du document
  */
+//TODO à supprimer
 async function setgraph(userid: string, graph: GraphType, id: string) {
     const docRef = collection(db, "users", userid, "Graphs")
     await setDoc(doc(docRef, id), graph, { merge: true })
@@ -70,6 +72,12 @@ export function saveLocalStoragePersonnalData(PersonnalData: personnalDataUserIn
     localStorage.setItem("personnalDataUser", JSON.stringify(PersonnalData))
 }
 
+export function saveLocalStorageUser(user: User | CustomUser) {
+    localStorage.setItem("user", JSON.stringify(user))
+}
+
+
+
 
 export function getLocalStoragePersonnalData() {
     // Récupérez les données de `localStorage`
@@ -85,6 +93,16 @@ export function getLocalStoragePersonnalData() {
         return null;
     }
 }
+
+export function getLocalStorageUser() {
+    const storedData = localStorage.getItem("user")
+    if (storedData !== null) {
+        const Userdata: CustomUser = JSON.parse(storedData)
+        return Userdata
+    } else return null
+}
+
+
 async function deleteGraph(userid: string, graphId: string) {
     try {
         const docRef = doc(db, "users", userid, "Graphs", graphId)
@@ -106,7 +124,7 @@ async function getPersonnalData(userid: string) {
         const userDocSnapshot = await getDoc(docRef)
         if (userDocSnapshot.exists()) {
             const dataUser = userDocSnapshot.data();
-            console.log("data user : ",dataUser)
+            console.log("data user : ", dataUser)
             return dataUser
         }
         return null
@@ -162,9 +180,9 @@ export async function getGraphPartageUser(ListGraph: DocumentReference[]): Promi
         const graphPromises = ListGraph.map(async (item) => {
             try {
                 console.log(item)
-                const docRef =item
+                const docRef = item
                 const docSnapshot = await getDoc(docRef);
-                
+
 
                 if (docSnapshot.exists()) {
                     return docSnapshot.data() as GraphType;
@@ -181,7 +199,6 @@ export async function getGraphPartageUser(ListGraph: DocumentReference[]): Promi
         const resolvedGraphs = await Promise.all(graphPromises);
 
         const validGraphs = resolvedGraphs.filter((graph): graph is GraphType => graph !== undefined);
-        console.log(validGraphs)
         return validGraphs;
     } catch (error) {
         console.error('Erreur lors de la récupération des graphes partagés des utilisateurs :', error);
@@ -189,6 +206,106 @@ export async function getGraphPartageUser(ListGraph: DocumentReference[]): Promi
     }
 }
 
+
+interface listInterface {
+    idgraph: string,
+    usersId: string[],
+    lastUser : string
+}
+interface ListGraphsInterface {
+    nbGraphs: number,
+    list: listInterface[]
+
+}
+/**
+ * 
+ * @param graph le nouveau graphe
+ * @param uid id de l'utilisateur qui ajoute le graph
+ */
+export async function addGraphtest(graph: GraphType, uid: string ,  user : personnalDataUserInterface) {
+    const collectionRef = collection(db, "Graphs")
+    const docRef = doc(db, "Graphs", "ListGraphs")
+
+    const docSnap = await getDoc(docRef);
+    let ListGraphs = docSnap.exists() ? (docSnap.data() as ListGraphsInterface) : { nbGraphs: 0, list: [] };
+
+    const newGraphDocRef = doc(collectionRef);
+    const newGraphId = newGraphDocRef.id;
+
+    ListGraphs.list.push({ idgraph: newGraphId, usersId: [uid], lastUser : user.name+ " " + user.firstName} as listInterface)
+    ListGraphs.nbGraphs++
+
+    await setDoc(newGraphDocRef, { ...graph, id: newGraphId })
+
+    await setDoc(docRef, ListGraphs, { merge: true })
+
+}
+
+export async function setGraphtest(graph: GraphType, user : personnalDataUserInterface) {
+    try {
+        let docRef = doc(db, "Graphs", graph.id)
+        await setDoc(docRef, graph, {merge : true})
+        docRef = doc(db, "Graphs", "ListGraphs")
+        let ListGraphs = (await getDoc(docRef)).data() as ListGraphsInterface
+        ListGraphs.list.forEach(element => {
+            if(element.idgraph === graph.id) element.lastUser = user.name+" "+user.firstName
+        });
+        await setDoc(docRef, ListGraphs, {merge :true})
+
+    } catch (error) {
+        console.log("impossible de mettre à jour le graph", error)
+    }
+}
+
+
+/**
+ * 
+ * 
+ * @param uid uid de l'utilisater
+ * @returns list de graphs
+ */
+export async function getGraphtest(uid: string) {
+    const docRef = doc(db, "Graphs", "ListGraphs")
+    let listGraphs = (await getDoc(docRef)).data() as ListGraphsInterface
+    let graphPromises = listGraphs.list
+        .filter(graph => graph.usersId.includes(uid))
+        .map(async (graph) => {
+
+            let docRefGraph = doc(db, "Graphs", graph.idgraph)
+            const g = (await getDoc(docRefGraph)).data() as GraphType
+            return g
+        })
+
+    const results = await Promise.all(graphPromises)
+    return results as GraphType[]
+
+}
+
+export async function deleteGraphTest(graphid: string, uid: string) {
+    const docRef = doc(db, "Graphs", "ListGraphs")
+    let listGraphs = (await getDoc(docRef)).data() as ListGraphsInterface
+    listGraphs.list.forEach((item: listInterface) => {
+        if (item.idgraph === graphid) {
+
+            item.usersId = item.usersId.filter(i => i !== uid)
+
+        }
+    })
+
+    listGraphs.list = listGraphs.list.filter(element => {
+        if (element.usersId.length === 0) {
+            const graphdocRef = doc(db, "Graphs", element.idgraph)
+            deleteDoc(graphdocRef)
+            listGraphs.nbGraphs -= 1
+            return false // Ne pas inclure cet élément dans la nouvelle liste
+        } else {
+            return true // Inclure cet élément dans la nouvelle liste
+        }
+    });
+
+    await setDoc(docRef, listGraphs, { merge: true })
+
+}
 
 export default db
 export { CreateGraph, getUserGraphs, setgraph, deleteGraph, setPersonnalData, getPersonnalData }

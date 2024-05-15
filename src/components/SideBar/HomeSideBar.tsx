@@ -1,21 +1,13 @@
 import React, { Dispatch, FC, useContext, useState } from "react"
 import "./HomeSideBarStyle.css"
-import { GoBackButton, IconButton, IconTextButton } from "../Buttons/IconButtons"
-import { Link, useNavigate } from "react-router-dom"
-import { IoChevronForward, IoReload, IoReloadOutline, IoSettingsOutline } from "react-icons/io5"
-import { FiEdit3, FiSettings } from "react-icons/fi"
-import { VscSymbolOperator } from "react-icons/vsc";
-import { HiOutlineCog } from "react-icons/hi";
-import EditSideBar from "./EditSideBar"
-import CalculSideBar from "./CalculSideBar"
-import SettingsSideBar from "./SettingsSideBar"
-import { SlCalculator } from "react-icons/sl"
+import {  IconButton, IconTextButton } from "../Buttons/IconButtons"
+import { useNavigate } from "react-router-dom"
+import {  IoSettingsOutline } from "react-icons/io5"
+
+
 import { GraphContext } from "../../context/GraphContext"
-import { GraphType } from "../../types/Graph/GraphType"
-import { setgraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext } from "../../context/AppContext"
 import ProfilButton from "../Profil/ProfilButton"
-import { CiLogout } from "react-icons/ci";
 import { MdLogout } from "react-icons/md"
 import { MidText, MidTextBold, NormalText, TitleText } from "../Text/CustomText"
 import { PiGraph } from "react-icons/pi"

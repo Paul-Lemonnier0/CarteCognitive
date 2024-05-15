@@ -5,7 +5,9 @@ export const graph1: GraphType = {
     nodes: [],
     edges: [],
     id:"",
-    upgrade : false
+    upgrade : false,
+    users : []
+
 }
 
 export const graph2: GraphType = {
@@ -13,7 +15,9 @@ export const graph2: GraphType = {
     nodes: [],
     edges: [],
     id: "",
-    upgrade : false
+    upgrade : false,
+    users : []
+
 
 }
 
@@ -22,7 +26,9 @@ export const graph3: GraphType = {
     nodes: [],
     edges: [],
     id: "",
-    upgrade : false
+    upgrade : false,
+    users : []
+
 
 
 }
@@ -32,7 +38,9 @@ export const graph4: GraphType = {
     nodes: [],
     edges: [],
     id: "",
-    upgrade : false
+    upgrade : false,
+    users : []
+
 
 
 }
@@ -42,7 +50,8 @@ export const graph5: GraphType = {
     nodes: [],
     edges: [],
     id: "",
-    upgrade : false
+    upgrade : false,
+    users : []
 
 
 }

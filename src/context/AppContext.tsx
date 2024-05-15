@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactNode, createContext, useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { GraphType } from "../types/Graph/GraphType";
-import { getGraphPartageUser, getLocalStoragePersonnalData, getUserGraphs, saveLocalStoragePersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
+import { getGraphPartageUser, getGraphtest, getLocalStoragePersonnalData, getUserGraphs, saveLocalStoragePersonnalData, saveLocalStorageUser } from "../firebase/FireStore.tsx/FirestoreDB";
 
 interface AppContextType {
     isDarkMode: boolean,
@@ -42,7 +42,7 @@ export interface personnalDataUserInterface {
     ListGraphsPartage : any[],
 }
 
-interface CustomUser {
+export interface CustomUser {
     uid: string;
     email: string;
 }
@@ -112,6 +112,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     function Deconnection() {
         setUser(defaultUser)
         setPersonnalDataUser(personnalData)
+        saveLocalStorageUser(defaultUser)
         saveLocalStoragePersonnalData(personnalData)
     }
 
@@ -122,7 +123,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         async function fetchGraphs() {
 
             try {
-                const graphCollection = await getUserGraphs(user.uid);
+                const graphCollection = await getGraphtest(user.uid);
                 setGraphsUser(graphCollection);
                 
             } catch (error) {

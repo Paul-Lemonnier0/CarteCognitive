@@ -8,4 +8,5 @@ export interface GraphType {
     edges: Edge[],
     id : string,
     upgrade : boolean,
+    users : string[],
 }

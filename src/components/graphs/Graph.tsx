@@ -1,16 +1,13 @@
 import React, { KeyboardEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, addEdge, useOnSelectionChange } from 'reactflow';
+import ReactFlow, { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, OnConnect, ReactFlowInstance, ReactFlowRefType, useOnSelectionChange } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CustomConnectionLine from './Edges/CustomConnectionLine';
 import { AppContext, PositionType } from '../../context/AppContext';
-import { GraphContext, InfluancePathType, TypesNode } from '../../context/GraphContext';
+import { GraphContext, TypesNode } from '../../context/GraphContext';
 import { connectionLineStyle } from '../../styles/Graphes/GraphStyle';
 import { defaultEdgeOptions } from '../../styles/Graphes/Edge';
 import { getStringRGBAFromHexa } from '../../primitives/ColorMethods';
-import NodeContextMenu from './Nodes/NodeContextMenu';
-import SelectorButton, { ToggleButton } from '../Buttons/SelectorButton';
-import AdjMatComponent from './AdjMatComponent';
-import { createNodesAndEdges, createNodesAndEdgesStress } from '../../utils/utils';
+import SelectorButton from '../Buttons/SelectorButton';
 
 export type MenuType = {
     id: string,
@@ -22,34 +19,34 @@ export type MenuType = {
 
 export default function Graph() {
     const {
-        isGraphModified, setIsGraphModified, isCalculating,
-        influancePath, setInfluancePath,
-        fitViewNodes, adjMat,
+         isCalculating,
+         setInfluancePath,
+        fitViewNodes,
         lastSelectedNodeID, setLastSelectedNodeID,
         selectedNodesIDs, setSelectedNodesIDs,
         nodes, setNodes, onNodesChange,
         edges, setEdges, onEdgesChange, addNewEdge,
         nodeTypes, edgeTypes,
         addNode, deleteSelectedNodes, groupSelectedNodes,
-        lastSelectedEdgeID, setLastSelectedEdgeID,
+         setLastSelectedEdgeID,
         upgrade, setUpgrade,
     } = useContext(GraphContext)
 
 
       
-    const updatePos = useCallback(() => {
-        setNodes((nds) => {
-        return nds.map((node) => {
-            return {
-            ...node,
-            position: {
-                x: Math.random() * 1500,
-                y: Math.random() * 1500,
-            },
-            };
-        });
-        });
-    }, []);
+    // const updatePos = useCallback(() => {
+    //     setNodes((nds) => {
+    //     return nds.map((node) => {
+    //         return {
+    //         ...node,
+    //         position: {
+    //             x: Math.random() * 1500,
+    //             y: Math.random() * 1500,
+    //         },
+    //         };
+    //     });
+    //     });
+    // }, []);
 
     //Data
 

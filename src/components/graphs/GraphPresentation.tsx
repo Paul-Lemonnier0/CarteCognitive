@@ -1,19 +1,11 @@
-import React, { Dispatch, FC, SyntheticEvent, useContext, useEffect, useMemo, useState } from "react"
+import React, { Dispatch, FC, useContext, useEffect, useState } from "react"
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { deleteGraph, deleteGraphTest } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext } from "../../context/AppContext"
-import ReactFlow, { Background, BackgroundVariant } from "reactflow"
-import { defaultEdgeOptions } from "../../styles/Graphes/Edge"
-import CustomConnectionLine from "./Edges/CustomConnectionLine"
-import { connectionLineStyle } from "../../styles/Graphes/GraphStyle"
-import FloatingEdge from "./Edges/FloatingEdge"
-import { CustomNode } from "./Nodes/CustomNode"
-import { FieldsetNode } from "./Nodes/FieldsetNode"
-import { NormalText, SmallText, TitleText } from "../Text/CustomText"
+import { NormalText, TitleText } from "../Text/CustomText"
 import { IconButton, IconText } from "../Buttons/IconButtons"
-import { IoIosMore, IoMdMore } from "react-icons/io";
 import { AiOutlineNodeIndex } from "react-icons/ai";
 import { PiFlowArrowDuotone } from "react-icons/pi";
 import { IoChevronForward } from "react-icons/io5"
@@ -43,7 +35,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         if (user?.uid === "")
             console.log("utilisateur introuvable")
         else {
-            deleteGraph(user ? user.uid : "", graph.id)
+            deleteGraphTest(graph.id, user.uid)
             const updatedGraphsUser = graphsUser.filter((g) => g.id !== graph.id)
             setGraphsUser(updatedGraphsUser)
 

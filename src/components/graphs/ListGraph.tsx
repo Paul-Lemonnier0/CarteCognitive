@@ -1,11 +1,8 @@
-import React, { CSSProperties, useContext, Dispatch } from "react"
+import React, { CSSProperties, Dispatch } from "react"
 import { GraphType } from "../../types/Graph/GraphType"
 import GraphPresentation from "./GraphPresentation"
-import { IconButton } from "../Buttons/IconButtons"
-import { FiRefreshCcw } from "react-icons/fi";
-import { getUserGraphs } from "../../firebase/FireStore.tsx/FirestoreDB";
-import { AppContext } from "../../context/AppContext";
-import { HugeText, TitleText } from "../Text/CustomText"
+
+import { HugeText } from "../Text/CustomText"
 
 
 interface ListGraphInterface {

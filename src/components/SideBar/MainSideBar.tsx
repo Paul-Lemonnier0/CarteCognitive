@@ -12,7 +12,7 @@ import SettingsSideBar from "./SettingsSideBar"
 import { SlCalculator } from "react-icons/sl"
 import { GraphContext } from "../../context/GraphContext"
 import { GraphType } from "../../types/Graph/GraphType"
-import { setgraph } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { setGraphtest } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext } from "../../context/AppContext"
 
 enum SideBarMenuType {
@@ -23,8 +23,8 @@ enum SideBarMenuType {
 
 const MainSideBar = () => {
 
-    const {isCalculating, setIsCalculating, isGraphModified, nodes, edges, id, graphTitle, upgrade} = useContext(GraphContext)
-    const {user} = useContext(AppContext)
+    const {isCalculating, setIsCalculating, isGraphModified, nodes, edges, id, graphTitle, upgrade, users} = useContext(GraphContext)
+    const {personnalDataUser, user} = useContext(AppContext)
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
     const [selectedMenu, setSelectedMenu] = useState<SideBarMenuType>(SideBarMenuType.Edit)
@@ -37,13 +37,14 @@ const MainSideBar = () => {
                      edges: edges,
                      id: id,
                      title: graphTitle,
-                     upgrade: upgrade
+                     upgrade: upgrade,
+                     users : users
                  }
         
                  if (isGraphModified) {
                      const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications ?");
                      if (shouldSave) {
-                         setgraph(user?user.uid : "", newGraph, newGraph.id)
+                         setGraphtest(newGraph, personnalDataUser)
                      }
                  }
         navigate(-1)

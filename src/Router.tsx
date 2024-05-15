@@ -6,7 +6,6 @@ import React from "react";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import GraphDetailsScreen from "./screens/GraphDetailsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import FireBaseScreenTest from "./screens/FireBaseScreenTest";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 
@@ -29,10 +28,7 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFoundScreen/>
   },
-  {
-    path:"FireBase",
-    element: <FireBaseScreenTest/>
-  },
+
   {
     path:"SignIn",
     element:<LoginScreen/>

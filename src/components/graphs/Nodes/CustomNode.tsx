@@ -1,16 +1,15 @@
-import { FC,useState, useContext, useEffect  } from "react";
+import { FC, useState, useContext, useEffect } from "react";
 import { Handle, NodeProps, NodeToolbar, Position, useKeyPress } from "reactflow";
 import React from 'react'
-import { nodeStyle  } from "../../../styles/Graphes/NodeStyle";
-import {useStore } from 'reactflow';
+import { useStore } from 'reactflow';
 import "./CustomNodeStyle.css"
-import theme, { baseColors } from "../../../constantes/Colors";
+import { baseColors } from "../../../constantes/Colors";
 import { FiUser, FiLink, FiTrash2, FiClock } from "react-icons/fi";
 import { AppContext } from "../../../context/AppContext";
 import { GraphContext } from "../../../context/GraphContext";
 import ColorIcon from "../../Other/ColorIcon";
 import { LuCopy } from "react-icons/lu";
-import { MidText, MidTextBold, NormalText, TitleText } from "../../Text/CustomText";
+import { MidTextBold, NormalText } from "../../Text/CustomText";
 
 export type CustomNodeData = {
   label: string;
@@ -24,13 +23,13 @@ export interface CustomNodeProps extends NodeProps {
 
 const connectionNodeIdSelector = (state: any) => state.connectionNodeId;
 
-export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
-  const {setIsWriting, colorNode, wantSelectColor } = useContext(AppContext)
+export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id }) => {
+  const { colorNode, wantSelectColor } = useContext(AppContext)
 
-  const { 
-    updateNodeData, 
-    lastSelectedNodeID, 
-    deleteSelectedNodes,
+  const {
+    updateNodeData,
+    lastSelectedNodeID,
+
     isCalculating,
     duplicateNode,
     deleteNode,
@@ -38,7 +37,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     influancePath,
     setInfluancePath,
     setSelectedNodesIDs,
-    setNodes
+
   } = useContext(GraphContext)
 
   const [label, setLabel] = useState(data.label ?? "")
@@ -58,7 +57,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     setLabel(data.label)
   }, [data.label])
 
-  
+
   useEffect(() => {
     setSelectedColor(data.couleur ?? "white")
 
@@ -68,8 +67,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   const chooseColorNode = (color = "white") => {
     setSelectedColor(color)
 
-    if(!data.couleur || (color !== data.couleur)) {
-      updateNodeData(id, {...data, couleur: color})
+    if (!data.couleur || (color !== data.couleur)) {
+      updateNodeData(id, { ...data, couleur: color })
     }
   }
 
@@ -90,9 +89,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   //   })
   // }, [changeColorWithField, id, chooseColorNode, nodeColorField, colorField, setNodeColorField])
 
-  const ShowCreator = () => {
-    setShowCreator(!showCreator)
-  }
+
 
   const handleDuplicateNode = () => {
     duplicateNode(id)
@@ -112,7 +109,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
     setIsSelectingColor(false)
   }
 
-  const isSourceOfInfluanceCalcul =  ((isCalculating && influancePath && influancePath.nodesID && influancePath.nodesID.length > 0) && influancePath.nodesID[0] === id) as boolean
+  const isSourceOfInfluanceCalcul = ((isCalculating && influancePath && influancePath.nodesID && influancePath.nodesID.length > 0) && influancePath.nodesID[0] === id) as boolean
   const isTargetOfInfluanceCalcul = ((isCalculating && influancePath && influancePath.nodesID && influancePath.nodesID.length > 1) && influancePath.nodesID[influancePath.nodesID.length - 1] === id) as boolean
   const isInInfluanceCalcul = !isSourceOfInfluanceCalcul && !isTargetOfInfluanceCalcul && ((isCalculating && influancePath && influancePath.nodesID) && influancePath.nodesID.includes(id)) as boolean
   const indexOfNodeInInflancePath = (isCalculating && influancePath && influancePath.nodesID) ? influancePath.nodesID.indexOf(id) : 0
@@ -126,21 +123,21 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
 
   let borderColor = "transparent"
 
-  if(isCalculating) {
-    if(isPartOfInfluanceCalcul) borderColor = "black"
+  if (isCalculating) {
+    if (isPartOfInfluanceCalcul) borderColor = "black"
   }
 
   else {
-    if(isHighLighted) borderColor = "black"
+    if (isHighLighted) borderColor = "black"
   }
 
   const handleOnClick = () => {
-    if(isCalculating) {
-      if(influancePath && influancePath.nodesID && influancePath.nodesID.includes(id)) {
+    if (isCalculating) {
+      if (influancePath && influancePath.nodesID && influancePath.nodesID.includes(id)) {
         const prevNodesID = influancePath?.nodesID ? [...influancePath?.nodesID] : []
         const newSelectedNodeIds = prevNodesID.filter(nodeID => nodeID !== id)
 
-        setInfluancePath({nodesID: newSelectedNodeIds, edges: []})
+        setInfluancePath({ nodesID: newSelectedNodeIds, edges: [] })
 
         setSelectedNodesIDs(newSelectedNodeIds)
 
@@ -157,7 +154,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
         const prevNodesID = influancePath?.nodesID ? [...influancePath?.nodesID] : []
         const newSelectedNodeIds = [...prevNodesID, id]
 
-        setInfluancePath({nodesID: newSelectedNodeIds, edges: []})
+        setInfluancePath({ nodesID: newSelectedNodeIds, edges: [] })
 
         setSelectedNodesIDs(newSelectedNodeIds)
 
@@ -173,96 +170,96 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id}) => {
   }
 
   return (
-    <div className="customNodeContainer" onClick={handleOnClick}>  
+    <div className="customNodeContainer" onClick={handleOnClick}>
       {
-        <NodeToolbar nodeId={id} offset={50} align="start" isVisible={isToolbarVisible}> 
-         { 
-          isCalculating ?
+        <NodeToolbar nodeId={id} offset={50} align="start" isVisible={isToolbarVisible}>
+          {
+            isCalculating ?
 
-          <div className={`customNodeToolbar ${isPartOfInfluanceCalcul ? '' : 'customNodeToolbarHidden'}`}
-            style={{backgroundColor: "#313443", width: 90}}>
-            <MidTextBold text={
-                isSourceOfInfluanceCalcul ? "Source" : 
-                isTargetOfInfluanceCalcul ? "Cible" : middleInfluantePathNodeName} color="white"/>
-          </div>
-        
-         :
-         
-         <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
-            <div className="customNodeIconContainer" onClick={handleBreakLinks}>
-              <FiLink size={20}/>
-              <span className="verticalTooltip">Casser les liens</span>
-            </div>
-            <div className="customNodeIconContainer" onClick={handleDuplicateNode}>
-              <LuCopy size={20}/>
-              <span className="verticalTooltip">Dupliquer</span>
-            </div>
-            {
-              showCreator ?
-              <div className="nodeCreator">
-                <div className="nodeCreatorIcon">
-                  <FiUser size={20}/>
-                  <span>Nicolas Mdr</span>
-                  
+              <div className={`customNodeToolbar ${isPartOfInfluanceCalcul ? '' : 'customNodeToolbarHidden'}`}
+                style={{ backgroundColor: "#313443", width: 90 }}>
+                <MidTextBold text={
+                  isSourceOfInfluanceCalcul ? "Source" :
+                    isTargetOfInfluanceCalcul ? "Cible" : middleInfluantePathNodeName} color="white" />
+              </div>
+
+              :
+
+              <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
+                <div className="customNodeIconContainer" onClick={handleBreakLinks}>
+                  <FiLink size={20} />
+                  <span className="verticalTooltip">Casser les liens</span>
                 </div>
-                <div className="nodeCreatorIcon">
-                  <FiClock size={20}/>
-                  {data.date}
+                <div className="customNodeIconContainer" onClick={handleDuplicateNode}>
+                  <LuCopy size={20} />
+                  <span className="verticalTooltip">Dupliquer</span>
+                </div>
+                {
+                  showCreator ?
+                    <div className="nodeCreator">
+                      <div className="nodeCreatorIcon">
+                        <FiUser size={20} />
+                        <span>Nicolas Mdr</span>
+
+                      </div>
+                      <div className="nodeCreatorIcon">
+                        <FiClock size={20} />
+                        {data.date}
+                      </div>
+                    </div>
+                    : undefined
+                }
+                <div className="customNodeIconContainer" onClick={handleDeleteNode}>
+                  <FiTrash2 size={20} />
+                  <span className="verticalTooltip">Supprimer</span>
+
+                </div>
+
+                <div className="separator" />
+
+                <div className="customNodeIconContainer">
+                  <ColorIcon small isSelected color={selectedColor} onPress={clickColorNode} />
+                  <span className="verticalTooltip">Couleur</span>
+
+                </div>
+
+                <div style={{ top: -50 }} className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
+                  {
+                    baseColors.map(baseColor =>
+                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => handleSelectColor(baseColor)} />
+                    )
+                  }
                 </div>
               </div>
-              : undefined
-            }
-            <div className="customNodeIconContainer" onClick={handleDeleteNode}>
-              <FiTrash2 size={20}/>
-              <span className="verticalTooltip">Supprimer</span>
-
-            </div>
-
-            <div className="separator"/>
-
-            <div className="customNodeIconContainer">
-              <ColorIcon small isSelected color={selectedColor} onPress={clickColorNode}/>
-              <span className="verticalTooltip">Couleur</span>
-
-            </div>
-            
-            <div style={{top: -50}} className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
-              {
-                  baseColors.map(baseColor =>
-                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => handleSelectColor(baseColor)}/>
-                  )
-              }
-            </div>
-          </div>
           }
         </NodeToolbar>
       }
 
-        <div style={{
-            backgroundColor: selectedColor, 
-            border:  `3px solid ${isHighLighted ? "black" : "transparent"}`,
-            // opacity: isPartOfInfluanceCalcul ? 1 : 0.25
-          }} 
-          className="customNode" 
-          onClick={wantSelectColor ? clickColorSibebar : undefined}>
+      <div style={{
+        backgroundColor: selectedColor,
+        border: `3px solid ${isHighLighted ? "black" : "transparent"}`,
+        // opacity: isPartOfInfluanceCalcul ? 1 : 0.25
+      }}
+        className="customNode"
+        onClick={wantSelectColor ? clickColorSibebar : undefined}>
 
-          {!ctrlKeyPressed && !selected && !wantSelectColor && !isCalculating &&
-              <>
-                {
-                  !isConnecting &&
-                  <Handle id={"handle_A_"+id} className="customHandle" position={Position.Bottom} type="source" /> 
-                }
+        {!ctrlKeyPressed && !selected && !wantSelectColor && !isCalculating &&
+          <>
+            {
+              !isConnecting &&
+              <Handle id={"handle_A_" + id} className="customHandle" position={Position.Bottom} type="source" />
+            }
 
-                <Handle id={"handle_B_"+id} className="customHandle" position={Position.Left} type="target" isConnectableStart={false}/>
-              </>
-          }
+            <Handle id={"handle_B_" + id} className="customHandle" position={Position.Left} type="target" isConnectableStart={false} />
+          </>
+        }
 
-          <NormalText text={label} wrap center bold/>
-        </div>
+        <NormalText text={label} wrap center bold />
+      </div>
     </div>
   );
 
-  
+
 }
 
 {/* <input 

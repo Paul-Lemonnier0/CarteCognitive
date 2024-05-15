@@ -3,7 +3,7 @@ import { IoChevronBack } from "react-icons/io5";
 import "./IconButtonsStyle.css"
 import { IconType } from 'react-icons';
 import { FaCheck } from "react-icons/fa6";
-import { MidText, NormalText, SmallText } from '../Text/CustomText';
+import { MidText, NormalText } from '../Text/CustomText';
 
 interface IconButtonProps {
     onPress: () => void,
