@@ -126,7 +126,14 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
             try {
                 const graphCollection = await getGraphtest(user.uid);
-                setGraphsUser(graphCollection);
+                let graphs1 = [] as GraphType[]
+                let graphs2 = [] as GraphType[]
+                graphCollection.forEach((e) => {
+                    if (e.proprio === user.uid) graphs1.push(e)
+                    else graphs2.push(e)
+                })
+                setGraphsUser(graphs1);
+                setGraphsPartage(graphs2);
 
             } catch (error) {
                 console.error("Erreur lors de la récupération des graphiques de l'utilisateur :", error);

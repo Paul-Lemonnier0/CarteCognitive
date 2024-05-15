@@ -23,7 +23,7 @@ const HomeScreen = () => {
     const graph3 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph3.json") as GraphType);
     const graph4 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph4.json") as GraphType);
     const graphs = [graph1, graph2, graph3, graph4];
-    const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setPersonnalDataUser, setListUtilisateurs, setUser } = useContext(AppContext);
+    const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, setPersonnalDataUser, setListUtilisateurs, setUser } = useContext(AppContext);
 
 
     // Partie Firestore
@@ -80,7 +80,15 @@ const HomeScreen = () => {
 
     const handleRefresh = async () => {
         const graphCollection = await getGraphtest(user.uid);
-        setGraphsUser(graphCollection);
+        let graphs1 =[] as GraphType[]
+        let graphs2 = [] as GraphType[]
+        graphCollection.forEach((e)=>{
+            if(e.proprio === user.uid) graphs1.push(e)
+                else graphs2.push(e)
+        })
+        console.log("graphs1  : ",graphs1 ,"\n", "graphs2  : ",graphs2)
+        setGraphsUser(graphs1);
+        setGraphsPartage(graphs2);
     };
 
     return (
@@ -109,7 +117,7 @@ const HomeScreen = () => {
         
                         <IconButton secondary Icon={IoIosAdd} onPress={() => {
 
-                            let newgraph = { ...graph1, users: [...graph1.users, user.uid] } as GraphType
+                            let newgraph = { ...graph1, proprio: user.uid } as GraphType
                             addGraphtest(newgraph, user.uid, personnalDataUser)
                             const updatedGraphsUser = graphsUser
                             updatedGraphsUser.push(graph1)

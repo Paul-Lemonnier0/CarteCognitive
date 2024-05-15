@@ -23,7 +23,7 @@ enum SideBarMenuType {
 
 const MainSideBar = () => {
 
-    const {isCalculating, setIsCalculating, isGraphModified, nodes, edges, id, graphTitle, upgrade, users} = useContext(GraphContext)
+    const {isCalculating, setIsCalculating, isGraphModified, nodes, edges, id, graphTitle, upgrade, proprio} = useContext(GraphContext)
     const {personnalDataUser, user} = useContext(AppContext)
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
@@ -38,7 +38,7 @@ const MainSideBar = () => {
                      id: id,
                      title: graphTitle,
                      upgrade: upgrade,
-                     users : users
+                     proprio : proprio
                  }
         
                  if (isGraphModified) {

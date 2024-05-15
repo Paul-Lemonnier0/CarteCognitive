@@ -127,6 +127,7 @@
         }
     ],
     "id": "graph2",
-    "upgrade" : false
+    "upgrade" : false,
+    "proprio" : ""
 
 }

@@ -153,7 +153,8 @@
         }
     ],
     "id": "graph3",
-    "upgrade" : false
+    "upgrade" : false,
+    "proprio" : ""
 
 
 }

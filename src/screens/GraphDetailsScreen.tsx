@@ -16,7 +16,7 @@ const GraphDetailsScreen = () => {
     if(!graph) return null
 
     return(
-        <GraphContextProvider listusers={graph.users} autoUpgrade={graph.upgrade} defaultNodes={graph.nodes} defaultEdges={graph.edges} graphName={graph.title} id={graph.id}>
+        <GraphContextProvider defaultProprio={graph.proprio} autoUpgrade={graph.upgrade} defaultNodes={graph.nodes} defaultEdges={graph.edges} graphName={graph.title} id={graph.id}>
             <div style={{display: "flex", flexDirection: "column", flex: 1}}>
                 <GraphTopBar title="e"/>
                 <div style={{ display: "flex", flexDirection: "row", flex: 1 }}

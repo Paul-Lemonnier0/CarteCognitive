@@ -78,8 +78,8 @@ interface GraphContextType {
     setAgregationValue: Dispatch<React.SetStateAction<string>>,
     resultAgregation: string,
     setResultAgregation: Dispatch<React.SetStateAction<string>>,
-    users : string[],
-    setUsers : Dispatch<React.SetStateAction<string[]>>,
+    proprio : string,
+    setProprio : Dispatch<React.SetStateAction<string>>,
 }
 
 const GraphContext = createContext<GraphContextType>({
@@ -142,8 +142,8 @@ const GraphContext = createContext<GraphContextType>({
     setAgregationValue: () => {},
     resultAgregation: "",
     setResultAgregation: () => {},
-    users : [],
-    setUsers : ()=>{},
+    proprio : "",
+    setProprio : ()=>{},
 })
 
 export interface SizeType {
@@ -168,11 +168,11 @@ interface GraphContextProviderType {
     graphName: string,
     id: string,
     children: ReactNode,
-    listusers : string[]
+    defaultProprio : string
 }
 
 
-const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphName, id, children, listusers }: GraphContextProviderType) => {
+const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphName, id, children, defaultProprio  }: GraphContextProviderType) => {
     
     // const { nodes: initialNodes, edges: initialEdges } = createNodesAndEdgesStress(
     //     15,
@@ -214,7 +214,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
     const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>(defaultNodes_zIndexed)
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(defaultEdges)
     const [upgrade, setUpgrade] = useState(autoUpgrade)
-    const [users, setUsers] = useState(listusers)
+    const [proprio, setProprio] = useState(defaultProprio)
 
     const [influancePath, setInfluancePath] = useState<InfluancePathType | null>(null)
     const [isCalculating, setIsCalculating] = useState<boolean>(false)
@@ -432,7 +432,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
                     id: id,
                     title: graphTitle,
                     upgrade: upgrade,
-                    users : users,
+                    proprio : proprio,
                 }
                 setGraphtest(newGraph,personnalDataUser)
                 setIsGraphModified(false)
@@ -481,7 +481,7 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             propagationValue, setPropagationValue,
             agregationValue,setAgregationValue,
             resultAgregation,setResultAgregation,
-            users, setUsers
+            proprio, setProprio
 
         }}>
             {children}
