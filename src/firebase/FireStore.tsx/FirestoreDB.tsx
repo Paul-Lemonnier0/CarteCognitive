@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getDoc } from "firebase/firestore";
+import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getDoc, DocumentReference } from "firebase/firestore";
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
 import { ListUtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext";
@@ -106,6 +106,7 @@ async function getPersonnalData(userid: string) {
         const userDocSnapshot = await getDoc(docRef)
         if (userDocSnapshot.exists()) {
             const dataUser = userDocSnapshot.data();
+            console.log("data user : ",dataUser)
             return dataUser
         }
         return null
@@ -156,35 +157,29 @@ export async function setListUtilisateur(Listdata: ListUtilisateurInterface) {
 }
 
 
-export async function getGraphPartageUser(ListGraph: any[]): Promise<GraphType[]> {
+export async function getGraphPartageUser(ListGraph: DocumentReference[]): Promise<GraphType[]> {
     try {
-        // Utilisez map pour créer un tableau de promesses
         const graphPromises = ListGraph.map(async (item) => {
             try {
                 console.log(item)
-                const docRef = doc(db, item);
+                const docRef =item
                 const docSnapshot = await getDoc(docRef);
                 
 
                 if (docSnapshot.exists()) {
-                    // Si le document existe, retournez les données en tant que GraphType
                     return docSnapshot.data() as GraphType;
                 } else {
-                    // Si le document n'existe pas, retournez undefined
                     console.warn(`Le document avec ID '${item}' n'existe pas.`);
                     return undefined;
                 }
             } catch (error) {
-                // Gérez les erreurs de l'accès au document ici
                 console.error(`Erreur lors de l'accès au document avec ID '${item}':`, error);
                 return undefined;
             }
         });
 
-        // Attendez que toutes les promesses se résolvent et obtenez un tableau de GraphType
         const resolvedGraphs = await Promise.all(graphPromises);
 
-        // Filtrez les valeurs undefined pour obtenir uniquement les GraphType valides
         const validGraphs = resolvedGraphs.filter((graph): graph is GraphType => graph !== undefined);
         console.log(validGraphs)
         return validGraphs;

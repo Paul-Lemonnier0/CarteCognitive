@@ -56,7 +56,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         if (user?.uid === "")
             console.log("utilisateur introuvable")
         else {
-            //TODO fair la fonction partagé
+            //TODO faire la fonction partagé
             setShowUserListModal(true);
             console.log("id : ", graph.id, "partagé !")
             setIsSelect(false)

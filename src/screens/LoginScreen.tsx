@@ -8,11 +8,11 @@ import { CheckButton, GoBackButton } from '../components/Buttons/IconButtons';
 import { TbPasswordUser } from "react-icons/tb";
 import "./LoginScreen.css"
 import { AppContext, personnalDataUserInterface } from '../context/AppContext';
-import { getPersonnalData, saveLocalStoragePersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
+import { getGraphPartageUser, getPersonnalData, saveLocalStoragePersonnalData } from '../firebase/FireStore.tsx/FirestoreDB';
 
 
 const LoginScreen = () => {
-    const {setUser, setPersonnalDataUser} = useContext(AppContext)
+    const {setUser, setPersonnalDataUser, setGraphsPartage} = useContext(AppContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -49,6 +49,12 @@ const LoginScreen = () => {
                 console.log( "toto: ", PersonnalData.ListGraphsPartage)
                 setPersonnalDataUser(PersonnalData)
                 saveLocalStoragePersonnalData(PersonnalData)
+                const getGraphPartageFun=(async () => {
+                    console.log("list graph : ", PersonnalData.ListGraphsPartage)
+                    const graphCollectionPartage = await getGraphPartageUser(PersonnalData.ListGraphsPartage)
+                    setGraphsPartage(graphCollectionPartage)
+                })
+                getGraphPartageFun()
                 console.log("user connecté : ", user);
             } catch (error) {
                 console.error("Erreur de connexion :", error);

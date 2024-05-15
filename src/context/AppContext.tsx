@@ -131,6 +131,8 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
         }
         fetchGraphs();
+
+        
     }, [user]);
 
 

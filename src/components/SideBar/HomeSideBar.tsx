@@ -57,12 +57,8 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
         <div className={`homeSideBarContainer ${isExpanded ? "expanded" : ""}`}>
             {personnalDataUser.name !== "" ? (
                 //cas ou connecté
-                <div onClick={() => {
-                    //TODO voyage vers le page de connection
-                    console.log(personnalDataUser)
-
-                }} id="header" style={{ userSelect: "none", cursor: "pointer" }}>
-                    <ProfilButton name={"Paul"} />
+                <div  id="header" style={{ userSelect: "none", cursor: "pointer" }}>
+                    <ProfilButton name={personnalDataUser.name} />
                     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 0 }}>
                         <MidText bold text={personnalDataUser.name} />
                         <NormalText bold text={personnalDataUser.firstName} />

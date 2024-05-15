@@ -50,12 +50,6 @@ const HomeScreen = () => {
             }
         }
         getListFun()
-        const getGraphPartageFun=(async () => {
-            console.log("list graph : ", personnalDataUser.ListGraphsPartage)
-            const graphCollectionPartage = await getGraphPartageUser(personnalDataUser.ListGraphsPartage)
-            setGraphsPartage(graphCollectionPartage)
-        })
-        getGraphPartageFun()
 
     }, [])
 
