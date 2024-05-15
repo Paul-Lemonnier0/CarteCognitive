@@ -146,11 +146,13 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
                 </div>
             </div>
             {showUserListModal && (
+                //TODO améliorer le style
                 <div className="modal-overlay">
                     <div className="modal-content" onClick={(e)=>{e.stopPropagation()}}>
                         <h3>Liste des utilisateurs</h3>
                         {/* Parcourez la liste des utilisateurs et affichez leur profil */}
                         {ListUtilisateurs.List.map((u) => (
+
                             <div className="OtherUser" onClick={()=>{handleClickOtherUser(u)}}>
                                 <OtherUserProfile
                                     key={u.uid}
