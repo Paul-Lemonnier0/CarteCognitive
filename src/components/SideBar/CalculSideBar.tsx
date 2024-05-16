@@ -56,20 +56,32 @@ const CalculSideBar: FC<CalculSideBarProps> = ({ isExpanded }) => {
 
 
     let liste_chemin: Edge[][] = []
-    const nextEdges = useCallback((source: string, target: string, chemin: Edge[], nodeVisited: Node[]) => {
+    const nextEdges = useCallback((source: string, target: string, chemin: Edge[], nodeVisited: Node[], edgeShouldVisited: boolean) => {
         const nextEdge = edges.filter((elem) => elem.source === source)
         nextEdge.forEach((elem) => {
             if (!chemin.find((edge) => edge === elem)) {
 
+                if(edgeShouldVisited) {
+                    if (elem.target === target) {
 
-                if (elem.target === target) {
-
-                    if (nodeVisited.length === 0) liste_chemin = [...liste_chemin, [...chemin, elem]]
-                    return null
+                        if (nodeVisited.length === 0) liste_chemin = [...liste_chemin, [...chemin, elem]]
+                        return null
+                    }
+                    else {
+                        if(!nodeVisited.find((node) => node.id === elem.target)) {
+                            return null
+                        }
+                        else return nextEdges(elem.target, target, [...chemin, elem], nodeVisited.filter((node) => node.id !== elem.source && node.id !== elem.target), edgeShouldVisited)
+                    }
                 }
                 else {
+                    if (elem.target === target) {
+                        liste_chemin = [...liste_chemin, [...chemin, elem]]
+                    }
+                    else {
 
-                    return nextEdges(elem.target, target, [...chemin, elem], nodeVisited.filter((node) => node.id !== elem.source && node.id !== elem.target))
+                        return nextEdges(elem.target, target, [...chemin, elem], nodeVisited.filter((node) => node.id !== elem.source && node.id !== elem.target), edgeShouldVisited)
+                    }
                 }
             }
         })
@@ -102,7 +114,7 @@ const CalculSideBar: FC<CalculSideBarProps> = ({ isExpanded }) => {
 
         if(sourceNode && targetNode) {
             liste_chemin = []
-            nextEdges(sourceNode.id, targetNode.id, path, nodeShouldVisit)
+            nextEdges(sourceNode.id, targetNode.id, path, nodeShouldVisit, nodeShouldVisit.length>0)
 
             if(liste_chemin.length === 0) {
                 setCheminNull(true)
