@@ -7,6 +7,7 @@ import { CustomCard } from "../Card/CustomCard";
 import "./SettingsSideBarStyle.css"
 import "./EditSideBarStyle.css"
 import { FiAlertTriangle, FiSettings } from "react-icons/fi";
+import { PropagationAgretationType } from "../../constantes/InfluanceCalculs";
 
 interface SettingsSideBarProps {
     isExpanded: boolean
@@ -20,18 +21,18 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
         switch(e.target.value) {
             case GraphCalculType.Boolean:
                 handleChangeCalculType(GraphCalculType.Boolean)
-                setPropagationValue("∧")
-                setAgregationValue("∧")
+                setPropagationValue(PropagationAgretationType.AND)
+                setAgregationValue(PropagationAgretationType.AND)
                 break;
             case GraphCalculType.Symbolic:
                 handleChangeCalculType(GraphCalculType.Symbolic)
-                setPropagationValue("∧")
-                setAgregationValue("∧")
+                setPropagationValue(PropagationAgretationType.AND)
+                setAgregationValue(PropagationAgretationType.AND)
                 break;
             default:
                 handleChangeCalculType(GraphCalculType.Integer)
-                setPropagationValue("min")
-                setAgregationValue("max")
+                setPropagationValue(PropagationAgretationType.MIN)
+                setAgregationValue(PropagationAgretationType.MAX)
                 break;
         } 
     }
@@ -41,11 +42,11 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
     }
 
     const changePropagation = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setPropagationValue(e.target.value)
+        setPropagationValue(e.target.value as PropagationAgretationType)
         setResultAgregation("")
     }
     const changeAgregation = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setAgregationValue(e.target.value)
+        setAgregationValue(e.target.value as PropagationAgretationType)
         setResultAgregation("")
     }
 
@@ -112,19 +113,19 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                                 <select name="PropagationVal" id="edgeBoolVals" value={propagationValue} onChange={changePropagation}>
                                     
                                     {
-                                        graphCalculType==="Integer" ? 
+                                        graphCalculType === GraphCalculType.Integer ? 
                                         <>
-                                            <option value="min">min</option>
-                                            <option value="max">max</option>
-                                            <option value="*">*</option>
-                                            <option value="+">+</option>
-                                            <option value="-">-</option>
-                                            <option value="moyenne">moyenne</option>
+                                            <option value={PropagationAgretationType.MIN}>min</option>
+                                            <option value={PropagationAgretationType.MAX}>max</option>
+                                            <option value={PropagationAgretationType.MULTIPLY}>*</option>
+                                            <option value={PropagationAgretationType.ADD}>+</option>
+                                            <option value={PropagationAgretationType.SUBSCTRACT}>-</option>
+                                            <option value={PropagationAgretationType.AVG}>moyenne</option>
                                         </>
                                         : 
                                         <>
-                                            <option value="∧">∧</option>
-                                            <option value="V">V</option>
+                                            <option value={PropagationAgretationType.AND}>∧</option>
+                                            <option value={PropagationAgretationType.OR}>V</option>
                                         </>
 
                                     }
@@ -139,7 +140,7 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                                 <select name="AgregationVal" id="edgeBoolVals" value={agregationValue}onChange={changeAgregation}>
                                     
                                     {
-                                        graphCalculType==="Integer" ? 
+                                        graphCalculType === GraphCalculType.Integer ? 
                                         <>
                                             <option value="min">min</option>
                                             <option value="max">max</option>
@@ -153,7 +154,6 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                                             <option value="∧" >∧</option>
                                             <option value="V">V</option>
                                         </>
-
                                     }
                                 </select>
                             </CustomCard>
@@ -163,12 +163,10 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
         } 
             </div>
 
-            
-            
-        <div id="settingsSideBarFooter" style={{height: 60}}>
-                        <FiAlertTriangle size={65} color="#D44C47"/>
-                        <NormalText color="#D44C47" bold text="Un changement de type entraîne une réinitilisation irréversible des valeurs des arrêtes"/>
-        </div>
+            <div id="settingsSideBarFooter" style={{height: 60}}>
+                <FiAlertTriangle size={65} color="#D44C47"/>
+                <NormalText color="#D44C47" bold text="Un changement de type entraîne une réinitilisation irréversible des valeurs des arrêtes"/>
+            </div>
         </div>
     )
 }

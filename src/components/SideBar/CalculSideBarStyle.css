@@ -1,0 +1,9 @@
+.subSideBarContainer #body {
+    overflow-y: scroll;
+    margin-top: -30px;
+    padding-top: 30px;
+    margin-bottom: -20px;
+    padding-bottom: 20px;
+    margin-inline: -10px;
+    padding-inline: 10px;
+}

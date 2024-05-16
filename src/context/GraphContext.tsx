@@ -10,6 +10,7 @@ import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 import { AdjMat, AdjMat_addEdge, AdjMat_addNode, AdjMat_breakNodeLinks, AdjMat_deleteMultipleEdges, AdjMat_deleteMultipleNodes, AdjMat_deleteNode, AdjMat_init } from "../primitives/MatriceMethods";
 import { GraphType } from "../types/Graph/GraphType";
 import { setGraphtest } from "../firebase/FireStore.tsx/FirestoreDB";
+import { PropagationAgretationType } from "../constantes/InfluanceCalculs";
 
 export enum GraphCalculType {
     Boolean = "Boolean",
@@ -72,12 +73,15 @@ interface GraphContextType {
     graphCalculType: GraphCalculType,
     setGraphCalculType: Dispatch<GraphCalculType>,
     handleChangeCalculType: (type: GraphCalculType) => void,
-    propagationValue: string,
-    setPropagationValue: Dispatch<React.SetStateAction<string>>,
-    agregationValue: string,
-    setAgregationValue: Dispatch<React.SetStateAction<string>>,
+
+    propagationValue: PropagationAgretationType,
+    setPropagationValue: Dispatch<React.SetStateAction<PropagationAgretationType>>,
+    agregationValue: PropagationAgretationType,
+    setAgregationValue: Dispatch<React.SetStateAction<PropagationAgretationType>>,
+
     resultAgregation: string,
     setResultAgregation: Dispatch<React.SetStateAction<string>>,
+
     proprio : string,
     setProprio : Dispatch<React.SetStateAction<string>>,
 }
@@ -136,9 +140,9 @@ const GraphContext = createContext<GraphContextType>({
     graphCalculType: GraphCalculType.Integer,
     setGraphCalculType: () => {},
     handleChangeCalculType: (type: GraphCalculType) => {},
-    propagationValue: "",
+    propagationValue: PropagationAgretationType.MIN,
     setPropagationValue: () => {},
-    agregationValue: "",
+    agregationValue: PropagationAgretationType.MAX,
     setAgregationValue: () => {},
     resultAgregation: "",
     setResultAgregation: () => {},
@@ -174,18 +178,13 @@ interface GraphContextProviderType {
 
 const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphName, id, children, defaultProprio  }: GraphContextProviderType) => {
     
-    // const { nodes: initialNodes, edges: initialEdges } = createNodesAndEdgesStress(
-    //     15,
-    //     30,
-    // );
-    
     const [isGraphModified, setIsGraphModified] = useState(false)
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState<boolean>(false)
     const [showEdge, setShowEdge] = useState<boolean>(true)
-    const [propagationValue, setPropagationValue] = useState<string>("min")
-    const [agregationValue, setAgregationValue] = useState<string>("max")
+    const [propagationValue, setPropagationValue] = useState<PropagationAgretationType>(PropagationAgretationType.MIN)
+    const [agregationValue, setAgregationValue] = useState<PropagationAgretationType>(PropagationAgretationType.MAX)
 
     const [resultAgregation, setResultAgregation] = useState<string>("")
 
@@ -261,8 +260,6 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
         const newAdjMat = AdjMat_deleteMultipleNodes(adjMat, selectedNodeIDs)
 
         setAdjMat(AdjMat_deleteMultipleEdges(newAdjMat, deletedEdges.map(edge => edge.id)))
-
-
     }
 
     const updateNodeData = (nodeID: string, newNodeData: CustomNodeData) => {
@@ -273,8 +270,6 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
 
         setIsGraphModified(true)
     }
-
-
 
     const selectNodesInPositionRange = (x_left: number, x_right: number, y_top: number, y_bottom: number, color = "white"): void => {
         const selected_nodes_id: string[] = []
@@ -479,8 +474,8 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
             pathEdges, setPathEdges,
             graphCalculType, setGraphCalculType, handleChangeCalculType,
             propagationValue, setPropagationValue,
-            agregationValue,setAgregationValue,
-            resultAgregation,setResultAgregation,
+            agregationValue, setAgregationValue,
+            resultAgregation, setResultAgregation,
             proprio, setProprio
 
         }}>

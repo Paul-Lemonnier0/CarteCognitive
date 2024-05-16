@@ -1,4 +1,4 @@
-import React, { CSSProperties, Dispatch, FC } from "react"
+import React, { CSSProperties, Dispatch, FC, useEffect } from "react"
 
 import "./TextInputStyle.css"
 import { CustomCard } from "../Card/CustomCard";
@@ -36,10 +36,20 @@ const IconTextInput: FC<IconTextInputProps> = ({
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        if (setTextValue) {
-            setTextValue(newValue);
-        }    
+
+        // if(e.)
+        // if (setTextValue) {
+        //     setTextValue(newValue);
+        // }    
     }
+    // const numberInput = document.getElementById('inputTest');
+
+    // const onInput = (event: React.FormEvent<HTMLInputElement>): void => {
+    //     const regex = /^[0-9]+(?:\/[1-9][0-9]*)?(?:\.[0-9]+)?$/;
+
+    //     if (!regex.test(event.)) {
+    // }
+
     
     return(
         <div style={style? style :{minWidth:50, flex: 1}}>
@@ -50,7 +60,9 @@ const IconTextInput: FC<IconTextInputProps> = ({
                     </div>
                     
                     <input className="customInput"
-                        type={passWord ? "password": (numeric ? "number" : "text")}
+                        pattern={numeric ? "[0-9]+(?:\/[1-9][0-9]*)?(?:\.[0-9]+)?" : undefined}
+                        type={passWord ? "password": "text"}
+                        id="inputTest"
                         onChange={onChangeCustom ?? onChange}
                         value={textValue}
                         defaultValue={startingValue}
