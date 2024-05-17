@@ -73,7 +73,7 @@ const SignUpScreen = () => {
                 setPersonnalData(user.uid, userData)
                 setPersonnalDataUser(userData)
                 saveLocalStoragePersonnalData(userData)
-                const newListUtilisateurs = ListUtilisateurs
+                const newListUtilisateurs = {...ListUtilisateurs}
                 newListUtilisateurs.List.push({name : userData.name, firstName : userData.firstName, uid : user.uid})
                 setListUtilisateur(newListUtilisateurs)
                 console.log("user connecté : ", user);

@@ -37,11 +37,14 @@ const IconTextInput: FC<IconTextInputProps> = ({
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
 
-        // if(e.)
-        // if (setTextValue) {
-        //     setTextValue(newValue);
-        // }    
+        if (setTextValue) {
+            setTextValue(newValue);
+        }    
     }
+
+    const onChangeNumeric = (e: React.ChangeEvent<HTMLInputElement>) => {
+    }
+
     // const numberInput = document.getElementById('inputTest');
 
     // const onInput = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -60,10 +63,9 @@ const IconTextInput: FC<IconTextInputProps> = ({
                     </div>
                     
                     <input className="customInput"
-                        pattern={numeric ? "[0-9]+(?:\/[1-9][0-9]*)?(?:\.[0-9]+)?" : undefined}
+                        // pattern={numeric ? "[0-9]+(?:\/[1-9][0-9]*)?(?:\.[0-9]+)?" : undefined}
                         type={passWord ? "password": "text"}
-                        id="inputTest"
-                        onChange={onChangeCustom ?? onChange}
+                        onChange={onChangeCustom ?? (numeric ? onChangeNumeric : onChange)}
                         value={textValue}
                         defaultValue={startingValue}
                         placeholder={placeholder}
