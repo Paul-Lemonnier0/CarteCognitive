@@ -1,0 +1,21 @@
+.autoComplete {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.inputBorne {
+    border: none;
+    background-color: lightgray;
+    padding: 0.5em;
+    height: 3em;
+    width: 3em;
+    border-radius: 20%;
+    margin-right: 1em;
+    margin-bottom: 1em;
+
+}
+
+.borne {
+    display: flex;
+}
