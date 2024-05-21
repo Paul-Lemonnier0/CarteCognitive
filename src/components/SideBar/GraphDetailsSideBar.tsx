@@ -302,8 +302,8 @@ const GraphDetailsSideBar = () => {
                         <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }} onClick={handleClickOnUnExpandedListItem}>
                             {
                                 isSommetSelected ?
-                                    <CustomNodeIcon size={25} color="#ebedee" /> :
-                                    <CustomZoneIcon size={25} color="#ebedee" />
+                                    <CustomNodeIcon size={25}/> :
+                                    <CustomZoneIcon size={25}/>
                             }
 
                             {/* <BackgroundIcon Icon={IoGitMergeOutline} size={25}/> */}
@@ -360,7 +360,7 @@ const GraphDetailsSideBar = () => {
                     <div id="selectedOptions">
                         <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }} onClick={handleClickOnUnExpandedListItem}>
                             {
-                                <CustomEdgeIcon size={25} color="#ebedee"/>
+                                <CustomEdgeIcon size={25}/>
                             }
                             <div className="TitleAndSubtitleContainer">
                                 <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string }</p>

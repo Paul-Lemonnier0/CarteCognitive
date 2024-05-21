@@ -1,3 +1,5 @@
+@import url('../../constantes/Colors.css');
+
 .ModalOverlay{
     z-index: 1000000000000000000;
     position: fixed;
@@ -6,7 +8,7 @@
 
     left: 0;
     top: 0;
-    background: rgba(27, 31, 36, 0.8);
+    background: var(--overlay);
     justify-content: center;
     align-items: center;
 
@@ -17,8 +19,8 @@
 .ModalContainer{
     z-index: 1000000000000000000;
     height: auto;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: var(--secondary);
+    box-shadow: var(--modalShadow);
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -44,7 +46,7 @@
 }
 
 .ModalFooter{
-    background-color: #e2e2e2;
+    background-color: var(--tertiary);
     padding: 15px;
     padding-left: 30px;
     display: flex;

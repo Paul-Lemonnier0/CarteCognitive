@@ -5,16 +5,18 @@ import { BackgroundIcon } from '../../Buttons/IconButtons';
 interface CustomNodeIconProps {
     size?: number,
     color?: string,
-    isSelected?: boolean
+    isSelected?: boolean,
+    isPrimary?: boolean
 }
 
-export const CustomNodeIcon: FC<CustomNodeIconProps> = ({size, color, isSelected}) => {  
+export const CustomNodeIcon: FC<CustomNodeIconProps> = ({size, color, isSelected, isPrimary}) => {
+    
     return (
         <BackgroundIcon 
             Icon={RxTextAlignCenter} 
             size={size ?? 25} 
-            color={color ?? "white"}
             isSelected={isSelected}
+            isPrimary={isPrimary}
         />
   )
 }

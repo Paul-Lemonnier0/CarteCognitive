@@ -1,3 +1,5 @@
+@import url('../../constantes/Colors.css');
+
 .baseText {
     padding: 0;
     margin: 0;
@@ -9,34 +11,34 @@
 
 .smallText {
     font-size: 12px;
-    font-family: "Poppins";
+    font-family: var(--baseFont);
 }
 
 .normalText {
     font-size: 14px;
-    font-family: "Poppins";
+    font-family: var(--baseFont);
 }
 
 .midText {
     font-size: 18px;
-    font-family: "Poppins";
+    font-family: var(--baseFont);
 }
 
 .midTextBold {
     font-size: 18px;
-    font-family: "PoppinsMedium";
+    font-family: var(--mediumFont);
 }
 
 
 .titleText {
     font-size: 24px;
-    font-family: "PoppinsBold";
+    font-family: var(--boldFont);
     font-weight: bold;
 }
 
 .hugeText {
     font-size: 30px;
-    font-family: "PoppinsBold";
+    font-family: var(--boldFont);
     font-weight: bold;
 }
 
@@ -55,4 +57,8 @@
 
 .flex {
     flex: 1
+}
+
+.gray {
+    color: var(--fontGray)
 }

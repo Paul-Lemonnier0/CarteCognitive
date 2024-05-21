@@ -1,12 +1,13 @@
 import React, { CSSProperties, FC } from 'react'
 import './ButtonsStyle.css'
-import { NormalText } from '../Text/CustomText'
+import { MidText, MidTextBold, NormalText } from '../Text/CustomText'
 
 interface ButtonProps {
     text: string,
     onPress: () => void,
     disabled?: boolean,
     style ? : CSSProperties
+    big?: boolean
 }
 
 export const UsualButton: FC<ButtonProps> = ({text, onPress}) => {
@@ -17,10 +18,13 @@ export const UsualButton: FC<ButtonProps> = ({text, onPress}) => {
   )
 }
 
-export const ValidationButton: FC<ButtonProps> = ({text, onPress, disabled, style}) => {
+export const ValidationButton: FC<ButtonProps> = ({text, onPress, disabled, style ,big}) => {
     return(
         <button style={style} disabled={disabled} className={`validation-button ${disabled ? "disabled" : ""}`} onClick={onPress}>
-            <NormalText center bold text={text}/>
+            {
+                big ? <MidText bold center text={text} style={{fontSize: 14}}/>
+                : <NormalText bold center text={text} style={{fontSize: 14}}/>
+            }
         </button>
     )
 }

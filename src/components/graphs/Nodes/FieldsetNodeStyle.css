@@ -1,3 +1,5 @@
+@import url('../../../constantes/Colors.css');
+
 .fieldset-container {
     width: 100%;
     height: 100%;
@@ -13,26 +15,8 @@
     all: unset;
 }
 
-.fieldset {
-    background-color: none;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 10px;
-    min-width: 150px;
-}
-
-.legend {
-    font-weight: bold;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-bottom: 0px solid #ccc;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-
-}
-
 .inputLegendFieldsetNodeContainer {
-    background-color: white;
+    background-color: var(--secondary);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     font-size: 14px;
@@ -40,7 +24,7 @@
     margin: 0px;
     border: none;
     outline: none; 
-    font-family: "PoppinsSemiBold";
+    font-family: var(--semiBoldFont);
     width: 100%;
     cursor: text;
     box-sizing: border-box;
@@ -50,7 +34,7 @@
 }
 
 .textLegendFieldsetNodeContainer {
-    background-color: white;
+    background-color: var(--secondary);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     font-size: 14px;
@@ -77,7 +61,7 @@
     margin: 0px;
     padding: 0px;
     line-height: normal;
-    font-family: "PoppinsSemiBold";
+    font-family: var(--semiBoldFont);
     user-select: none;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -85,51 +69,29 @@
 
 }
 
-div.FieldsetNodeToolbar {
-    position: absolute;
-    top: 108%;
-    background-color: white;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    padding: 2px 5px;
-    margin: 10;
-    box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
-  }
-
-div.InputFieldSetNode {
-    position: absolute;
-    top: 105%;
-    width: auto;
-    border-radius: 10px;
-    border: 2px solid black;
-    margin: 10px;
-    margin-left: auto;
-}
-
 div.customFieldToolbar {
     position: absolute;
     top: 102%;
-    background-color: white;
+    background-color: var(--secondary);
     border-radius: 10px;
     display: flex;
     flex-direction: row;
     padding: 2px 5px;
     margin: 10;
-    box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
+    box-shadow: var(--nodeToolBarShadow);
 }
 
 div.subCustomFieldToolbar {
     position: absolute;
     top: 120%;
-    background-color: white;
+    background-color: var(--secondary);
     border-radius: 10px;
     left: 0;
     display: flex;
     flex-direction: row;
     padding: 2px 5px;
     margin: 10;
-    box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
+    box-shadow: 3var(--nodeToolBarShadow);
 }
 
 div.customFieldToolbarHidden {
@@ -147,7 +109,7 @@ div.customFieldIconContainer {
 }
 
 .react-flow__resize-control.line {
-    border-color: black !important;
+    border-color: var(--resizeBorderColor) !important;
     border-width: 0;
     border-style: solid;
 }
@@ -157,6 +119,6 @@ div.customFieldIconContainer {
     height: 6px !important;
     border-radius: 50% !important;
     border: 2px solid #fff !important;
-    background-color: black  !important;
+    background-color: var(--resizeBorderColor)  !important;
     transform: translate(-50%, -50%);
 }

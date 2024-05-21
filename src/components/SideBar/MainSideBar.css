@@ -1,3 +1,5 @@
+@import url('../../constantes/Colors.css');
+
 .mainSideBarContainer {
     display: flex;
     flex-direction: row;
@@ -5,7 +7,7 @@
 }
 
 .mainSideBarSubContainer {
-    background-color: white;
+    background-color: var(--secondary);
 
     display: flex;
     flex-direction: column;
@@ -18,12 +20,12 @@
     overflow: hidden;
     max-height: 100%;
     width: 55px;
-    border-right: 2px solid #ebedee;
+    border-right: 2px solid var(--primary);
 }
 
 .mainSideBarContentContainer {
     width: 0px;
-    background-color: white;
+    background-color: var(--secondary);
     max-height: 100%;
     transition: 0.3s;
 }
@@ -41,7 +43,7 @@
     margin-bottom: 10px;
     padding-inline: 20px;
     margin-inline: -20px;
-    border-bottom: 2px solid #ebedee
+    border-bottom: 2px solid var(--primary);
 }
 
 .mainSideBarSubContainer #body {
@@ -68,7 +70,7 @@
     gap: 15px;
     display: flex;
     flex-direction: column;
-    border-top: 2px solid #ebedee;
+    border-top: 2px solid var(--primary);
     margin-inline: -20px;
     padding-inline: 20px;
     padding-top: 20px;
@@ -77,8 +79,6 @@
 
 .mainSideBarSubContainer .utilsSideBarItem #developIcon{
     user-select: none;
-    /* padding: 15px;*/
-
     transition: transform 0.5s ease;
     transform-origin: center center;
 }
@@ -91,20 +91,20 @@
 .tooltip {
     display: inline-block;
     position: absolute;
-    background-color: #313443;
+    background-color: var(--contrast);
     padding: 8px 15px;
     border-radius: 3px;
     margin-top: 0;
     left: 90px;
     font-weight: bold;
     opacity: 0;    
-    font-family: "Poppins";
-    color: white;
+    font-family: var(--baseFont);
+    color: var(--fontContrast);
     visibility: hidden;
     font-size: 14px;
     letter-spacing: .5px;
     z-index: 10000000000;
-    box-shadow: rgba(0, 0, 0, 0.175) 0px 5px 15px;
+    box-shadow: var(--tooltipShadow);
     
     &:before {
         content: '';
@@ -146,7 +146,6 @@
 }
 
 .utilsSideBarItem:hover{
-    /* transform: translateY(-3px); */
     cursor:pointer;
 }
 
@@ -156,7 +155,7 @@
     padding-left: 5px;
     margin: 0;
     transition: opacity 0.5s ease;
-    font-family: "PoppinsMedium";
+    font-family: var(--mediumFont);
 }
 
 .mainSideBarSubContainer.expanded .utilsSideBarItem #title {

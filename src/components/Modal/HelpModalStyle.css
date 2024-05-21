@@ -1,3 +1,5 @@
+@import url('../../constantes/Colors.css');
+
 .HM-commandItem {
     display: flex;
     width: 100%;
@@ -7,7 +9,7 @@
 }
 
 .HM-commandItem p {
-    font-family: "PoppinsMedium";
+    font-family: var(--mediumFont);
     font-weight: bold;
     margin: 0;
     padding: 0;
@@ -23,7 +25,7 @@
 
 
 .HM-commandItem h1 {
-    font-family: "PoppinsBold";
+    font-family: var(--boldFont);
     font-weight: bolder;
     font-size: 12px;
     margin: 0;
@@ -49,6 +51,6 @@
     margin-inline: -20px;
     padding-inline: 20px;
     padding-top: 20px;
-    border-top: 2px solid #e2e2e2;
+    border-top: 2px solid var(--tertiary);
 }
 

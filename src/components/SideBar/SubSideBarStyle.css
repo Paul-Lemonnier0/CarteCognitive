@@ -1,5 +1,7 @@
+@import url('../../constantes/Colors.css');
+
 .subSideBarContainer {
-    background-color: white;
+    background-color: var(--secondary);
 
     display: flex;
     flex-direction: column;
@@ -26,7 +28,7 @@
     padding-inline: 20px;
     margin-inline: -20px;
 
-    border-bottom: 2px solid #ebedee
+    border-bottom: 2px solid var(--primary);
 }
 
 .subSideBarContainer #body {

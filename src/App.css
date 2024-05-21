@@ -23,11 +23,15 @@
     url("./assets/fonts/Poppins-Bold.ttf") format("truetype");
 } 
 
+@import url('./constantes/Colors.css');
+
 .App {
   text-align: center;
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: column;
+  background-color: var(--primary);
 }
 
 .App-logo {

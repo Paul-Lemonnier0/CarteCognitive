@@ -1,5 +1,7 @@
+@import url('../../constantes/Colors.css');
+
 .sideBar {
-    background-color: white;
+    background-color: var(--secondary);
     height: 100%;
     max-height: 100%;
 
@@ -11,7 +13,7 @@
     padding-bottom: 0px;
 
     z-index: 1000;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+    box-shadow: var(--sideBarShadow);
     transition: 0.3s;
 }
 
@@ -33,7 +35,7 @@
     flex-direction: row;
     align-items: center; 
     justify-content: center;
-    border-top: 2px solid #ebedee;
+    border-top: 2px solid var(--primary);
     margin-inline: -15px;
     padding-inline: 15px;
     padding-top: 15px;
@@ -67,7 +69,7 @@
 .sideBarItem p {
     margin: 0;
     font-size: 12px;
-    font-family: "Poppins";
+    font-family: var(--baseFont);
     font-weight: bold;
     user-select: none;
 }
@@ -75,13 +77,13 @@
 
 div.customSibeToolbar {
     position: absolute;
-    background-color: white;
+    background-color: var(--secondary);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     right: 90px;
-    box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
+    box-shadow: var(--nodeToolBarShadow);
 }
   
 div.customSibeToolbarHidden {
@@ -93,19 +95,19 @@ div.customSibeToolbarHidden {
 .rightTooltip {
     display: inline-block;
     position: absolute;
-    background-color: #313443;
+    background-color: var(--contrast);
     padding: 8px 15px;
     border-radius: 3px;
     right: 90px;
     font-weight: bold;
     opacity: 0;    
-    font-family: "Poppins";
-    color: white;
+    font-family: var(--baseFont);
+    color: var(--fontContrast);
     visibility: hidden;
     font-size: 14px;
     letter-spacing: .5px;
     z-index: 5000;
-    box-shadow: rgba(0, 0, 0, 0.175) 0px 5px 15px;
+    box-shadow: var(--tooltipShadow);
     
     &:before {
         content: '';

@@ -18,7 +18,7 @@ function App() {
   return (
     <AppContextProvider>
       <ReactFlowProvider>
-        <div className="App" style={{backgroundColor: "#ebedee", display: "flex", flexDirection: "column"}}>
+        <div className="App">
             <RouterProvider router={router}/>
         </div>
       </ReactFlowProvider>

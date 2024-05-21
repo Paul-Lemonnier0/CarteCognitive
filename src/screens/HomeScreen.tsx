@@ -8,9 +8,12 @@ import { AppContext } from "../context/AppContext";
 import HomeSideBar from "../components/SideBar/HomeSideBar";
 import CustomSearchBar from "../components/SearchBar/SearchBar";
 import { IconButton } from "../components/Buttons/IconButtons";
-import { IoReload } from "react-icons/io5";
+import { IoAdd, IoReload } from "react-icons/io5";
 import { IoIosAdd } from "react-icons/io";
 import AddGraphModal from "../components/Modal/AddGraphModal";
+import { HugeText, MidTextBold, TitleText } from "../components/Text/CustomText";
+import { ValidationButton } from "../components/Buttons/Buttons";
+const { v4: uuidv4 } = require('uuid');
 
 export enum HomeSideBarMenu {
     Graphs = "Graphs",
@@ -30,7 +33,6 @@ const HomeScreen = () => {
     const [graphs, setGraphs] = useState<GraphType[]>(BASICS_GRAPHS)
     const [displayedGraphs, setDisplayedGraphs] = useState<GraphType[]>(graphs)
     const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, setPersonnalDataUser, setListUtilisateurs, setUser } = useContext(AppContext);
-
 
     const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false)
 
@@ -105,31 +107,34 @@ const HomeScreen = () => {
 
     const openAddModal = () => {
         setIsAddModalVisible(true)
-        // let newgraph = { ...graphs[0], proprio: user.uid } as GraphType
-        // addGraphtest(newgraph, user.uid, personnalDataUser)
-        // const updatedGraphsUser = graphsUser
-        // updatedGraphsUser.push(graphs[0])
-        // setGraphsUser(updatedGraphsUser)
 
     }
 
+    const handleAddGraph = (title: string) => {
+        const newGraph: GraphType = {
+            title,
+            proprio: user.uid,
+            nodes: [],
+            edges: [],
+            id: uuidv4(),
+            upgrade: false
+        }
+
+        addGraphtest(newGraph, user.uid, personnalDataUser)
+
+        setGraphsUser(prevUserGraphs =>  [
+                newGraph,
+                ...prevUserGraphs
+            ]
+        )
+    }
+
+    const userGraphsEmpty = graphsUser.length + graphsPartage.length === 0
     return (
         <div style={{ display: "flex", flexDirection: "row", maxHeight: "100%", flex: 1, boxSizing: "border-box" }}>
             <HomeSideBar menu={menu} setMenu={setMenu} />
             <div className="homeScreenContainer">
-                <div style={{
-                    boxSizing: "border-box",
-                    marginInline: -20,
-                    paddingInline: 30,
-                    paddingRight: 40,
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    paddingBottom: 15,
-                    gap: 30,
-                    borderBottom: '2px solid #d9d7d7'
-                }}>
+                <div className="homeScreenHeader">
                     <CustomSearchBar
                         isWhite
                         placeholder="Chercher une carte..."
@@ -137,50 +142,81 @@ const HomeScreen = () => {
                     <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                         <IconButton Icon={IoReload} onPress={handleRefresh} />
         
-                        <IconButton secondary Icon={IoIosAdd} onPress={openAddModal}/>
+                        <IconButton contrast Icon={IoAdd} onPress={openAddModal}/>
 
                     </div>
                 </div>
                 <div style={{
-                    overflowY: 'scroll',
-                    marginBlock: -20,
-                    paddingBlock: 20,
-                    marginRight: -10,
-                    paddingRight: 10
-                }}>
-                    {
-                        menu === HomeSideBarMenu.Graphs ?
-                            <div>
-                                <ListGraph
-                                    favorites={favorites}
-                                    setFavorites={setFavorites}
-                                    graphs={graphsUser}
-                                    title="Vos cartes"
-                                />
-                                <ListGraph
-                                    favorites={favorites}
-                                    setFavorites={setFavorites}
-                                    graphs={graphsPartage}
-                                    title="cartes partagées"
-                                />
-                            </div>
-                            :
-                            (
-                                menu === HomeSideBarMenu.Templates ?
+                        marginBlock: -20,
+                        paddingBlock: 20,
+                        marginRight: -10,
+                        paddingRight: 10,
+                        display: "flex",
+                        flexDirection: "column",
+                        flex: 1
+                    }}>
+                        {
+                            menu === HomeSideBarMenu.Graphs ? (
+                                <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                                    {userGraphsEmpty ? (
+                                        <div style={{ 
+                                            flex: 1, 
+                                            gap: 40,
+                                            display: "flex", 
+                                            flexDirection: "column", 
+                                            justifyContent: "center",
+                                            alignItems: "center"
+                                        }}>
+                                            <div style={{
+                                                display: "flex", 
+                                                flexDirection: "column", 
+                                                justifyContent: "center",
+                                                alignItems: "center"
+                                            }}>
+                                                <HugeText text="Aucune carte !" style={{fontSize: 40}}/>
+                                                <TitleText bold gray center color="" text="Commencez dès à créer des cartes personnalisées dès maitenant" />
+                                            </div>
+
+                                            <ValidationButton text="Créer une carte" onPress={openAddModal}/>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            {graphsUser.length > 0 && (
+                                                <ListGraph
+                                                    favorites={favorites}
+                                                    setFavorites={setFavorites}
+                                                    graphs={graphsUser}
+                                                    title="Vos cartes"
+                                                />
+                                            )}
+                                            {graphsPartage.length > 0 && (
+                                                <ListGraph
+                                                    favorites={favorites}
+                                                    setFavorites={setFavorites}
+                                                    graphs={graphsPartage}
+                                                    title="cartes partagées"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                </div>) 
+                                : menu === HomeSideBarMenu.Templates ? (
                                     <ListGraph
                                         favorites={favorites}
                                         setFavorites={setFavorites}
                                         graphs={displayedGraphs}
-                                        title="Modèles de cartes" /> :
-                                    <ListGraph
-                                        favorites={favorites}
-                                        setFavorites={setFavorites}
-                                        graphs={favoritesGraphs}
-                                        title="Vos Favoris"
-                                    />
-                            )
-                    }
-                </div>
+                                        title="Modèles de cartes"
+                                    />) 
+                                :   
+                                <ListGraph
+                                    favorites={favorites}
+                                    setFavorites={setFavorites}
+                                    graphs={favoritesGraphs}
+                                    title="Vos Favoris"
+                                />
+                        }
+                    </div>
+
             </div>
             {/* <div style={{padding: 20}}>
                 <ValidationButton text="Composants" onPress={handleShowComposants}/>
@@ -190,7 +226,17 @@ const HomeScreen = () => {
                 <ComposantsModal onClose={handleCloseComposants}/>
             } */}
 
-            {isAddModalVisible && <AddGraphModal onClose={() => setIsAddModalVisible(false)}/>}
+            {
+            isAddModalVisible && 
+                <AddGraphModal onClose={(text?: string) => {
+                        if(text) {
+                            handleAddGraph(text)
+                        }
+
+                        setIsAddModalVisible(false)
+                    }}
+                />
+            }
 
         </div>
     );

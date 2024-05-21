@@ -12,6 +12,7 @@ interface IconButtonProps {
     children?: ReactNode,
     small?: boolean,
     secondary?: boolean,
+    contrast?: boolean,
     stopPropagation?: boolean,
     color?: string
 }
@@ -24,21 +25,24 @@ export const IconButton: FC<IconButtonProps>  = ({
   small, 
   secondary,
   stopPropagation,
-  color
+  color,
+  contrast
 }) => {
+
+    const handleClick = (e: MouseEvent<HTMLSpanElement> ) => {
+      if(stopPropagation) {
+        e.stopPropagation()
+      }
+      onPress()
+    } 
+
     return (
-        <span className='iconButton' style={{
-          border: `2px solid ${(isSelected || secondary) ? "#313443" : "transparent"}`,
-          backgroundColor: (isSelected || secondary) ? "#313443" : "white"
-          }} onClick={(e: MouseEvent<HTMLSpanElement> ) => {
-            if(stopPropagation) {
-              e.stopPropagation()
-            }
-            onPress()
-          } }>
+        <span 
+            className={`iconButton ${(isSelected || contrast) ? 'selected' :''} `}
+            onClick={handleClick}>
             <span>
                 { Icon &&
-                  <Icon size={small ? 15 : 20} color={(isSelected || secondary) ? "white" : (color ?? "black")}/>
+                  <Icon size={small ? 15 : 20} color={(isSelected || secondary || contrast) ? "white" : (color ?? "black")}/>
                 }
 
                 {children ?? undefined}
@@ -52,20 +56,17 @@ export const IconButton: FC<IconButtonProps>  = ({
 interface IconTextProps {
   Icon: IconType,
   text: string,
-  secondary?: boolean
+  contrast?: boolean,
 }
 
-export const IconText: FC<IconTextProps> = ({Icon, text, secondary}) => {
+export const IconText: FC<IconTextProps> = ({Icon, text, contrast}) => {
   return(
-    <span className='iconButton' style={{
-      border: `2px solid "transparent"`,
-      backgroundColor: secondary ? "#313443" : "white"
-      }}>
+    <span className={`iconButton ${contrast ? 'selected' :''} `}>
         <span style={{display: "flex", flexDirection: "row", alignItems: "center", gap: 10}}>
             { Icon &&
-              <Icon size={20} color={secondary ? 'white' : "black"}/>
+              <Icon size={20} color={contrast ? 'white' : "black"}/>
             }
-            <NormalText text={text} bold color={secondary ? 'white' : "black"}/>            
+            <NormalText text={text} bold color={contrast ? 'white' : "black"}/>            
         </span>
     </span>
   )
@@ -97,7 +98,8 @@ interface BackgroundIconProps {
   isSelected?: boolean,
   Icon: IconType,
   hiddenIcon?: boolean,
-  iconHover?: boolean
+  iconHover?: boolean,
+  isPrimary?: boolean
 }
 
 export const BackgroundIcon: FC<BackgroundIconProps> = ({
@@ -108,11 +110,17 @@ export const BackgroundIcon: FC<BackgroundIconProps> = ({
   isSelected,
   squared,
   hiddenIcon,
-  iconHover
+  iconHover,
+  isPrimary
 }) => {
+
+  const bgColorStyle = color ? {backgroundColor: color, borderColor: color} : undefined
+  const selectedStyle = isSelected ? {borderColor: selectedBorderColor ?? "black"} : undefined
+
   return(
-    <div style={{
-        backgroundColor: color ?? "#ebedee",
+    <div className='backgroundButtonContainer' style={{
+        ...bgColorStyle,
+        ...selectedStyle,
         width: size ?? 40,
         padding: 10,
         borderRadius: squared ? 10 : 500,
@@ -120,7 +128,6 @@ export const BackgroundIcon: FC<BackgroundIconProps> = ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: isSelected ? `3px solid ${selectedBorderColor ?? "black"}` : `3px solid ${color ?? "#ebedee"}`
       }}>
         <div style={{display: "flex"}} className={iconHover ? "iconHover" : ""}>
           <Icon size={25} color={hiddenIcon ? "transparent" : "black"}/>
@@ -143,17 +150,17 @@ export const IconTextButton: FC<IconTextButtonProps> = ({
   stopPropagation,
   text
 }) => {
+
+  const handleOnClick = (e: MouseEvent<HTMLSpanElement> ) => {
+    if(stopPropagation) {
+      e.stopPropagation()
+    }
+    onPress()
+  } 
+
   return(
-    <span className='iconTextButton' style={{
-      border: `2px solid ${(isSelected || secondary) ? "#313443" : "transparent"}`,
-      backgroundColor: (isSelected || secondary) ? "#313443" : "white",
-      flex: 1,
-      }} onClick={(e: MouseEvent<HTMLSpanElement> ) => {
-        if(stopPropagation) {
-          e.stopPropagation()
-        }
-        onPress()
-      } }>
+    <span className={`iconTextButton ${isSelected ? 'selected' :''} `}
+      onClick={handleOnClick}>
         <span style={{display: "flex", flexDirection: "row", gap: 25}}>
             { Icon &&
               <Icon size={small ? 15 : 20} color={(isSelected || secondary) ? "white" : "black"}/>

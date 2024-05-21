@@ -59,7 +59,7 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                 <IconButton Icon={FiSettings} onPress={() => {}}/> 
             </div>
 
-            <div id="body">
+            <div id="body" style={{gap: 40}}>
                 <div className="settingsSideBarBody">
                     <div className="settingsSideBarRadio">
                         <input 
@@ -106,8 +106,8 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                 graphCalculType === "Symbolic" ?
                     undefined : 
                     
-                    <div id="SelectedCalculWay">
-                        <div id="SelectPropagation">
+                    <div style={{display: "flex", flexDirection: "column", gap: 15}}>
+                        <div className="selectOptionsContainer">
                             <MidTextBold text="Propagation" />
                             <CustomCard customPadding>
                                 <select name="PropagationVal" id="edgeBoolVals" value={propagationValue} onChange={changePropagation}>
@@ -134,8 +134,8 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                                 </select>
                             </CustomCard>
                         </div>
-                        <div id="SelectAgregation">
-                            <MidTextBold text="Agregation" />
+                        <div className="selectOptionsContainer">
+                            <MidTextBold text="Agregation"/>
                             <CustomCard customPadding >
                                 <select name="AgregationVal" id="edgeBoolVals" value={agregationValue}onChange={changeAgregation}>
                                     

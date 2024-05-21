@@ -74,7 +74,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         setIsSelect(!isSelect);
     };
 
-    const isFavorite = !favorites ?? favorites.includes(graph.id)
+    const isFavorite = favorites.includes(graph.id)
 
     const handleFavoriteState = async () => {
         if (isFavorite) {
@@ -135,12 +135,12 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
                     width: "100%"
                 }}>
                     <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-                        <IconText secondary Icon={AiOutlineNodeIndex} text={graph.nodes.length.toString()} />
-                        <IconText secondary Icon={PiFlowArrowDuotone} text={graph.edges.length.toString()} />
+                        <IconText contrast Icon={AiOutlineNodeIndex} text={graph.nodes.length.toString()} />
+                        <IconText contrast Icon={PiFlowArrowDuotone} text={graph.edges.length.toString()} />
                     </div>
 
                     <IconButton Icon={isFavorite ? FaStar : FaRegStar}
-                        color={isFavorite ? "#313443" : "black"}
+                        contrast={isFavorite}
                         onPress={handleFavoriteState} stopPropagation />
 
                 </div>

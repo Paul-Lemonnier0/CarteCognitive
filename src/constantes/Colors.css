@@ -1,0 +1,27 @@
+:root {
+    --primary: #ebedee;
+    --secondary: #FFFFFF;
+    --tertiary: #e2e2e2;
+    --contrast: #313443;
+    --contrastHover: #50535E;
+    --borderColor: #d9d7d7;
+
+    --fontContrast: white;
+    --fontGray: gray;
+    --font: black;
+
+    --baseFont: "Poppins";
+    --mediumFont: "PoppinsMedium";
+    --semiBoldFont: "PoppinsSemiBold";
+    --boldFont: "PoppinsBold";
+
+    --overlay: rgba(27, 31, 36, 0.8);
+    --modalShadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    --tooltipShadow: rgba(0, 0, 0, 0.175) 0px 5px 15px;
+    --nodeToolBarShadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
+    --sideBarShadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+    --iconButtonShadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    --cardShadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    
+    --resizeBorderColor: black;
+}

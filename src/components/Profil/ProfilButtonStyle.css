@@ -1,0 +1,12 @@
+@import url('../../constantes/Colors.css');
+
+.profilButton {
+    border-radius: 500px;
+    height: 25px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding: 10px; 
+    aspect-ratio: 1;
+    background-color: var(--contrast);
+}

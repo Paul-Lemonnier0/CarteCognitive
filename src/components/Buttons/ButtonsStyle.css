@@ -1,35 +1,36 @@
+@import url('../../constantes/Colors.css');
+
 .usualButton{
     outline: none;
     background: none;
     border: none;
-    font-family: "PoppinsMedium";
+    font-family: var(--mediumFont);
     padding: 8px 20px;
     cursor: pointer;
 }
 
 .usualButton:hover{
-    color: gray;
+    color: var(--fontGray);
 }
 
 .validation-button{
     background-color: transparent;
-    border: 2px solid #313443;
+    border: 2px solid var(--contrast);
     cursor: pointer;
-    font-family: "Poppins";
+    font-family: var(--baseFont);
 
-    border-radius: 5px;
+    border-radius: 10px;
     outline-offset: -1px;
 
-    color: white;
-    outline: 3px solid #313443;
+    color: var(--fontContrast);
     transition: outline-offset 0.1s ease;
-    background-color: #313443;
-    padding: 8px 20px;
+    background-color: var(--contrast);
+    padding: 12px 24px;
     font-size: 14px;
 }
 
-.validation-button:hover{
-    outline-offset: 2px;
+.validation-button:hover {
+    background-color: var(--contrastHover);
 }
 
 .validation-button.disabled {

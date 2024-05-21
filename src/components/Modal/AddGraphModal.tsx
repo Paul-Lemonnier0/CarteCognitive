@@ -7,13 +7,16 @@ import { IconButton } from '../Buttons/IconButtons';
 import { IoClose } from "react-icons/io5";
 import { TbSquareLetterG, TbSquareLetterN, TbSquareLetterS } from "react-icons/tb";
 import { TbClick } from "react-icons/tb";
+import IconTextInput from '../TextInput/IconTextInput';
+import { RxText } from 'react-icons/rx';
 
 interface AddGraphModalProps {
-  onClose: () => void
+  onClose: (text?: string) => void
 }
 
 const AddGraphModal: FC<AddGraphModalProps> = ({onClose}) => {
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("")
 
   function openModal() {
     setIsOpen(true);
@@ -25,56 +28,48 @@ const AddGraphModal: FC<AddGraphModalProps> = ({onClose}) => {
     onClose()
   }
 
+
+  function saveModal() {
+    setIsOpen(false);
+    onClose(title)
+  }
+
+
+  const handleSetTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value)
+}
+
   return (
     <div className='ModalOverlay' onClick={closeModal}>
-          <div className='ModalContainer' onClick={(e) => e.stopPropagation()}>
-              
-              <div className='ModalCore'>
-                  <div className='ModalHeader'>
+          <div className='ModalContainer' onClick={(e) => e.stopPropagation()}> 
+            <div className='ModalCore'>
+                <div className='ModalHeader'>
                     <div className='ModalTitle'>
                         <h3>Ajouter une carte</h3>
                     </div>
                     <div className='ModalIconClose'>
-                      <IconButton Icon={IoClose} onPress={closeModal}/>
+                        <IconButton Icon={IoClose} onPress={closeModal}/>
                     </div>
-                  </div>
-                  <div className='HM-body'>
-                    <div className="HM-subBody">
-                    
-                    </div>
-
-                  <div className='HM-subBody separation'>
-
-                      <div className="HM-commandItem">
-                        <div id="complexCommand">
-                          <h1>CTRL </h1>
-                          <p>+</p>
-                          <TbClick size={25}/>
-                        </div>
-
-                        <p>Sélectionner un noeud</p>
-                      </div>
-
-                      <div className="HM-commandItem">
-                        <div id="complexCommand">
-                          <h1>SHIFT</h1>
-                          <p>+</p>
-                          <TbClick size={25}/>
-                        </div>
-
-                        <p>Sélectionner les noeuds d'une zone</p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
+                <div className='HM-body'>
+                    <div className="HM-subBody">
+                        <IconTextInput 
+                            iconHover
+                            Icon={RxText} 
+                            textValue={title} 
+                            onChangeCustom={handleSetTitle}
+                            placeholder="Nom de la carte..."
+                        />
+                    </div>
+                </div>
+            </div>
 
               <div className='ModalFooter'>
                   <div className='ModalButtons'>
-                    <ValidationButton text="Terminer" onPress={onClose}/>
+                    <ValidationButton text="Ajouter" onPress={saveModal}/>
                   </div>
               </div>
           </div>
-            
       </div>
   );
 }

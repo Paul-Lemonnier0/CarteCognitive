@@ -87,11 +87,11 @@ const AutomatingSideBar: FC<AutomatingSideBarProps> = ({isExpanded}) => {
                         <div className="">
                             <div className="borne">
                                 <input className="inputBorne" type="number" max={borneMax-1} onChange={changeMin} value={borneMin}/>
-                                <MidText text="Borne Inferieur"/>
+                                <MidText bold text="Borne Inferieur"/>
                             </div>
                             <div className="borne">
                                 <input className="inputBorne" type="number" min={borneMin+1} onChange={changeMax} value={borneMax}/>
-                                <MidText text="Borne Superieur"/>
+                                <MidText bold text="Borne Superieur"/>
                             </div>
                         </div>
                             : undefined

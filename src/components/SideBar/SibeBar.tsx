@@ -117,7 +117,7 @@ const SideBar = () => {
                 <div id="tooltipContainer">
                     <div className="sideBarItem">
                         <div onDragStart={(event) => onDragStart(event, 'customNode')} draggable>
-                            <CustomNodeIcon color="#ebedee"/>
+                            <CustomNodeIcon/>
                         </div>
 
                         <span className="rightTooltip">Sommet</span>
@@ -127,7 +127,7 @@ const SideBar = () => {
                 <div id="tooltipContainer">
                     <div className="sideBarItem">
                         <div onDragStart={(event) => onDragStart(event, 'fieldsetNode')} draggable>
-                            <CustomZoneIcon color="#ebedee"/>
+                            <CustomZoneIcon/>
                         </div>
 
                         <span className="rightTooltip">Zone</span>

@@ -246,8 +246,8 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                         <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }}>
                             {
                                 isSommetSelected ?
-                                    <CustomNodeIcon size={25} color="#ebedee" /> :
-                                    <CustomZoneIcon size={25} color="#ebedee" />
+                                    <CustomNodeIcon size={25}/> :
+                                    <CustomZoneIcon size={25}/>
                             }
 
                             <div className="TitleAndSubtitleContainer">
@@ -294,7 +294,7 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                     selectedEdge && !isSommetSelected &&
                     <div id="selectedOptions">
                         <div id="selectedOptionsItem" style={{ marginLeft: 2.5 }}>
-                            <CustomEdgeIcon size={25} color="#ebedee" />
+                            <CustomEdgeIcon size={25}/>
 
                             <div className="TitleAndSubtitleContainer">
                                 <TitleText text={selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string} />

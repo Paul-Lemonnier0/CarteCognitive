@@ -13,7 +13,6 @@ export const CustomZoneIcon: FC<CustomZoneIconProps> = ({size, color, isSelected
         <BackgroundIcon
             Icon={LuText} 
             size={size ?? 25} 
-            color={color ?? "white"}
             isSelected={isSelected}
             squared
         />
