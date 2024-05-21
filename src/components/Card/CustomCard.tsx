@@ -4,15 +4,16 @@ import "./CustomCardStyle.css"
 interface CustomCardProps {
     children: ReactNode,
     customPadding?: boolean,
-    isWhite?: boolean
+    isWhite?: boolean,
+    disabled?: boolean
 }
 
-export const CustomCard: FC<CustomCardProps> = ({children, customPadding, isWhite}) => {
+export const CustomCard: FC<CustomCardProps> = ({children, customPadding, isWhite, disabled}) => {
 
   const bgStyle = isWhite ? {backgroundColor: "white"} : undefined
 
   return (
-    <div className='customCardContainer' 
+    <div className={`customCardContainer ${disabled ? 'disabled' : ''}`}
       style={{
         ...bgStyle,
         paddingBlock: customPadding ? 0 : 0, 

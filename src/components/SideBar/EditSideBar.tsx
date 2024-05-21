@@ -150,8 +150,6 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         if (selectedNode) {
             if (!selectedNode.data) {
                 updateNodeData(selectedNode.id, { ...selectedNodeData, couleur: color })
-               
-
             }
 
             else {
@@ -170,7 +168,7 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         }
     }
 
-    const baseColorsReduit = [baseColors[0], baseColors[1], baseColors[2], baseColors[3]]
+    const baseColorsReduit = baseColors
 
     const handleEditTitle = () => {
         setTitleIsModif(!titleIsModif)
@@ -196,10 +194,13 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         ))
     }, [selectedEdgeLabel]) 
 
+
     if (!isExpanded) return null
 
+    console.log(graphCalculType)
+
     return (
-        <div className={`subSideBarContainer`}>
+        <div className={`subSideBarContainer`} style={{overflowX: "hidden"}}>
             <div id="header">
                 {
                     titleIsModif ?
@@ -270,24 +271,24 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                             </div>
                         </div>
 
-                        <div id="selectedOptionsItem">
-                            <div style={{ display: "inline", flex: 1 }}>
-                                <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-                                    <span style={{ cursor: "pointer" }}>
-                                        <BackgroundIcon iconHover isSelected squared Icon={BiColorFill} size={25} color={selectedNodeData.couleur ?? "white"} />
-                                    </span>
-                                    <div style={{ display: "flex", flexDirection: "row", gap: 9, flex: 1 }}>
-                                        {
-                                            baseColorsReduit.map(color => (
-                                                <span id="colorBlockContainer" key={color} onClick={() => handleUpdateColor(color)}>
-                                                    <BackgroundIcon squared size={25} color={color} hiddenIcon Icon={BiColorFill} />
-                                                </span>
-                                            ))
-                                        }
-                                    </div>
+                        <div id="selectedOptionsItem" style={{ paddingBlock: 20, marginBlock: -20,}}>
+                            <div style={{ display: "flex", flex: 1, }}>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gridTemplateRows: "repeat(2, auto)", gap: 5, flex: 1 }}>
+                                    {
+                                        baseColorsReduit.map(color => (
+                                            <span id="colorBlockContainer" key={color} onClick={() => handleUpdateColor(color)} style={{ flex: 1 }}>
+                                                <BackgroundIcon 
+                                                    isSelected={color === selectedNode.data.couleur} 
+                                                    squared size={12} 
+                                                    hiddenIcon Icon={BiColorFill}
+                                                    color={color} grayBorder={color === "white"} />
+                                            </span>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 }
                 {
@@ -319,7 +320,7 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                                 {
                                     (graphCalculType === GraphCalculType.Boolean) &&
                                     <CustomCard customPadding>
-                                        <select name="edgeBoolVals" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
+                                        <select style={{borderRight: "16px solid transparent"}} name="edgeBoolVals" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
                                             <option value=""></option>
                                             <option value="0">Faux</option>
                                             <option value="1">Vrai</option>
@@ -329,12 +330,12 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                                 {
                                     (graphCalculType === GraphCalculType.Symbolic) &&
                                     <CustomCard customPadding>
-                                    <select name="edgeBoolValsBis" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
-                                        <option value="" ></option>
-                                        <option value="+">+</option>
-                                        <option value="-">-</option>
-                                        <option value="?">?</option>
-                                    </select>
+                                        <select style={{borderRight: "16px solid transparent"}} name="edgeBoolValsBis" id="edgeBoolVals" value={selectedEdgeLabel?.toString()} onChange={handleSelectMenuChange}>
+                                            <option value="" ></option>
+                                            <option value="+">+</option>
+                                            <option value="-">-</option>
+                                            <option value="?">?</option>
+                                        </select>
                                     </CustomCard>
                                 }
                             </div>

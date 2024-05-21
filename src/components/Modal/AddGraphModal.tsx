@@ -9,49 +9,55 @@ import { TbSquareLetterG, TbSquareLetterN, TbSquareLetterS } from "react-icons/t
 import { TbClick } from "react-icons/tb";
 import IconTextInput from '../TextInput/IconTextInput';
 import { RxText } from 'react-icons/rx';
+import RadioButton from '../Buttons/RadioButtons';
+import { GraphCalculType } from '../../context/GraphContext';
+import CustomSelect from '../SelectMenu/CustomSelect';
+import { useCalculType } from '../../hooks/useCalculType';
+import { PropagationAgretationType } from '../../constantes/InfluanceCalculs';
+import Separator from '../Other/Separator';
+import { HugeText, TitleText } from '../Text/CustomText';
 
 interface AddGraphModalProps {
   onClose: (text?: string) => void
 }
 
 const AddGraphModal: FC<AddGraphModalProps> = ({onClose}) => {
-  const [modalIsOpen, setIsOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("")
 
-  function openModal() {
-    setIsOpen(true);
-  }
-
-
   function closeModal() {
-    setIsOpen(false);
     onClose()
   }
 
-
   function saveModal() {
-    setIsOpen(false);
     onClose(title)
   }
 
 
   const handleSetTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value)
-}
+      setTitle(e.target.value)
+  }
+
+  const [graphCalculType, setGraphCalculType] = useState<GraphCalculType>(GraphCalculType.Integer)
+  const [aggretionValue, setAggretionValue] = useState<PropagationAgretationType>(PropagationAgretationType.ADD)
+  const [propagationValue, setPropagationValue] = useState<PropagationAgretationType>(PropagationAgretationType.ADD)
+
+  const {changePropagation, changeAgregation} = useCalculType(setGraphCalculType, setAggretionValue, setPropagationValue)
 
   return (
     <div className='ModalOverlay' onClick={closeModal}>
           <div className='ModalContainer' onClick={(e) => e.stopPropagation()}> 
             <div className='ModalCore'>
-                <div className='ModalHeader'>
+                <div className='ModalHeader' style={{marginTop: 15}}>
                     <div className='ModalTitle'>
-                        <h3>Ajouter une carte</h3>
+                        <TitleText text="Ajouter une carte"/>
                     </div>
                     <div className='ModalIconClose'>
                         <IconButton Icon={IoClose} onPress={closeModal}/>
                     </div>
                 </div>
                 <div className='HM-body'>
+                    <Separator/>
+
                     <div className="HM-subBody">
                         <IconTextInput 
                             iconHover
@@ -60,6 +66,29 @@ const AddGraphModal: FC<AddGraphModalProps> = ({onClose}) => {
                             onChangeCustom={handleSetTitle}
                             placeholder="Nom de la carte..."
                         />
+                    </div>
+
+                    <Separator/>
+
+                    <div className="HM-subBody">
+                        <RadioButton.GraphType customGraphCalculType={graphCalculType} handleSetGraphCalculType={setGraphCalculType}/>
+                    </div>
+
+                    <Separator/>
+
+                    <div className="HM-subBody">
+                      {
+                          <div style={{ display: "flex", flexDirection: "column",  gap: 15 }}>
+                              <CustomSelect.AggregationPropagation 
+                                  disabled={graphCalculType === GraphCalculType.Symbolic} 
+                                  value={propagationValue} setValue={changePropagation} graphCalculType={graphCalculType}/>
+                              
+                              <CustomSelect.AggregationPropagation aggregation
+                                  disabled={graphCalculType === GraphCalculType.Symbolic} 
+                                  value={aggretionValue} setValue={changeAgregation} 
+                                  graphCalculType={graphCalculType}/>
+                          </div>
+                      } 
                     </div>
                 </div>
             </div>

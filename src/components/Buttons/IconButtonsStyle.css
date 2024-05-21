@@ -60,3 +60,11 @@
 .backgroundButtonContainer {
     background-color: var(--primary);
 }
+
+.backgroundButtonContainer.secondary {
+    background-color: var(--secondary);
+}
+
+.backgroundButtonContainer.grayBorder {
+    border: 3px solid var(--borderColor);
+}

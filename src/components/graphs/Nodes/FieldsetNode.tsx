@@ -11,6 +11,7 @@ import { AppContext } from "../../../context/AppContext";
 import { baseColors } from "../../../constantes/Colors";
 import ColorIcon from "../../Other/ColorIcon";
 import { getStringRGBAFromHexa, getStringRGBFromHexa } from "../../../primitives/ColorMethods";
+import ColorToolBar from "./ColorToolBar";
 
 
 export type FieldsetNodeData = {
@@ -139,14 +140,13 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
               <div className="customFieldIconContainer">
                 <ColorIcon small isSelected color={selectedColor ?? "white"} onPress={clickColorNode}/>
               </div>
-              
-              <div className={`subCustomFieldToolbar ${isSelectingColor ? '' : 'customFieldToolbarHidden'}`}>
-                {
-                  baseColors.map(baseColor =>
-                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => chooseColorNode(baseColor)}/>
-                  )
-                }
-              </div>
+
+              <ColorToolBar 
+                onColorPressed={(color: string) => chooseColorNode(color)} 
+                isVisible={isSelectingColor}
+                selectedColor={selectedColor}
+                bottom
+              />
             </div>
           }
       </div>

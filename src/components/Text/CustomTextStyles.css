@@ -62,3 +62,7 @@
 .gray {
     color: var(--fontGray)
 }
+
+.error {
+    color: var(--error)
+}

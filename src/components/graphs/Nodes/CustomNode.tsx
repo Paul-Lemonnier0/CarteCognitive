@@ -10,6 +10,7 @@ import { GraphContext } from "../../../context/GraphContext";
 import ColorIcon from "../../Other/ColorIcon";
 import { LuCopy } from "react-icons/lu";
 import { MidTextBold, NormalText } from "../../Text/CustomText";
+import ColorToolBar from "./ColorToolBar";
 
 export type CustomNodeData = {
   label: string;
@@ -223,13 +224,12 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id }) => {
 
                 </div>
 
-                <div style={{ top: -50 }} className={`customNodeToolbar ${isSelectingColor ? '' : 'customNodeToolbarHidden'}`}>
-                  {
-                    baseColors.map(baseColor =>
-                      <ColorIcon key={baseColor} small isSelected={baseColor === selectedColor} color={baseColor} onPress={() => handleSelectColor(baseColor)} />
-                    )
-                  }
-                </div>
+                <ColorToolBar 
+                  onColorPressed={(color: string) => handleSelectColor(color)} 
+                  isVisible={isSelectingColor}
+                  selectedColor={selectedColor}
+                />
+
               </div>
           }
         </NodeToolbar>

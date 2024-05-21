@@ -35,8 +35,8 @@ const CustomNodeListItem: FC<CustomNodeListItemProps> = ({
             <div id="icon">
             {
                 node.type === "customNode" ?
-                <CustomNodeIcon color={node.data.couleur} isSelected={isSelected}/> :
-                <CustomZoneIcon color={node.data.couleur} isSelected={isSelected}/>
+                <CustomNodeIcon color={node.data.couleur} isSelected={isSelected} isSecondary/> :
+                <CustomZoneIcon color={node.data.couleur} isSelected={isSelected} isSecondary/>
             }
             </div>
             <div id="label">

@@ -1,5 +1,9 @@
 @import url('../../constantes/Colors.css');
 
+.subSideBarContainer {
+    overflow-x: hidden;
+}
+
 .subSideBarContainer #searchListContainer {
     height: 200px;
     width: 100%;

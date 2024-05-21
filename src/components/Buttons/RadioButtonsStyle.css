@@ -1,0 +1,11 @@
+@import url("../../constantes/Colors.css");
+
+.customRadioButton {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--secondary);
+    display: inline-block;
+    accent-color: var(--contrast);
+}

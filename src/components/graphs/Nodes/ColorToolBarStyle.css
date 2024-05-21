@@ -1,0 +1,15 @@
+@import url("../../../constantes/Colors.css");
+
+.customColorToolBar {
+    position: absolute;
+    background-color: var(--secondary);
+    border-radius: 10px;
+    padding: 5px 10px;
+    box-shadow: var(--nodeToolBarShadow);
+    top: -80px;
+  }
+  
+.customColorToolBar.hidden {
+    opacity: 0;
+    pointer-events: none;
+}

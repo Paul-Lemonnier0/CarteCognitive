@@ -10,14 +10,16 @@ interface TextProps {
     color?: string,
     gray?: boolean,
     style?: CSSProperties,
+    error?: boolean
 }
 
-export const SmallText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray}) => {
+export const SmallText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, error}) => {
     const classe = "baseText smallText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
         + (bold ? " bold" : "" )
-        + (flex ? " flex" : "" )
+        + (flex ? " flex" : "" )        
+        + (error ? " error" : "" )
         + (gray ? " gray" : "" )
 
     return(
@@ -25,12 +27,13 @@ export const SmallText: FC<TextProps> = ({text, wrap, center, bold, flex, color,
     )
 }
 
-export const NormalText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray}) => {
+export const NormalText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, error}) => {
     const classe = "baseText normalText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
         + (bold ? " bold" : "" )
-        + (flex ? " flex" : "" )
+        + (flex ? " flex" : "" )        
+        + (error ? " error" : "" )
         + (gray ? " gray" : "" )
 
     return(
@@ -38,12 +41,13 @@ export const NormalText: FC<TextProps> = ({text, wrap, center, bold, flex, color
     )
 }
 
-export const MidText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray}) => {
+export const MidText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, error}) => {
     const classe = "baseText midText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
         + (bold ? " bold" : "" )
-        + (flex ? " flex" : "" )
+        + (flex ? " flex" : "" )        
+        + (error ? " error" : "" )
         + (gray ? " gray" : "" )
 
     return(
@@ -51,12 +55,13 @@ export const MidText: FC<TextProps> = ({text, wrap, center, bold, flex, color, g
     )
 }
 
-export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray}) => {
+export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, error}) => {
     const classe = "baseText midTextBold" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
         + (bold ? " bold" : "" )
-        + (flex ? " flex" : "" )
+        + (flex ? " flex" : "" )        
+        + (error ? " error" : "" )
         + (gray ? " gray" : "" )
 
     return(
@@ -64,12 +69,13 @@ export const MidTextBold: FC<TextProps> = ({text, wrap, center, bold, flex, colo
     )
 }
 
-export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, style}) => {
+export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, error, style}) => {
     const classe = "baseText titleText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
         + (bold ? " bold" : "" )
-        + (flex ? " flex" : "" )
+        + (flex ? " flex" : "" )        
+        + (error ? " error" : "" )
         + (gray ? " gray" : "" )
 
     return(
@@ -77,11 +83,12 @@ export const TitleText: FC<TextProps> = ({text, wrap, center, bold, flex, color,
     )
 }
 
-export const HugeText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, style}) => {
+export const HugeText: FC<TextProps> = ({text, wrap, center, bold, flex, color, gray, error, style}) => {
     const classe = "baseText hugeText" 
         + (wrap ? " wrap" : "" )
         + (center ? " center" : "" )
         + (bold ? " bold" : "" )
+        + (error ? " error" : "" )        
         + (flex ? " flex" : "" )
 
     return(

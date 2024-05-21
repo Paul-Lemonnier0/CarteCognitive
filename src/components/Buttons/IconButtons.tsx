@@ -6,7 +6,7 @@ import { FaCheck } from "react-icons/fa6";
 import { MidText, NormalText } from '../Text/CustomText';
 
 interface IconButtonProps {
-    onPress: () => void,
+    onPress?: () => void,
     Icon?: IconType,
     isSelected?: boolean,
     children?: ReactNode,
@@ -33,7 +33,7 @@ export const IconButton: FC<IconButtonProps>  = ({
       if(stopPropagation) {
         e.stopPropagation()
       }
-      onPress()
+      onPress && onPress()
     } 
 
     return (
@@ -99,7 +99,8 @@ interface BackgroundIconProps {
   Icon: IconType,
   hiddenIcon?: boolean,
   iconHover?: boolean,
-  isPrimary?: boolean
+  isSecondary?: boolean,
+  grayBorder?: boolean
 }
 
 export const BackgroundIcon: FC<BackgroundIconProps> = ({
@@ -111,17 +112,19 @@ export const BackgroundIcon: FC<BackgroundIconProps> = ({
   squared,
   hiddenIcon,
   iconHover,
-  isPrimary
+  isSecondary,
+  grayBorder
 }) => {
 
-  const bgColorStyle = color ? {backgroundColor: color, borderColor: color} : undefined
-  const selectedStyle = isSelected ? {borderColor: selectedBorderColor ?? "black"} : undefined
+  const bgColorStyle = color ? {backgroundColor: color} : undefined
+  const selectedStyle = isSelected ? {border: `3px solid ${selectedBorderColor ?? "black"}`} : (grayBorder ? undefined :{border: `3px solid ${color ?? "transparent"}`})
 
   return(
-    <div className='backgroundButtonContainer' style={{
-        ...bgColorStyle,
+    <div className={`backgroundButtonContainer ${isSecondary ? 'secondary' : ''} ${grayBorder ? 'grayBorder' : ''}`} style={{
         ...selectedStyle,
+        ...bgColorStyle,
         width: size ?? 40,
+        height: size ?? 40,
         padding: 10,
         borderRadius: squared ? 10 : 500,
         aspectRatio: 1/1,
@@ -155,7 +158,7 @@ export const IconTextButton: FC<IconTextButtonProps> = ({
     if(stopPropagation) {
       e.stopPropagation()
     }
-    onPress()
+    onPress && onPress()
   } 
 
   return(

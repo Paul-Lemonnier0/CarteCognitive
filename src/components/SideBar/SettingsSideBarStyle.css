@@ -16,16 +16,6 @@ select {
     gap: 10px;
 }
 
-.customRadioButton {
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    cursor: pointer;
-    background-color: var(--secondary);
-    display: inline-block;
-    accent-color: var(--contrast);
-}
-
 #settingsSideBarFooter {
     margin-inline: -20px;
     padding-inline: 20px;

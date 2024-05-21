@@ -6,17 +6,18 @@ interface CustomNodeIconProps {
     size?: number,
     color?: string,
     isSelected?: boolean,
-    isPrimary?: boolean
+    isSecondary?: boolean
 }
 
-export const CustomNodeIcon: FC<CustomNodeIconProps> = ({size, color, isSelected, isPrimary}) => {
+export const CustomNodeIcon: FC<CustomNodeIconProps> = ({size, color, isSelected, isSecondary}) => {
     
     return (
         <BackgroundIcon 
             Icon={RxTextAlignCenter} 
             size={size ?? 25} 
             isSelected={isSelected}
-            isPrimary={isPrimary}
+            color={color}
+            isSecondary={isSecondary}
         />
   )
 }

@@ -1,0 +1,9 @@
+@import url("../../constantes/Colors.css");
+
+.separator {
+    margin-block: 10px;
+    height: 2px;
+    width: 150%;
+    margin-inline: -50px;
+    background-color: var(--borderColor);
+}

@@ -18,7 +18,6 @@ export enum GraphCalculType {
     Integer = "Integer",
 }
 
-
 interface GraphContextType {
     upgrade: boolean
     setUpgrade: Dispatch<React.SetStateAction<boolean>>,
