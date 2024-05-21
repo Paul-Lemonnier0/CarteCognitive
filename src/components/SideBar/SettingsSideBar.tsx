@@ -110,7 +110,7 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                         <div className="selectOptionsContainer">
                             <MidTextBold text="Propagation" />
                             <CustomCard customPadding>
-                                <select name="PropagationVal" id="edgeBoolVals" value={propagationValue} onChange={changePropagation}>
+                                <select style={{borderRight: "16px solid transparent",}} name="PropagationVal" id="edgeBoolVals" value={propagationValue} onChange={changePropagation}>
                                     
                                     {
                                         graphCalculType === GraphCalculType.Integer ? 
@@ -137,7 +137,7 @@ const SettingsSideBar: FC<SettingsSideBarProps> = ({isExpanded}) => {
                         <div className="selectOptionsContainer">
                             <MidTextBold text="Agregation"/>
                             <CustomCard customPadding >
-                                <select name="AgregationVal" id="edgeBoolVals" value={agregationValue}onChange={changeAgregation}>
+                                <select style={{borderRight: "16px solid transparent",}} name="AgregationVal" id="edgeBoolVals" value={agregationValue}onChange={changeAgregation}>
                                     
                                     {
                                         graphCalculType === GraphCalculType.Integer ? 
