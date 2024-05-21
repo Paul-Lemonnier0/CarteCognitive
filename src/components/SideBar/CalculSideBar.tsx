@@ -53,8 +53,6 @@ const CalculSideBar: FC<CalculSideBarProps> = ({ isExpanded }) => {
         }
     })
 
-
-
     let liste_chemin: Edge[][] = []
     const nextEdges = useCallback((source: string, target: string, chemin: Edge[], nodeVisited: Node[], edgeShouldVisited: boolean) => {
         const nextEdge = edges.filter((elem) => elem.source === source)
@@ -87,17 +85,6 @@ const CalculSideBar: FC<CalculSideBarProps> = ({ isExpanded }) => {
         })
 
     }, [edges, liste_chemin])
-
-    //TODO : Récupérer la gestion des fractions et l'implémenter
-    //                     if (edge.data.label) {
-    //                         if (/^\d+(\.\d+)?$/.test(edge.data.label))
-    //                             currentCompteur += parseFloat(edge.data.label as string);
-    //                         else if (/^\d+\/\d+$/.test(edge.data.label)) {
-    //                             const [numerator, denominator] = edge.data.label.split('/').map(Number);
-    //                             const result = numerator / denominator;
-    //                             currentCompteur += result
-    //                         }
-    //                     }
 
     const handleCalculateMax = () => {
         setResultAgregation("")

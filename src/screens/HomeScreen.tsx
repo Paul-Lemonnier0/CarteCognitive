@@ -10,6 +10,7 @@ import CustomSearchBar from "../components/SearchBar/SearchBar";
 import { IconButton } from "../components/Buttons/IconButtons";
 import { IoReload } from "react-icons/io5";
 import { IoIosAdd } from "react-icons/io";
+import AddGraphModal from "../components/Modal/AddGraphModal";
 
 export enum HomeSideBarMenu {
     Graphs = "Graphs",
@@ -17,14 +18,21 @@ export enum HomeSideBarMenu {
     Favorites = "Favorites"
 }
 
+const BASICS_GRAPHS = [
+    getGraphFromJSON(require("../constantes/Graph/DefaultGraph1.json") as GraphType),
+    getGraphFromJSON(require("../constantes/Graph/DefaultGraph2.json") as GraphType),
+    getGraphFromJSON(require("../constantes/Graph/DefaultGraph3.json") as GraphType),
+    getGraphFromJSON(require("../constantes/Graph/DefaultGraph4.json") as GraphType),
+]
+
 const HomeScreen = () => {
-    const graph1 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph1.json") as GraphType);
-    const graph2 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph2.json") as GraphType);
-    const graph3 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph3.json") as GraphType);
-    const graph4 = getGraphFromJSON(require("../constantes/Graph/DefaultGraph4.json") as GraphType);
-    const graphs = [graph1, graph2, graph3, graph4];
+    
+    const [graphs, setGraphs] = useState<GraphType[]>(BASICS_GRAPHS)
+    const [displayedGraphs, setDisplayedGraphs] = useState<GraphType[]>(graphs)
     const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, setPersonnalDataUser, setListUtilisateurs, setUser } = useContext(AppContext);
 
+
+    const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false)
 
     // Partie Firestore
     useEffect(() => {
@@ -91,6 +99,20 @@ const HomeScreen = () => {
         setGraphsPartage(graphs2);
     };
 
+    useEffect(() => {
+        setDisplayedGraphs(graphs.filter(graph => graph.title.toLowerCase().startsWith(searchValue.toLowerCase())))
+    }, [searchValue])
+
+    const openAddModal = () => {
+        setIsAddModalVisible(true)
+        // let newgraph = { ...graphs[0], proprio: user.uid } as GraphType
+        // addGraphtest(newgraph, user.uid, personnalDataUser)
+        // const updatedGraphsUser = graphsUser
+        // updatedGraphsUser.push(graphs[0])
+        // setGraphsUser(updatedGraphsUser)
+
+    }
+
     return (
         <div style={{ display: "flex", flexDirection: "row", maxHeight: "100%", flex: 1, boxSizing: "border-box" }}>
             <HomeSideBar menu={menu} setMenu={setMenu} />
@@ -115,15 +137,7 @@ const HomeScreen = () => {
                     <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                         <IconButton Icon={IoReload} onPress={handleRefresh} />
         
-                        <IconButton secondary Icon={IoIosAdd} onPress={() => {
-
-                            let newgraph = { ...graph1, proprio: user.uid } as GraphType
-                            addGraphtest(newgraph, user.uid, personnalDataUser)
-                            const updatedGraphsUser = graphsUser
-                            updatedGraphsUser.push(graph1)
-                            setGraphsUser(updatedGraphsUser)
-
-                        }} />
+                        <IconButton secondary Icon={IoIosAdd} onPress={openAddModal}/>
 
                     </div>
                 </div>
@@ -156,7 +170,7 @@ const HomeScreen = () => {
                                     <ListGraph
                                         favorites={favorites}
                                         setFavorites={setFavorites}
-                                        graphs={graphs}
+                                        graphs={displayedGraphs}
                                         title="Modèles de cartes" /> :
                                     <ListGraph
                                         favorites={favorites}
@@ -175,6 +189,9 @@ const HomeScreen = () => {
                 showComposants &&
                 <ComposantsModal onClose={handleCloseComposants}/>
             } */}
+
+            {isAddModalVisible && <AddGraphModal onClose={() => setIsAddModalVisible(false)}/>}
+
         </div>
     );
 };
