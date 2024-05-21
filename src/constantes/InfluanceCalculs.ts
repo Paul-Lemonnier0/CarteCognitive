@@ -98,9 +98,18 @@ export const getIntPathsValue = (paths: Edge[][], propagationValue: PropagationA
                 return null
             }
 
-            const currentEdgeValue = parseFloat(edge.data.label)
+            let currentEdgeValue = 0 
+            if (/^\d+([.,]\d+)?$/.test(edge.data.label)) {
+                const labelWhithPoint = edge.data.label.replace(',', '.');
+                currentEdgeValue = parseFloat(labelWhithPoint);
+            }
+            else if (/^\d+\/\d+$/.test(edge.data.label)){
+                const [numerator, denominator] = edge.data.label.split('/').map(Number);
+                const result = numerator / denominator;
+                currentEdgeValue = result
+            }
             if(isFirstElement) {
-                currentPathValue = currentEdgeValue
+                currentPathValue = currentEdgeValue 
                 isFirstElement = false
             }
 

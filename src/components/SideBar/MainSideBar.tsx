@@ -3,12 +3,13 @@ import "./MainSideBar.css"
 import { GoBackButton, IconButton } from "../Buttons/IconButtons"
 import { useNavigate } from "react-router-dom"
 import { IoChevronForward } from "react-icons/io5"
-import { FiEdit3, FiSettings } from "react-icons/fi"
+import { FiEdit3, FiSettings, FiCpu } from "react-icons/fi"
 import { VscSymbolOperator } from "react-icons/vsc";
 import { HiOutlineCog } from "react-icons/hi";
 import EditSideBar from "./EditSideBar"
 import CalculSideBar from "./CalculSideBar"
 import SettingsSideBar from "./SettingsSideBar"
+import AutomatingSideBar from "./AutomatingSideBar"
 import { SlCalculator } from "react-icons/sl"
 import { GraphContext } from "../../context/GraphContext"
 import { GraphType } from "../../types/Graph/GraphType"
@@ -18,7 +19,8 @@ import { AppContext } from "../../context/AppContext"
 enum SideBarMenuType {
     Edit = "Edit",
     Calcul = "Calcul",
-    Settings = "Settings"
+    Settings = "Settings",
+    Auto = "Auto"
 }
 
 const MainSideBar = () => {
@@ -99,6 +101,13 @@ const MainSideBar = () => {
                             Icon={FiSettings} />
                         <span className="tooltip">Paramètres</span>
                     </div>
+                    <div className="mainSideBarListItem">
+                        <IconButton 
+                            isSelected={selectedMenu === SideBarMenuType.Auto} 
+                            onPress={() => handleChangeMenu(SideBarMenuType.Auto)}
+                            Icon={FiCpu} />
+                        <span className="tooltip">Automatisation</span>
+                    </div>
                 </div>
 
                 <div id="footer">
@@ -121,6 +130,7 @@ const MainSideBar = () => {
                 {(selectedMenu == SideBarMenuType.Edit) && <EditSideBar isExpanded={isExpanded}/>}
                 {(selectedMenu == SideBarMenuType.Calcul) && <CalculSideBar isExpanded={isExpanded}/>}
                 {(selectedMenu == SideBarMenuType.Settings) && <SettingsSideBar isExpanded={isExpanded}/>}
+                {(selectedMenu == SideBarMenuType.Auto) && <AutomatingSideBar isExpanded={isExpanded}/>}
             </div>
         </div>
     )

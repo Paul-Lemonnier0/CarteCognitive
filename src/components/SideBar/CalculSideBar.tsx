@@ -88,11 +88,11 @@ const CalculSideBar: FC<CalculSideBarProps> = ({ isExpanded }) => {
 
     const handleCalculateMax = () => {
         setResultAgregation("")
-        handleCalculateBase(PropagationAgretationType.MAX)
+        handleCalculateBase(PropagationAgretationType.MAX,PropagationAgretationType.MAX)
     }
     const handleCalculateMin = () => {
         setResultAgregation("")
-        handleCalculateBase(PropagationAgretationType.MIN)
+        handleCalculateBase(PropagationAgretationType.MIN,PropagationAgretationType.MIN)
     }
 
     const handleCalculateBase = (customAgregation?: PropagationAgretationType, customPropagation?: PropagationAgretationType) => {
