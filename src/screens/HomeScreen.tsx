@@ -3,7 +3,7 @@ import "./HomeScreen.css";
 import { GraphType } from "../types/Graph/GraphType";
 import { getGraphFromJSON } from "../primitives/GraphMethods";
 import ListGraph from "../components/graphs/ListGraph";
-import { CreateGraph, addGraphtest, deleteGraphTest, getGraphtest, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs } from "../firebase/FireStore.tsx/FirestoreDB";
+import { CreateGraph, addGraphtest, deleteGraphTest, getGraphtest, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs, saveLocalStoragePersonnalData, setPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
 import { AppContext } from "../context/AppContext";
 import HomeSideBar from "../components/SideBar/HomeSideBar";
 import CustomSearchBar from "../components/SearchBar/SearchBar";
@@ -36,6 +36,8 @@ const HomeScreen = () => {
     const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, setPersonnalDataUser, setListUtilisateurs, setUser } = useContext(AppContext);
     const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false)
     const [isConnected, setIsConnected] = useState(false)
+    const [favorites, setFavorites] = useState<string[]>(personnalDataUser.favorites);
+    const [favoritesGraphs, setFavoritesGraphs] = useState<GraphType[]>([]);
 
     const navigation = useNavigate()
     // Partie Firestore
@@ -44,10 +46,12 @@ const HomeScreen = () => {
         const userData = getLocalStorageUser()
         if (storagePersonnalData) {
             setPersonnalDataUser(storagePersonnalData)
+            setFavorites(storagePersonnalData.favorites)
         }
         if (userData) {
             setUser(userData)
         }
+
         const getListFun = async () => {
             try {
                 // Attendre le résultat de getListUtilisateur
@@ -68,19 +72,21 @@ const HomeScreen = () => {
     }, [])
 
     useEffect(() => {
-        if (user.uid !== "Default") setIsConnected(true)
-        if (user.uid === "Default") setIsConnected(false)
+        if (user.uid !== "Default") {
+            setIsConnected(true)
+        }
+        else setIsConnected(false)
     }, [user])
 
     const [menu, setMenu] = useState<HomeSideBarMenu>(HomeSideBarMenu.Graphs);
     const [searchValue, setSearchValue] = useState<string>("");
 
-    const [favorites, setFavorites] = useState<string[]>(personnalDataUser.favorites ?? []);
-    const [favoritesGraphs, setFavoritesGraphs] = useState<GraphType[]>([]);
+
 
     useEffect(() => {
-        const newFavoritesGraphs: GraphType[] = [];
 
+
+        const newFavoritesGraphs: GraphType[] = [];
         const userGraphsIDs = graphsUser.map(graph => graph.id);
         const defaultGraphIDs = graphs.map(graph => graph.id);
         favorites.forEach((graphID) => {
@@ -90,10 +96,28 @@ const HomeScreen = () => {
 
             if (defaultGraphIDs.includes(graphID)) {
                 newFavoritesGraphs.push(graphs.find(graph => graph.id === graphID)!);
+
             }
         });
         setFavoritesGraphs(newFavoritesGraphs);
+
+        
+
+
     }, [favorites, graphs, graphsUser]);
+
+
+    useEffect(()=>{
+        if(personnalDataUser.name !== "" && isConnected){
+            console.log("personnal data : ", personnalDataUser)
+            saveLocalStoragePersonnalData({...personnalDataUser, favorites : favorites})
+            setPersonnalDataUser({...personnalDataUser, favorites : favorites})
+            setPersonnalData(user.uid, {...personnalDataUser, favorites : favorites})
+
+        }
+    },[favorites])
+
+
 
     const handleRefresh = async () => {
         const graphCollection = await getGraphtest(user.uid);
@@ -106,6 +130,7 @@ const HomeScreen = () => {
         console.log("graphs1  : ", graphs1, "\n", "graphs2  : ", graphs2)
         setGraphsUser(graphs1);
         setGraphsPartage(graphs2);
+        setFavorites(personnalDataUser.favorites)
     };
 
     useEffect(() => {
@@ -149,7 +174,7 @@ const HomeScreen = () => {
                     <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                         <IconButton Icon={IoReload} onPress={handleRefresh} />
 
-                        <IconButton contrast Icon={IoAdd} onPress={isConnected? openAddModal : ()=>{}} />
+                        <IconButton contrast Icon={IoAdd} onPress={isConnected ? openAddModal : () => { }} />
 
                     </div>
                 </div>
