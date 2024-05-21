@@ -1,12 +1,20 @@
 @import url('../../constantes/Colors.css');
 
-.autoComplete {
+.autoComplete, .autoCreate {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.inputBorne {
+
+
+.autoCreate {
+    margin-top: 5em;
+}
+
+
+
+.inputBorne, .inputCreate {
     border: none;
     background-color: var(--tertiary);
     padding: 0.5em;
@@ -17,7 +25,7 @@
     margin-bottom: 1em;
 }
 
-.borne {
+.borne, .parametreAutoCreate {
     display: flex;
     align-items: center;
 }
