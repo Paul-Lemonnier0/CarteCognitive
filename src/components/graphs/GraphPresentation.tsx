@@ -2,8 +2,8 @@ import React, { Dispatch, FC, useContext, useEffect, useState } from "react"
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { addPartageOtherUser, deleteGraph, deleteGraphTest } from "../../firebase/FireStore.tsx/FirestoreDB"
-import { AppContext, ListUtilisateurInterface, UtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext"
+import { addPartageOtherUser, deleteGraphTest } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { AppContext, UtilisateurInterface } from "../../context/AppContext"
 import { NormalText, TitleText } from "../Text/CustomText"
 import { IconButton, IconText } from "../Buttons/IconButtons"
 import { AiOutlineNodeIndex } from "react-icons/ai";
@@ -28,7 +28,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     setFavorites
 }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs } = useContext(AppContext)
+    const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs, personnalDataUser, setPersonnalDataUser} = useContext(AppContext)
     const [showUserListModal, setShowUserListModal] = useState(false);
 
     const handleClickEffacer = () => {
@@ -85,6 +85,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
 
         else {
             setFavorites([...favorites, graph.id])
+
         }
 
     }

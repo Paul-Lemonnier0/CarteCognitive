@@ -15,6 +15,7 @@ interface ListGraphInterface {
 
 const ListGraph = ({graphs, title, style, favorites, setFavorites} : ListGraphInterface) => {
 
+
     return (
     <div style={style} className="graphPresentationListContainer">
         <div style={{marginLeft: 20}}>
