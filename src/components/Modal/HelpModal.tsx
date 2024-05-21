@@ -7,6 +7,8 @@ import { IconButton } from '../Buttons/IconButtons';
 import { IoClose } from "react-icons/io5";
 import { TbSquareLetterG, TbSquareLetterN, TbSquareLetterS } from "react-icons/tb";
 import { TbClick } from "react-icons/tb";
+import BaseModal from './BaseModal';
+import Separator from '../Other/Separator';
 
 interface HelpModalProps {
   onClose: () => void
@@ -25,18 +27,14 @@ const HelpModal: FC<HelpModalProps> = ({onClose}) => {
   }
 
   return (
-    <div className='ModalOverlay' onClick={onClose}>
-          <div className='ModalContainer' onClick={(e) => e.stopPropagation()}>
-              
-              <div className='ModalCore'>
-                  <div className='ModalHeader'>
-                    <div className='ModalTitle'>
-                        <h3>Aide</h3>
-                    </div>
-                    <div className='ModalIconClose'>
-                      <IconButton Icon={IoClose} onPress={onClose}/>
-                    </div>
-                  </div>
+    <BaseModal.Overlay onClose={onClose}>
+          <BaseModal.Container> 
+              <BaseModal.Core>
+                  <BaseModal.Header>
+                    <BaseModal.HeaderTitle title='Aide'/>
+                    <BaseModal.CloseIcon onClose={onClose}/>
+                  </BaseModal.Header>
+
                   <div className='HM-body'>
                     <div className="HM-subBody">
                       <div className="HM-commandItem">
@@ -55,7 +53,9 @@ const HelpModal: FC<HelpModalProps> = ({onClose}) => {
                       </div>
                   </div>
 
-                  <div className='HM-subBody separation'>
+                  <Separator/>
+
+                  <div className='HM-subBody'>
 
                       <div className="HM-commandItem">
                         <div id="complexCommand">
@@ -78,16 +78,17 @@ const HelpModal: FC<HelpModalProps> = ({onClose}) => {
                       </div>
                     </div>
                   </div>
-                </div>
+              </BaseModal.Core>
 
-              <div className='ModalFooter'>
-                  <div className='ModalButtons'>
-                    <ValidationButton text="Terminer" onPress={onClose}/>
-                  </div>
-              </div>
-          </div>
-            
-      </div>
+              <BaseModal.Footer>
+                <BaseModal.FooterButtons>
+                  
+                  <ValidationButton text="Terminer" onPress={onClose}/>
+                
+                </BaseModal.FooterButtons>
+              </BaseModal.Footer>
+          </BaseModal.Container>  
+      </BaseModal.Overlay>
   );
 }
 

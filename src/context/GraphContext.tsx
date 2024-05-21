@@ -171,19 +171,32 @@ interface GraphContextProviderType {
     graphName: string,
     id: string,
     children: ReactNode,
-    defaultProprio : string
+    defaultProprio : string,
+    defaultGraphCalculType?: GraphCalculType,
+    defaultPropagation?: PropagationAgretationType,
+    defaultAggregation?: PropagationAgretationType
 }
 
 
-const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphName, id, children, defaultProprio  }: GraphContextProviderType) => {
+const GraphContextProvider = ({ id, graphName, 
+    defaultGraphCalculType,
+    defaultPropagation,
+    defaultAggregation,
+    autoUpgrade,
+    defaultNodes, defaultEdges,    
+    defaultProprio, 
+    children 
+}: GraphContextProviderType) => {
     
     const [isGraphModified, setIsGraphModified] = useState(false)
     const [graphTitle, setGraphTitle] = useState<string>(graphName)
     const [nodeColorField, setNodeColorField] = useState<string[]>([])
     const [changeColorWithField, setChangeColorWithField] = useState<boolean>(false)
     const [showEdge, setShowEdge] = useState<boolean>(true)
-    const [propagationValue, setPropagationValue] = useState<PropagationAgretationType>(PropagationAgretationType.MIN)
-    const [agregationValue, setAgregationValue] = useState<PropagationAgretationType>(PropagationAgretationType.MAX)
+
+    const [graphCalculType, setGraphCalculType] = useState<GraphCalculType>(defaultGraphCalculType ?? GraphCalculType.Integer)
+    const [propagationValue, setPropagationValue] = useState<PropagationAgretationType>(defaultPropagation ?? PropagationAgretationType.MIN)
+    const [agregationValue, setAgregationValue] = useState<PropagationAgretationType>(defaultAggregation ?? PropagationAgretationType.MAX)
 
     const [resultAgregation, setResultAgregation] = useState<string>("")
 
@@ -427,15 +440,16 @@ const GraphContextProvider = ({ autoUpgrade, defaultNodes, defaultEdges, graphNa
                     title: graphTitle,
                     upgrade: upgrade,
                     proprio : proprio,
+                    propagation: propagationValue,
+                    aggregation: agregationValue,
+                    graphCalculType: graphCalculType,
                 }
-                setGraphtest(newGraph,personnalDataUser)
+
+                setGraphtest(newGraph, personnalDataUser)
                 setIsGraphModified(false)
     
             } 
         }, [upgrade,graphTitle, nodes, edges, id, lastSelectedNodeID, lastSelectedEdgeID, user])
-
-
-    const [graphCalculType, setGraphCalculType] = useState<GraphCalculType>(GraphCalculType.Integer)
 
     const handleChangeCalculType = (type: GraphCalculType) => {
 

@@ -15,13 +15,18 @@ import CustomSelect from '../SelectMenu/CustomSelect';
 import { useCalculType } from '../../hooks/useCalculType';
 import { PropagationAgretationType } from '../../constantes/InfluanceCalculs';
 import Separator from '../Other/Separator';
-import { HugeText, TitleText } from '../Text/CustomText';
+import { TitleText } from '../Text/CustomText';
+import { GraphType } from '../../types/Graph/GraphType';
+import { User } from 'firebase/auth';
+import { CustomUser } from '../../context/AppContext';
+const { v4: uuidv4 } = require('uuid');
 
 interface AddGraphModalProps {
-  onClose: (text?: string) => void
+  onClose: (newGraph?: GraphType) => void,
+  user: CustomUser | User
 }
 
-const AddGraphModal: FC<AddGraphModalProps> = ({onClose}) => {
+const AddGraphModal: FC<AddGraphModalProps> = ({onClose, user}) => {
   const [title, setTitle] = useState<string>("")
 
   function closeModal() {
@@ -29,7 +34,19 @@ const AddGraphModal: FC<AddGraphModalProps> = ({onClose}) => {
   }
 
   function saveModal() {
-    onClose(title)
+    const newGraph: GraphType = {
+      title,
+      proprio: user.uid,
+      nodes: [],
+      edges: [],
+      id: uuidv4(),
+      upgrade: false,
+      propagation: propagationValue, 
+      aggregation: aggretionValue, 
+      graphCalculType: graphCalculType
+  }
+
+    onClose(newGraph)
   }
 
 

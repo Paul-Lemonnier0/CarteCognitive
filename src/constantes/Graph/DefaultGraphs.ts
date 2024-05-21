@@ -1,4 +1,6 @@
+import { GraphCalculType } from "../../context/GraphContext";
 import { GraphType } from "../../types/Graph/GraphType";
+import { PropagationAgretationType } from "../InfluanceCalculs";
 
 export const graph1: GraphType = {
     title: "Premier graphe",
@@ -6,8 +8,10 @@ export const graph1: GraphType = {
     edges: [],
     id:"",
     upgrade : false,
-    proprio : ""
-
+    proprio : "",
+    propagation: PropagationAgretationType.ADD,
+    aggregation: PropagationAgretationType.ADD,
+    graphCalculType: GraphCalculType.Integer
 }
 
 export const graph2: GraphType = {
@@ -16,9 +20,10 @@ export const graph2: GraphType = {
     edges: [],
     id: "",
     upgrade : false,
-    proprio : ""
-
-
+    proprio : "",
+    propagation: PropagationAgretationType.ADD,
+    aggregation: PropagationAgretationType.ADD,
+    graphCalculType: GraphCalculType.Integer
 }
 
 export const graph3: GraphType = {
@@ -27,10 +32,10 @@ export const graph3: GraphType = {
     edges: [],
     id: "",
     upgrade : false,
-    proprio : ""
-
-
-
+    proprio : "",
+    propagation: PropagationAgretationType.ADD,
+    aggregation: PropagationAgretationType.ADD,
+    graphCalculType: GraphCalculType.Integer
 }
 
 export const graph4: GraphType = {
@@ -39,10 +44,10 @@ export const graph4: GraphType = {
     edges: [],
     id: "",
     upgrade : false,
-    proprio : ""
-
-
-
+    proprio : "",
+    propagation: PropagationAgretationType.ADD,
+    aggregation: PropagationAgretationType.ADD,
+    graphCalculType: GraphCalculType.Integer
 }
 
 export const graph5: GraphType = {
@@ -51,9 +56,10 @@ export const graph5: GraphType = {
     edges: [],
     id: "",
     upgrade : false,
-    proprio : ""
-
-
+    proprio : "",
+    propagation: PropagationAgretationType.ADD,
+    aggregation: PropagationAgretationType.ADD,
+    graphCalculType: GraphCalculType.Integer
 }
 
 export const defaultGraphs = [graph1, graph2, graph3, graph4, graph5]

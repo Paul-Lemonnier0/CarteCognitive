@@ -23,7 +23,7 @@ import { RxValueNone,RxUpdate,RxFontRoman  } from "react-icons/rx";
 
 const SideBar = () => {
     const {colorNode, setColorNode, setWantSelectColor, wantSelectColor,cyclique,setCyclique,user, personnalDataUser} = useContext(AppContext)
-    const {showEdge,setShowEdge,upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified, proprio, setProprio } = useContext(GraphContext)
+    const {graphCalculType, propagationValue, agregationValue, showEdge, setShowEdge, upgrade, nodes, edges, graphTitle, id, isGraphModified, setIsGraphModified, proprio, setProprio } = useContext(GraphContext)
   
     const { getNodes } = useReactFlow();
 
@@ -62,9 +62,12 @@ const SideBar = () => {
             id: id,
             title: graphTitle,
             upgrade : upgrade,
-            proprio : proprio
-
+            proprio : proprio,
+            graphCalculType,
+            propagation: propagationValue,
+            aggregation: agregationValue
         }
+        
         setGraphtest(newGraph, personnalDataUser)
         console.log("sauvegarde effectué")
         setIsGraphModified(false)

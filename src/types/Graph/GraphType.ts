@@ -1,4 +1,6 @@
 import { Edge, Node } from "reactflow";
+import { PropagationAgretationType } from "../../constantes/InfluanceCalculs";
+import { GraphCalculType } from "../../context/GraphContext";
 
 export interface GraphType {
     title: string,
@@ -9,4 +11,7 @@ export interface GraphType {
     id : string,
     upgrade : boolean,
     proprio : string,
+    propagation: PropagationAgretationType,
+    aggregation: PropagationAgretationType,
+    graphCalculType: GraphCalculType,
 }

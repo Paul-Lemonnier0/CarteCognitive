@@ -16,13 +16,18 @@ const GraphDetailsScreen = () => {
     if(!graph) return null
 
     return(
-        <GraphContextProvider defaultProprio={graph.proprio} autoUpgrade={graph.upgrade} defaultNodes={graph.nodes} defaultEdges={graph.edges} graphName={graph.title} id={graph.id}>
+        <GraphContextProvider id={graph.id} 
+            defaultGraphCalculType={graph.graphCalculType}
+            defaultAggregation={graph.aggregation}
+            defaultPropagation={graph.propagation}
+            graphName={graph.title} 
+            defaultNodes={graph.nodes} defaultEdges={graph.edges}
+            defaultProprio={graph.proprio} autoUpgrade={graph.upgrade} 
+        >
             <div style={{display: "flex", flexDirection: "column", flex: 1}}>
                 <GraphTopBar title="e"/>
                 <div style={{ display: "flex", flexDirection: "row", flex: 1 }}
                     className="graphDetailsContainer">
-                    
-                        
                         <MainSideBar/>
                         <Graph/>    
                         <SideBar/>

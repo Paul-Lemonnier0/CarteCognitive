@@ -14,7 +14,6 @@ import AddGraphModal from "../components/Modal/AddGraphModal";
 import { HugeText, MidTextBold, TitleText } from "../components/Text/CustomText";
 import { ValidationButton } from "../components/Buttons/Buttons";
 import { useNavigate } from "react-router-dom";
-const { v4: uuidv4 } = require('uuid');
 
 export enum HomeSideBarMenu {
     Graphs = "Graphs",
@@ -117,23 +116,13 @@ const HomeScreen = () => {
 
     }
 
-    const handleAddGraph = (title: string) => {
-        const newGraph: GraphType = {
-            title,
-            proprio: user.uid,
-            nodes: [],
-            edges: [],
-            id: uuidv4(),
-            upgrade: false
-        }
-
+    const handleAddGraph = (newGraph: GraphType) => {
         addGraphtest(newGraph, user.uid, personnalDataUser)
 
         setGraphsUser(prevUserGraphs => [
             newGraph,
             ...prevUserGraphs
-        ]
-        )
+        ])
     }
 
     const userGraphsEmpty = graphsUser.length + graphsPartage.length === 0
@@ -150,7 +139,6 @@ const HomeScreen = () => {
                         <IconButton Icon={IoReload} onPress={handleRefresh} />
 
                         <IconButton contrast Icon={IoAdd} onPress={isConnected? openAddModal : ()=>{}} />
-
                     </div>
                 </div>
                 <div style={{
@@ -181,11 +169,16 @@ const HomeScreen = () => {
                                             alignItems: "center"
                                         }}>
                                             <HugeText text="Aucune carte !" style={{ fontSize: 40 }} />
-                                            <TitleText bold gray center color="" text="Commencez à créer des cartes personnalisées dès maitenant" />
+                                            
+                                            <TitleText bold gray center color="" text={
+                                                isConnected ?
+                                                "Commencez à créer des cartes personnalisées dès maitenant" :
+                                                "Connectez-vous afin de créer des cartes personnalisées"
+                                            } />
                                         </div>
                                         {isConnected ?
                                             <ValidationButton text="Créer une carte" onPress={openAddModal} /> :
-                                            <ValidationButton text="connectez-vous" onPress={() => navigation("SignIn")} />
+                                            <ValidationButton text="Connectez-vous" onPress={() => navigation("SignIn")} />
                                         }
 
                                     </div>
@@ -238,13 +231,13 @@ const HomeScreen = () => {
 
             {
                 isAddModalVisible &&
-                <AddGraphModal onClose={(text?: string) => {
-                    if (text) {
-                        handleAddGraph(text)
+                <AddGraphModal user={user} onClose={(newGraph?: GraphType) => {
+                    if(newGraph) {
+                        handleAddGraph(newGraph)
                     }
 
                     setIsAddModalVisible(false)
-                }}
+                    }}
                 />
             }
 

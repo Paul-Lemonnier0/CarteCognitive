@@ -36,7 +36,8 @@ const GraphDetailsSideBar = () => {
         lastSelectedNodeID, setLastSelectedNodeID, 
         updateNodeData, 
         lastSelectedEdgeID, setLastSelectedEdgeID, 
-        setIsCalculating, isCalculating, proprio
+        setIsCalculating, isCalculating, proprio,
+        graphCalculType, propagationValue, agregationValue
     } = useContext(GraphContext)
 
     const {user, personnalDataUser} = useContext(AppContext)
@@ -69,7 +70,10 @@ const GraphDetailsSideBar = () => {
                 id: id,
                 title: editedTitle,
                 upgrade: upgrade,
-                proprio : proprio
+                proprio : proprio,
+                graphCalculType,
+                propagation: propagationValue,
+                aggregation: agregationValue
             }
             setGraphtest(newGraph, personnalDataUser )
             setIsGraphModified(false)
@@ -138,7 +142,10 @@ const GraphDetailsSideBar = () => {
             id: id,
             title: editedTitle,
             upgrade: upgrade,
-            proprio: proprio
+            proprio: proprio,
+            graphCalculType,
+            propagation: propagationValue,
+            aggregation: agregationValue
         }
 
         if (isGraphModified) {
