@@ -47,15 +47,9 @@ const LoginScreen = () => {
                 saveLocalStorageUser(user)
                 setUser(user);
                 const PersonnalData = await getPersonnalData(user.uid) as personnalDataUserInterface
-                console.log( "toto: ", PersonnalData.ListGraphsPartage)
                 setPersonnalDataUser(PersonnalData)
                 saveLocalStoragePersonnalData(PersonnalData)
-                const getGraphPartageFun=(async () => {
-                    console.log("list graph : ", PersonnalData.ListGraphsPartage)
-                    const graphCollectionPartage = await getGraphPartageUser(PersonnalData.ListGraphsPartage)
-                    setGraphsPartage(graphCollectionPartage)
-                })
-                getGraphPartageFun()
+                
                 console.log("user connecté : ", user);
             } catch (error) {
                 console.error("Erreur de connexion :", error);

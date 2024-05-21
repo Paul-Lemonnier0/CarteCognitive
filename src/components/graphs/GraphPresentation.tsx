@@ -28,7 +28,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     setFavorites
 }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const { user, graphsUser, setGraphsUser, ListUtilisateurs } = useContext(AppContext)
+    const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs } = useContext(AppContext)
     const [showUserListModal, setShowUserListModal] = useState(false);
 
     const handleClickEffacer = () => {
@@ -37,7 +37,9 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         else {
             deleteGraphTest(graph.id, user.uid)
             const updatedGraphsUser = graphsUser.filter((g) => g.id !== graph.id)
+            const updatedGraphsUserPartage = graphsPartage.filter((g) => g.id !== graph.id)
             setGraphsUser(updatedGraphsUser)
+            setGraphsPartage(updatedGraphsUserPartage)
 
             console.log("id : ", graph.id, "effacée !")
             setIsSelect(false)

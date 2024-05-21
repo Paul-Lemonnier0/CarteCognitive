@@ -69,7 +69,7 @@ const SignUpScreen = () => {
                 const user = await SignUpEmailPassword(email, password, navigate)
                 setUser(user);
                 saveLocalStorageUser(user)
-                const userData : personnalDataUserInterface= {firstName , name, favorites : [], ListGraphsPartage : []} 
+                const userData : personnalDataUserInterface= {firstName , name, favorites : []} 
                 setPersonnalData(user.uid, userData)
                 setPersonnalDataUser(userData)
                 saveLocalStoragePersonnalData(userData)

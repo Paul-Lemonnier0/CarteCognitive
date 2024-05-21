@@ -41,7 +41,6 @@ export interface personnalDataUserInterface {
     name: string,
     firstName: string,
     favorites: string[],
-    ListGraphsPartage: any[],
 }
 
 export interface CustomUser {
@@ -60,7 +59,6 @@ const personnalData: personnalDataUserInterface = {
     firstName: '',
     name: '',
     favorites: [],
-    ListGraphsPartage: [],
 };
 
 const AppContext = createContext<AppContextType>({
@@ -112,6 +110,8 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const [graphsPartage, setGraphsPartage] = useState<GraphType[]>([])
 
     function Deconnection() {
+        setGraphsPartage([])
+        setGraphsUser([])
         setUser(defaultUser)
         setPersonnalDataUser(personnalData)
         saveLocalStorageUser(defaultUser)
