@@ -18,7 +18,7 @@ interface AppContextType {
     //TODO changer les any par des types approprié
     setUser: any,
     personnalDataUser: personnalDataUserInterface
-    setPersonnalDataUser: any,
+    setPersonnalDataUser: Dispatch<React.SetStateAction<personnalDataUserInterface>>,
     Deconnection: () => void,
     graphsUser: GraphType[],
     graphsPartage: GraphType[],

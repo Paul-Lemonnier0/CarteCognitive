@@ -3,7 +3,9 @@ import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getD
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
 import { CustomUser, ListUtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext";
-import { User } from "firebase/auth";
+import { User, deleteUser, signOut } from "firebase/auth";
+import { auth } from "../Authentification/Auth";
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -136,7 +138,7 @@ async function getPersonnalData(userid: string) {
 
 }
 
-export async function getListUtilisateur(): Promise<ListUtilisateurInterface | null> {
+export async function getListUtilisateur(): Promise<ListUtilisateurInterface> {
     try {
         // Référencer le document Firestore
         const docRef = doc(db, "users", "ListUtilisateurs");
@@ -147,7 +149,7 @@ export async function getListUtilisateur(): Promise<ListUtilisateurInterface | n
         // Vérifier si le document existe
         if (!docSnapshot.exists()) {
             console.error("Le document ListUtilisateurs n'existe pas");
-            return null;
+            return {} as ListUtilisateurInterface;
         }
 
         // Récupérer les données du document
@@ -156,7 +158,7 @@ export async function getListUtilisateur(): Promise<ListUtilisateurInterface | n
         // Vérifier les données récupérées pour la sécurité de type
         if (!data) {
             console.error("Les données récupérées ne sont pas valides");
-            return null;
+            return {} as ListUtilisateurInterface;
         }
 
         // Retourner les données
@@ -164,7 +166,7 @@ export async function getListUtilisateur(): Promise<ListUtilisateurInterface | n
     } catch (error) {
         // Gestion des erreurs
         console.error("Erreur lors de la récupération de la liste des utilisateurs :", error);
-        return null;
+        return {} as ListUtilisateurInterface;
     }
 }
 export async function setListUtilisateur(Listdata: ListUtilisateurInterface) {
@@ -314,6 +316,32 @@ export async function addPartageOtherUser(graphid : string, uid : string){
         if(e.idgraph === graphid) e.usersId.push(uid)
     })
     await setDoc(docRef, listGraphs, {merge : true})
+}
+
+export async function deleteAllDataUser (uid : string){
+    const user = auth.currentUser
+    if(user !== null){
+    const ListUsersdocRef = doc(db, "users", "ListUtilisateurs")
+    let ListUsersdata = (await getDoc(ListUsersdocRef)).data() as ListUtilisateurInterface
+    const newListUsers = {}as ListUtilisateurInterface
+    newListUsers.List= ListUsersdata.List.filter((user)=>user.uid !== uid)
+    await setDoc(ListUsersdocRef, newListUsers, {merge : true})
+    const userDoc = doc(db, "users", uid)
+    await deleteDoc(userDoc)
+    const ListGraphsDocRef = doc(db, "Graphs", "ListGraphs")
+    let ListGraphs = (await getDoc(ListGraphsDocRef)).data() as ListGraphsInterface
+    ListGraphs.list.forEach((item: listInterface) => {
+        if (item.usersId.includes(uid)) {
+            deleteGraphTest(item.idgraph, uid)
+        }
+    })
+    deleteUser(user).then(()=>{
+        console.log("delete du compte réussi")
+    }).catch((error)=>{
+        console.log(error)
+    })
+    }
+
 }
 
 export default db

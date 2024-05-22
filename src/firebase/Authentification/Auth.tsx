@@ -1,7 +1,7 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential, User } from "firebase/auth";
 import { app } from "../FireBaseConnexion";
 import { useNavigate } from "react-router-dom";
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
 
 
