@@ -30,13 +30,27 @@ const BASICS_GRAPHS = [
 
 const HomeScreen = () => {
 
-    const [graphs, setGraphs] = useState<GraphType[]>(BASICS_GRAPHS)
-    const [displayedGraphs, setDisplayedGraphs] = useState<GraphType[]>(graphs)
-    const { user, personnalDataUser, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, setPersonnalDataUser, setListUtilisateurs, setUser } = useContext(AppContext);
+    const { 
+        user,
+         personnalDataUser,
+         graphsUser,
+         setGraphsUser,
+         graphsPartage,
+         setGraphsPartage,
+         setPersonnalDataUser, setListUtilisateurs, setUser 
+    } = useContext(AppContext);
     const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false)
     const [isConnected, setIsConnected] = useState(false)
     const [favorites, setFavorites] = useState<string[]>(personnalDataUser.favorites);
+
+    const [graphs, setGraphs] = useState<GraphType[]>(BASICS_GRAPHS)
+    const [templateDisplayedGraphs, setTemplateDisplayedGraphs] = useState<GraphType[]>(graphs)
+
     const [favoritesGraphs, setFavoritesGraphs] = useState<GraphType[]>([]);
+    const [displayedFavoritesGraphs, setDisplayedFavoritesGraphs] = useState<GraphType[]>(favoritesGraphs);
+
+    const [displayedUserGraphs, setDisplayedUserGraphs] = useState<GraphType[]>(graphsUser);
+    const [displayedSharedUserGraphs, setDisplayedSharedUserGraphs] = useState<GraphType[]>(graphsPartage);
 
     const navigation = useNavigate()
     // Partie Firestore
@@ -132,9 +146,25 @@ const HomeScreen = () => {
         setFavorites(personnalDataUser.favorites)
     };
 
+    const isGraphDisplayedForSearchValue = (graph: GraphType) => {
+        return graph.title.toLowerCase().startsWith(searchValue.toLowerCase())
+    }
+
     useEffect(() => {
-        setDisplayedGraphs(graphs.filter(graph => graph.title.toLowerCase().startsWith(searchValue.toLowerCase())))
-    }, [searchValue])
+        if(menu === HomeSideBarMenu.Templates) {
+            setTemplateDisplayedGraphs(graphs.filter(isGraphDisplayedForSearchValue))
+        }
+
+        else if (menu === HomeSideBarMenu.Graphs) {
+            setDisplayedUserGraphs(graphsUser.filter(isGraphDisplayedForSearchValue))
+            setDisplayedSharedUserGraphs(graphsPartage.filter(isGraphDisplayedForSearchValue))
+        }
+
+        else {
+            setDisplayedFavoritesGraphs(favoritesGraphs.filter(isGraphDisplayedForSearchValue))
+        }
+    
+    }, [searchValue, menu])
 
     const openAddModal = () => {
         setIsAddModalVisible(true)
@@ -213,7 +243,7 @@ const HomeScreen = () => {
                                             <ListGraph
                                                 favorites={favorites}
                                                 setFavorites={setFavorites}
-                                                graphs={graphsUser}
+                                                graphs={displayedUserGraphs}
                                                 title="Vos cartes"
                                             />
                                         )}
@@ -221,8 +251,8 @@ const HomeScreen = () => {
                                             <ListGraph
                                                 favorites={favorites}
                                                 setFavorites={setFavorites}
-                                                graphs={graphsPartage}
-                                                title="cartes partagées"
+                                                graphs={displayedSharedUserGraphs}
+                                                title="Cartes partagées"
                                             />
                                         )}
                                     </div>
@@ -232,14 +262,14 @@ const HomeScreen = () => {
                                 <ListGraph
                                     favorites={favorites}
                                     setFavorites={setFavorites}
-                                    graphs={displayedGraphs}
+                                    graphs={templateDisplayedGraphs}
                                     title="Modèles de cartes"
                                 />)
                                 :
                                 <ListGraph
                                     favorites={favorites}
                                     setFavorites={setFavorites}
-                                    graphs={favoritesGraphs}
+                                    graphs={displayedFavoritesGraphs}
                                     title="Vos Favoris"
                                 />
                     }
