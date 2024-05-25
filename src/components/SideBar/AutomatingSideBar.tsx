@@ -85,6 +85,25 @@ const AutomatingSideBar: FC<AutomatingSideBarProps> = ({isExpanded}) => {
         if(parseInt(event.target.value) <= 100) setDensity(parseInt(event.target.value))
     }
 
+    const isCycle = (currentEdge:Edge[],source:string,target:string,visited:Edge[]) => {
+
+        if(currentEdge.some((edge) => edge.source === source && edge.target === target)) return true
+        else {
+            const newEdges = currentEdge.filter((edge) => edge.source === source)
+            if(newEdges.length === 0) return false
+            else {
+                for(const edge of newEdges) {
+                    if(!visited.find((current) => {current === edge}) && isCycle(currentEdge, edge.target,target,[...visited,edge])) {
+                        return true
+                    }
+                    
+                }
+                return false
+            }
+
+        }
+    }
+
     const clickAutoCreate = () => {
         let x = 0
         let y = 0
@@ -101,21 +120,25 @@ const AutomatingSideBar: FC<AutomatingSideBarProps> = ({isExpanded}) => {
         }  
         setNodes([...currentNodes])  
         
-        const currentEdges = edges
+        console.log(nodes)
+        const currentEdges:Edge[] = []
         const nbrEdge = Math.round(nbrNode/100*density)
+
         for(let i = 0; i < nbrNode; i++) {
             for(let y = 0; y <= nbrEdge; y++) {
                 const next = Math.floor(Math.random() * (nbrNode))
-                if(next!=i ) {
-                    const id = "edge_" + i.toString() + generation.toString() + "-" + y.toString() + generation.toString()
+                const id = "edge_" + i.toString() + generation.toString() + "-" + next.toString() + generation.toString()
+                if(next!= i && !currentEdges.some(edge => edge.source === `${next}${generation}` && edge.target === `${i}${generation}`) && 
+                !currentEdges.some(edge => edge.id === id) && !isCycle(currentEdges,`${next}${generation}`,`${i}${generation}`,[])) {
+                    
                     currentEdges.push({source:`${i}${generation}`, target:`${next}${generation}`,id:id,data:{label:""}} as Edge)
                     
                 }
             }
             
-            
         }
-        setEdges([...currentEdges])
+        
+        setEdges([...edges,...currentEdges])
         
         
         setGeneration(generation+1)

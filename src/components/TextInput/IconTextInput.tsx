@@ -36,7 +36,6 @@ const IconTextInput: FC<IconTextInputProps> = ({
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-
         if (setTextValue) {
             setTextValue(newValue);
         }    

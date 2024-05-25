@@ -109,9 +109,13 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         setSelectedNodeData((prevData) => ({ ...prevData, label: e.target.value ?? "" }))
         
     }
+    const [inputWrittingEdge, setInputWrittingEdge] = useState("")
     const handleWrittingEdge = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedEdgeLabel(e.target.value)
-        
+        const regex = /^\d+([.,/]\d+)?$/
+        const value= e.target.value
+        setInputWrittingEdge(value)
+        if(regex.test(value))
+            setSelectedEdgeLabel(value)  
     }
 
     const handleUpdateNodeLabel = () => {
@@ -139,10 +143,12 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         }
     }
     const handleUpdateEdgeLabel = () => {
-        setEdges((prevEdges) => prevEdges.map(edge =>
-            edge.id === selectedEdge?.id ?
-                { ...edge, data: { label: selectedEdgeLabel } as any } : edge
-        ))
+            setInputWrittingEdge("")
+            setEdges((prevEdges) => prevEdges.map(edge =>
+                edge.id === selectedEdge?.id ?
+                    { ...edge, data: { label: selectedEdgeLabel } as any } : edge
+            ))
+       
         
     }
 
@@ -197,7 +203,6 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
 
     if (!isExpanded) return null
 
-    console.log(graphCalculType)
 
     return (
         <div className={`subSideBarContainer`} style={{overflowX: "hidden"}}>
@@ -308,10 +313,10 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                                 {
                                     (graphCalculType === GraphCalculType.Integer) &&
                                     <IconTextInput
-                                        numeric
+                                        
                                         iconHover
                                         Icon={RxText}
-                                        textValue={String(selectedEdgeLabel) ?? ""}
+                                        textValue={inputWrittingEdge}
                                         onChangeCustom={handleWrittingEdge}
                                         onBlur={handleUpdateEdgeLabel}
                                         placeholder="Nom de l'arrete ..."
