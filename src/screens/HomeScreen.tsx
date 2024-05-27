@@ -52,6 +52,15 @@ const HomeScreen = () => {
     const [displayedUserGraphs, setDisplayedUserGraphs] = useState<GraphType[]>(graphsUser);
     const [displayedSharedUserGraphs, setDisplayedSharedUserGraphs] = useState<GraphType[]>(graphsPartage);
 
+
+    useEffect(()=>{
+        setDisplayedUserGraphs(graphsUser)
+    },[graphsUser])
+
+    useEffect(()=>{
+        setDisplayedSharedUserGraphs(graphsPartage)
+    },[graphsPartage])
+
     const navigation = useNavigate()
     // Partie Firestore
     useEffect(() => {
