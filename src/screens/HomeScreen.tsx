@@ -111,6 +111,7 @@ const HomeScreen = () => {
         const newFavoritesGraphs: GraphType[] = [];
         const userGraphsIDs = graphsUser.map(graph => graph.id);
         const defaultGraphIDs = graphs.map(graph => graph.id);
+        const userGraphsPartageIDs = graphsPartage.map(graph => graph.id);
         favorites.forEach((graphID) => {
             if (userGraphsIDs.includes(graphID)) {
                 newFavoritesGraphs.push(graphsUser.find(graph => graph.id === graphID)!);
@@ -118,6 +119,10 @@ const HomeScreen = () => {
 
             if (defaultGraphIDs.includes(graphID)) {
                 newFavoritesGraphs.push(graphs.find(graph => graph.id === graphID)!);
+
+            }
+            if (userGraphsPartageIDs.includes(graphID)) {
+                newFavoritesGraphs.push(graphsPartage.find(graph => graph.id === graphID)!);
 
             }
         });
