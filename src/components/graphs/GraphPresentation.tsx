@@ -12,6 +12,7 @@ import { IoChevronForward } from "react-icons/io5"
 import { FaRegStar, FaStar } from "react-icons/fa6"
 import OtherUserProfile from "../Profil/OtherUserProfile"
 import { UsualButton } from "../Buttons/Buttons"
+import ExportToJSON from "../../data/ExportToJSON"
 
 interface GraphPresentationProps {
     graph: GraphType
@@ -30,6 +31,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     const [isSelect, setIsSelect] = useState(false)
     const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs, personnalDataUser, setPersonnalDataUser} = useContext(AppContext)
     const [showUserListModal, setShowUserListModal] = useState(false);
+
 
     const handleClickEffacer = () => {
         if (user?.uid === "")
@@ -70,6 +72,10 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         }
         if ((e.key === "p" && isSelect)) {
             handleClickPartage()
+        }
+        if((e.key ==="t" && isSelect)){
+            ExportToJSON(graph)
+            
         }
     }
     const handleSelectClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -153,7 +159,6 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
                 <div className="modal-overlay">
                     <div className="modal-content" onClick={(e)=>{e.stopPropagation()}}>
                         <h3>Liste des utilisateurs</h3>
-                        {/* Parcourez la liste des utilisateurs et affichez leur profil */}
                         {ListUtilisateurs.List.map((u) => (
 
                             <div className="OtherUser" onClick={()=>{handleClickOtherUser(u)}}>

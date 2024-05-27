@@ -19,6 +19,7 @@ import BaseModal from "../Modal/BaseModal"
 import IconTextInput from "../TextInput/IconTextInput"
 import { RxText } from "react-icons/rx"
 import { deleteAllDataUser, saveLocalStoragePersonnalData, setListUtilisateur, setPersonnalData } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { HelpModalHome } from "../Modal/HelpModal"
 
 enum SideBarMenuType {
     Edit = "Edit",
@@ -43,6 +44,7 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
     const [isModif, setIsModif] = useState<boolean>(false)
     const [name, setName] = useState<string>(personnalDataUser.name)
     const [firstName, setFirstName] = useState<string>(personnalDataUser.firstName)
+
 
 
     useEffect(() => {
@@ -125,7 +127,7 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
                             <ProfilButton onClick={() => { setProfilSelected(false); setIsModif(false) }} name={personnalDataUser.name} />
                             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 0 }}>
                                 <UsualButton text="Modifier" onPress={handlemodif}></UsualButton>
-                                <UsualButton text="supprimer" onPress={handledelete}></UsualButton>
+                                <UsualButton text="Supprimer" onPress={handledelete}></UsualButton>
                             </div>
 
                         </div>
@@ -184,6 +186,7 @@ const HomeSideBar: FC<HomeSideBarProps> = ({
 
                 </li>
             </div>
+
             {
                 isModif ?
                     (<BaseModal.Overlay onClose={() => { }}>
