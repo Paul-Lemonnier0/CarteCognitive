@@ -71,10 +71,8 @@ export const FieldsetNode: FC<FieldsetNodeProps> = ({ data, selected, id, xPos, 
   }
 
   const chooseColorNode = (color = "white") => {
-    setSelectedColor(color)
-
-    if(!data.couleur || selectedColor !== data.couleur) {
-      updateNodeData(id, {...data, couleur: selectedColor})
+    if(!data.couleur || color !== data.couleur) {
+      updateNodeData(id, {...data, couleur: color})
     }
   }
 

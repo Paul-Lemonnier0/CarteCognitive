@@ -315,7 +315,7 @@ const GraphDetailsSideBar = () => {
 
                             {/* <BackgroundIcon Icon={IoGitMergeOutline} size={25}/> */}
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{ opacity: selectedNodeData.label ? 1 : 0 }}>{selectedNodeData.label === "" ? "A" : selectedNodeData.label}</p>
+                                <p className="graphDetailsSideBarContainerTitleText" style={{ opacity: selectedNodeData.label ? 1 : 0 }}>{selectedNodeData.label === "" ? "--" : selectedNodeData.label}</p>
                                 <p className="graphDetailsSideBarContainerText">{selectedNodeTypeString} - Paul {selectedNodeData.date === "Non Definis" ? undefined : selectedNodeData.date}</p>
                             </div>
 
@@ -370,7 +370,7 @@ const GraphDetailsSideBar = () => {
                                 <CustomEdgeIcon size={25}/>
                             }
                             <div className="TitleAndSubtitleContainer">
-                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string }</p>
+                                <p className="graphDetailsSideBarContainerTitleText" style={{opacity: selectedEdgeLabel ? 1 : 0}}>{selectedEdgeLabel === "" ? "--" : selectedEdgeLabel as string }</p>
                                 <p className="graphDetailsSideBarContainerText"> Nicolas </p>
                             </div>
                         </div>

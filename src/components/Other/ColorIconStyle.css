@@ -6,6 +6,7 @@ div.customNodeIconContainer {
     display: flex;
     cursor: pointer;
     padding: 5px;
+    position: relative;
 }
 
 div.customNodeIconContainer:hover {

@@ -17,6 +17,7 @@ const ColorToolBar: FC<ColorToolBarProps> = ({isVisible, bottom, onColorPressed,
 
     return (
         <div style={{ 
+            position: "absolute",
             display: "grid", 
             gridTemplateColumns: `repeat(${nbColonnes}, 1fr)`, 
             gridTemplateRows: `repeat(${nbLignes}, auto)`, 
