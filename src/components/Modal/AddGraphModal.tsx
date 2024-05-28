@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import ReactDOM from 'react-dom';
 import "./ModalStyle.css"
 import "./AddGraphModalStyle.css"
@@ -18,7 +18,7 @@ import Separator from '../Other/Separator';
 import { TitleText } from '../Text/CustomText';
 import { GraphType } from '../../types/Graph/GraphType';
 import { User } from 'firebase/auth';
-import { CustomUser } from '../../context/AppContext';
+import { AppContext, CustomUser } from '../../context/AppContext';
 const { v4: uuidv4 } = require('uuid');
 
 interface AddGraphModalProps {

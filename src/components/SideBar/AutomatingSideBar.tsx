@@ -128,7 +128,9 @@ const AutomatingSideBar: FC<AutomatingSideBarProps> = ({isExpanded}) => {
             for(let y = 0; y <= nbrEdge; y++) {
                 const next = Math.floor(Math.random() * (nbrNode))
                 const id = "edge_" + i.toString() + generation.toString() + "-" + next.toString() + generation.toString()
-                if(next!= i && !currentEdges.some(edge => edge.source === `${next}${generation}` && edge.target === `${i}${generation}`) && 
+                
+                if(next === i) y-=1
+                else if(!currentEdges.some(edge => edge.source === `${next}${generation}` && edge.target === `${i}${generation}`) && 
                 !currentEdges.some(edge => edge.id === id) && !isCycle(currentEdges,`${next}${generation}`,`${i}${generation}`,[])) {
                     
                     currentEdges.push({source:`${i}${generation}`, target:`${next}${generation}`,id:id,data:{label:""}} as Edge)
@@ -174,11 +176,11 @@ const AutomatingSideBar: FC<AutomatingSideBarProps> = ({isExpanded}) => {
                 <div className="autoCreate">
                     <div className="parametreAutoCreate">
                         <input className="inputCreate" type="number" min={1} onChange={changeNbrNode} value={nbrNode}/>
-                        <MidText bold text="nombre Noeud(s)"/>
+                        <MidText bold text="Nombre de noeuds"/>
                     </div>
                     <div className="parametreAutoCreate">
                         <input className="inputCreate" type="number" min={0} max={100} onChange={changeNbrDensity} value={density}/>
-                        <MidText bold text="Densitée (%)"/>
+                        <MidText bold text="Densité (%)"/>
                     </div>
                     <ValidationButton text="Créer des nouveaux noeuds" onPress={clickAutoCreate}/>
                 </div>
