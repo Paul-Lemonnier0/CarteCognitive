@@ -185,7 +185,7 @@ interface ListGraphsInterface {
  * @param uid id de l'utilisateur qui ajoute le graph
  * @param user personnalDataUserInterface
  */
-export async function addGraphtest(graph: GraphType, uid: string ,  user : personnalDataUserInterface) {
+export async function addGraph(graph: GraphType, uid: string ,  user : personnalDataUserInterface) {
     const collectionRef = collection(db, "Graphs")
     const docRef = doc(db, "Graphs", "ListGraphs")
 
@@ -201,6 +201,7 @@ export async function addGraphtest(graph: GraphType, uid: string ,  user : perso
     await setDoc(newGraphDocRef, { ...graph, id: newGraphId })
 
     await setDoc(docRef, ListGraphs, { merge: true })
+    return newGraphId
 
 }
 

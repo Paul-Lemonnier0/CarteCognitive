@@ -3,7 +3,7 @@ import "./HomeScreen.css";
 import { GraphType } from "../types/Graph/GraphType";
 import { getGraphFromJSON } from "../primitives/GraphMethods";
 import ListGraph from "../components/graphs/ListGraph";
-import { CreateGraph, addGraphtest, deleteGraph, getGraph, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs, saveLocalStoragePersonnalData, setPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
+import { CreateGraph, addGraph, deleteGraph, getGraph, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs, saveLocalStoragePersonnalData, setPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
 import { AppContext } from "../context/AppContext";
 import HomeSideBar from "../components/SideBar/HomeSideBar";
 import CustomSearchBar from "../components/SearchBar/SearchBar";
@@ -190,11 +190,12 @@ const HomeScreen = () => {
 
     }
 
-    const handleAddGraph = (newGraph: GraphType) => {
-        addGraphtest(newGraph, user.uid, personnalDataUser)
+    const handleAddGraph = async (newGraph: GraphType) => {
+        const idgraph = await addGraph(newGraph, user.uid, personnalDataUser)
+
 
         setGraphsUser(prevUserGraphs => [
-            newGraph,
+            {...newGraph, "id" : idgraph},
             ...prevUserGraphs
         ])
     }
