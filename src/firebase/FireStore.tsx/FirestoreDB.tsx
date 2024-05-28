@@ -298,7 +298,7 @@ export async function deleteAllDataUser (uid : string){
         }
     })
     deleteUser(user).then(()=>{
-        console.log("delete du compte réussi")
+        console.log("suppression du compte réussi")
     }).catch((error)=>{
         console.log(error)
     })
