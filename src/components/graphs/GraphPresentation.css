@@ -19,7 +19,31 @@
     border: 3px solid var(--font);
 }
 
+#ListUsers {
+    height: 200px;
+    padding: 10;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    border: 1px solid #ccc;
+}
 
-.OtherUser :hover{
+.OtherUser {
+    display: flex;
+    flex-direction: column;
+    columns: 2;
+    align-items: center;
+    align-content: center;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
     border: 2px solid black;
 }
+
+.OtherUserProfile {
+    transition: transform 0.1s ease;
+}
+
+  
+  .OtherUserProfile:hover {
+    transform: translateY(-5px); 
+  }

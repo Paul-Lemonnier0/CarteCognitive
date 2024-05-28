@@ -275,7 +275,8 @@ export async function addPartageOtherUser(graphid : string, uid : string){
     const docRef = doc(db, "Graphs", "ListGraphs")
     let listGraphs = (await getDoc(docRef)).data() as ListGraphsInterface
     listGraphs.list.forEach((e)=>{
-        if(e.idgraph === graphid) e.usersId.push(uid)
+        if(e.idgraph === graphid)
+            if(!e.usersId.includes(uid)) e.usersId.push(uid)
     })
     await setDoc(docRef, listGraphs, {merge : true})
 }

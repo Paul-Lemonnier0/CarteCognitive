@@ -159,6 +159,8 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
                 <div className="modal-overlay">
                     <div className="modal-content" onClick={(e)=>{e.stopPropagation()}}>
                         <h3>Liste des utilisateurs</h3>
+                        <div id="ListUsers">
+
                         {ListUtilisateurs.List.map((u) => (
 
                             <div className="OtherUser" onClick={()=>{handleClickOtherUser(u)}}>
@@ -171,6 +173,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
                             </div>
 
                         ))}
+                        </div>
                         <UsualButton onPress={closeUserListModal} text="Fermer"></UsualButton>
                     </div>
                 </div>
