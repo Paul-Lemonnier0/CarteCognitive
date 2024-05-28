@@ -186,7 +186,8 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id }) => {
 
               :
 
-              <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
+              <div className={`customNodeEditToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
+                <div style={{display: "flex", flexDirection: "row", flex: 1}}>
                 <div className="customNodeIconContainer" onClick={handleBreakLinks}>
                   <FiLink size={20} />
                   <span className="verticalTooltip">Casser les liens</span>
@@ -229,6 +230,7 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id }) => {
                   isVisible={isSelectingColor}
                   selectedColor={selectedColor}
                 />
+                </div>
 
               </div>
           }
