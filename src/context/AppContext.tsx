@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactNode, createContext, useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { GraphType } from "../types/Graph/GraphType";
-import { getGraphPartageUser, getGraphtest, getLocalStoragePersonnalData, getUserGraphs, saveLocalStoragePersonnalData, saveLocalStorageUser } from "../firebase/FireStore.tsx/FirestoreDB";
+import { getGraph, getLocalStoragePersonnalData, getUserGraphs, saveLocalStoragePersonnalData, saveLocalStorageUser } from "../firebase/FireStore.tsx/FirestoreDB";
 
 interface AppContextType {
     isDarkMode: boolean,
@@ -125,7 +125,7 @@ const AppContextProvider = ({ children }: AppContextProviderProps) => {
         async function fetchGraphs() {
 
             try {
-                const graphCollection = await getGraphtest(user.uid);
+                const graphCollection = await getGraph(user.uid);
                 let graphs1 = [] as GraphType[]
                 let graphs2 = [] as GraphType[]
                 graphCollection.forEach((e) => {

@@ -8,7 +8,7 @@ import { CheckButton, GoBackButton } from '../components/Buttons/IconButtons';
 import { TbPasswordUser } from "react-icons/tb";
 import "./LoginScreen.css"
 import { AppContext, personnalDataUserInterface } from '../context/AppContext';
-import { getGraphPartageUser, getPersonnalData, saveLocalStoragePersonnalData, saveLocalStorageUser } from '../firebase/FireStore.tsx/FirestoreDB';
+import { getPersonnalData, saveLocalStoragePersonnalData, saveLocalStorageUser } from '../firebase/FireStore.tsx/FirestoreDB';
 
 
 const LoginScreen = () => {

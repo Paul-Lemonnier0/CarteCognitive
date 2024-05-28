@@ -2,7 +2,7 @@ import React, { Dispatch, FC, useContext, useEffect, useState } from "react"
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { addPartageOtherUser, deleteGraphTest } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { addPartageOtherUser, deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext, UtilisateurInterface } from "../../context/AppContext"
 import { NormalText, TitleText } from "../Text/CustomText"
 import { IconButton, IconText } from "../Buttons/IconButtons"
@@ -12,6 +12,7 @@ import { IoChevronForward } from "react-icons/io5"
 import { FaRegStar, FaStar } from "react-icons/fa6"
 import OtherUserProfile from "../Profil/OtherUserProfile"
 import { UsualButton } from "../Buttons/Buttons"
+import ExportToJSON from "../../data/ExportToJSON"
 
 interface GraphPresentationProps {
     graph: GraphType
@@ -28,14 +29,15 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     setFavorites
 }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs, personnalDataUser, setPersonnalDataUser} = useContext(AppContext)
+    const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs, personnalDataUser, setPersonnalDataUser } = useContext(AppContext)
     const [showUserListModal, setShowUserListModal] = useState(false);
+
 
     const handleClickEffacer = () => {
         if (user?.uid === "")
             console.log("utilisateur introuvable")
         else {
-            deleteGraphTest(graph.id, user.uid)
+            deleteGraph(graph.id, user.uid)
             const updatedGraphsUser = graphsUser.filter((g) => g.id !== graph.id)
             const updatedGraphsUserPartage = graphsPartage.filter((g) => g.id !== graph.id)
             setGraphsUser(updatedGraphsUser)
@@ -71,6 +73,10 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         if ((e.key === "p" && isSelect)) {
             handleClickPartage()
         }
+        if ((e.key === "t" && isSelect)) {
+            ExportToJSON(graph)
+
+        }
     }
     const handleSelectClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         setIsSelect(!isSelect);
@@ -93,7 +99,8 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         setShowUserListModal(false);
     };
 
-    const handleClickOtherUser = (u : UtilisateurInterface) => {
+
+    const handleClickOtherUser = (u: UtilisateurInterface) => {
         addPartageOtherUser(graph.id, u.uid)
     }
 
@@ -151,21 +158,27 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
             {showUserListModal && (
                 //TODO améliorer le style
                 <div className="modal-overlay">
-                    <div className="modal-content" onClick={(e)=>{e.stopPropagation()}}>
+                    <div className="modal-content" onClick={(e) => { e.stopPropagation() }}>
                         <h3>Liste des utilisateurs</h3>
-                        {/* Parcourez la liste des utilisateurs et affichez leur profil */}
-                        {ListUtilisateurs.List.map((u) => (
 
-                            <div className="OtherUser" onClick={()=>{handleClickOtherUser(u)}}>
-                                <OtherUserProfile
-                                    key={u.uid}
-                                    name={u.name}
-                                    firstName={u.firstName}
-                                    uid={u.uid}
-                                />
-                            </div>
 
-                        ))}
+
+                        <div id="ListUsers">
+                            {ListUtilisateurs.List.map((u) => (
+
+                                <div className="OtherUser" onClick={() => { handleClickOtherUser(u) }}>
+                                    <OtherUserProfile
+                                        key={u.uid}
+                                        name={u.name}
+                                        firstName={u.firstName}
+                                        uid={u.uid}
+                                    />
+                                </div>
+
+                            ))}
+                        </div>
+
+
                         <UsualButton onPress={closeUserListModal} text="Fermer"></UsualButton>
                     </div>
                 </div>

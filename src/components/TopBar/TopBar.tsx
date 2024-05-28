@@ -58,7 +58,7 @@ const AppTopBar: FC<AppTopBarProps> = ({isHomeScreen}) => {
             }}>
                 <FiBell size={25}/>
                 <Link to={"/Profile"} style={{ fontFamily: "PoppinsSemiBold" }}>
-                    <ProfilButton name={user.email?.toLocaleUpperCase() ?? "A"}/>
+                    <ProfilButton name={user.email?.toLocaleUpperCase() ?? "--"}/>
                 </Link>
             </div>
                 

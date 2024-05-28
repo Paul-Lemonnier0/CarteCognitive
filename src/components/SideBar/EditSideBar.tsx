@@ -18,6 +18,7 @@ import "./EditSideBarStyle.css"
 import "./SubSideBarStyle.css"
 
 import { NormalText, TitleText } from "../Text/CustomText";
+import { auth } from "../../firebase/Authentification/Auth";
 
 interface EditSideBarProps {
     isExpanded: boolean
@@ -185,7 +186,7 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
         setIsGraphModified(true);
     }
 
-    const nodeProprietaire = "Paul"
+    const nodeProprietaire = "unknown"
     const nodeDate = selectedNodeData.date ?? "Non Definis"
 
     const handleSelectMenuChange = (e: React.ChangeEvent<HTMLSelectElement>) => {        
@@ -193,12 +194,14 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
     }
 
     
-    useEffect(() => {
-        setEdges((prevEdges) => prevEdges.map(edge =>
-            edge.id === selectedEdge?.id ?
-                { ...edge, data: { label: selectedEdgeLabel } as any } : edge
-        ))
-    }, [selectedEdgeLabel]) 
+    // useEffect(() => {
+    //     if(selectedEdgeLabel !== selectedEdge?.data.label ) {
+    //         setEdges((prevEdges) => prevEdges.map(edge =>
+    //             edge.id === selectedEdge?.id ?
+    //                 { ...edge, data: { label: selectedEdgeLabel } as any } : edge
+    //         ))
+    //     }
+    // }, [selectedEdgeLabel]) 
 
 
     if (!isExpanded) return null
@@ -258,7 +261,7 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
 
                             <div className="TitleAndSubtitleContainer">
                                 <TitleText text={selectedNodeData.label === "" ? "" : selectedNodeData.label} />
-                                <NormalText text={selectedNodeTypeString + "-" + nodeProprietaire + "-" + nodeDate} />
+                                <NormalText text={selectedNodeTypeString} />
                             </div>
                         </div>
 
@@ -303,8 +306,8 @@ const EditSideBar: FC<EditSideBarProps> = ({ isExpanded }) => {
                             <CustomEdgeIcon size={25}/>
 
                             <div className="TitleAndSubtitleContainer">
-                                <TitleText text={selectedEdgeLabel === "" ? "A" : selectedEdgeLabel as string} />
-                                <NormalText text={nodeProprietaire} />
+                                <TitleText text={selectedEdgeLabel === "" ? "--" : selectedEdgeLabel as string} />
+                                <NormalText text={"Arête"} />
                             </div>
                         </div>
 

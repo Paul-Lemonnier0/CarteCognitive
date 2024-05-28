@@ -173,11 +173,11 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id }) => {
   return (
     <div className="customNodeContainer" onClick={handleOnClick}>
       {
-        <NodeToolbar nodeId={id} offset={50} align="start" isVisible={isToolbarVisible}>
+        <NodeToolbar nodeId={id} offset={60} align="start" isVisible={isToolbarVisible}>
           {
             isCalculating ?
 
-              <div className={`customNodeToolbar ${isPartOfInfluanceCalcul ? '' : 'customNodeToolbarHidden'}`}
+              <div className={`customNodeEditToolbar ${isPartOfInfluanceCalcul ? '' : 'customNodeToolbarHidden'}`}
                 style={{ backgroundColor: "#313443", width: 90 }}>
                 <MidTextBold text={
                   isSourceOfInfluanceCalcul ? "Source" :
@@ -186,50 +186,52 @@ export const CustomNode: FC<CustomNodeProps> = ({ data, selected, id }) => {
 
               :
 
-              <div className={`customNodeToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
-                <div className="customNodeIconContainer" onClick={handleBreakLinks}>
-                  <FiLink size={20} />
-                  <span className="verticalTooltip">Casser les liens</span>
-                </div>
-                <div className="customNodeIconContainer" onClick={handleDuplicateNode}>
-                  <LuCopy size={20} />
-                  <span className="verticalTooltip">Dupliquer</span>
-                </div>
-                {
-                  showCreator ?
-                    <div className="nodeCreator">
-                      <div className="nodeCreatorIcon">
-                        <FiUser size={20} />
-                        <span>Nicolas Mdr</span>
+              <div className={`customNodeEditToolbar ${lastSelectedNodeID === id ? '' : 'customNodeToolbarHidden'}`} >
+                {/* <div style={{display: "inline-block", backgroundColor: "red"}}> */}
+                  <div className="customNodeIconContainer" onClick={handleBreakLinks}>
+                    <FiLink size={20}/>
+                    <span className="verticalTooltip">Casser les liens</span>
+                  </div>
+                  <div className="customNodeIconContainer" onClick={handleDuplicateNode}>
+                    <LuCopy size={20} />
+                    <span className="verticalTooltip">Dupliquer</span>
+                  </div>
+                  {/* {
+                    showCreator ?
+                      <div className="nodeCreator">
+                        <div className="nodeCreatorIcon">
+                          <FiUser size={20} />
+                          <span>Nicolas Mdr</span>
 
+                        </div>
+                        <div className="nodeCreatorIcon">
+                          <FiClock size={20} />
+                          {data.date}
+                        </div>
                       </div>
-                      <div className="nodeCreatorIcon">
-                        <FiClock size={20} />
-                        {data.date}
-                      </div>
-                    </div>
-                    : undefined
-                }
-                <div className="customNodeIconContainer" onClick={handleDeleteNode}>
-                  <FiTrash2 size={20} />
-                  <span className="verticalTooltip">Supprimer</span>
+                      : undefined
+                  } */}
+                  <div className="customNodeIconContainer" onClick={handleDeleteNode}>
+                    <FiTrash2 size={20} />
+                    <span className="verticalTooltip">Supprimer</span>
 
-                </div>
+                  </div>
 
-                <div className="separator" />
+                  {/* <div className="separator" /> */}
+  
+                  <div className="customNodeIconContainer">
+                    <ColorIcon small isSelected color={selectedColor} onPress={clickColorNode} />
+                    <span className="verticalTooltip">Couleur</span>
 
-                <div className="customNodeIconContainer">
-                  <ColorIcon small isSelected color={selectedColor} onPress={clickColorNode} />
-                  <span className="verticalTooltip">Couleur</span>
+                  </div>
 
-                </div>
+                  <ColorToolBar 
+                    onColorPressed={(color: string) => handleSelectColor(color)} 
+                    isVisible={isSelectingColor}
+                    selectedColor={selectedColor}
+                  />
 
-                <ColorToolBar 
-                  onColorPressed={(color: string) => handleSelectColor(color)} 
-                  isVisible={isSelectingColor}
-                  selectedColor={selectedColor}
-                />
-
+                {/* </div> */}
               </div>
           }
         </NodeToolbar>

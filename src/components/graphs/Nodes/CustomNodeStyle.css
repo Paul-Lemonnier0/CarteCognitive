@@ -12,15 +12,17 @@ div.customHandle {
   opacity: 0;
 }
 
-div.customNodeToolbar {
+.customNodeEditToolbar {
   position: absolute;
-  background-color: white;
-  border-radius: 10px;
   display: flex;
   flex-direction: row;
   padding: 5px 10px;
+  background-color: white;
+  border-radius: 10px;
+  min-width: auto;
   box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1);
 }
+
 
 div.customNodeToolbarHidden {
   opacity: 0;

@@ -9,7 +9,7 @@ import { createNewNodeObject } from "../primitives/NodesMethods";
 import { FieldsetNode } from "../components/graphs/Nodes/FieldsetNode";
 import { AdjMat, AdjMat_addEdge, AdjMat_addNode, AdjMat_breakNodeLinks, AdjMat_deleteMultipleEdges, AdjMat_deleteMultipleNodes, AdjMat_deleteNode, AdjMat_init } from "../primitives/MatriceMethods";
 import { GraphType } from "../types/Graph/GraphType";
-import { setGraphtest } from "../firebase/FireStore.tsx/FirestoreDB";
+import { setGraph } from "../firebase/FireStore.tsx/FirestoreDB";
 import { PropagationAgretationType } from "../constantes/InfluanceCalculs";
 
 export enum GraphCalculType {
@@ -445,7 +445,7 @@ const GraphContextProvider = ({ id, graphName,
                     graphCalculType: graphCalculType,
                 }
 
-                setGraphtest(newGraph, personnalDataUser)
+                setGraph(newGraph, personnalDataUser)
                 setIsGraphModified(false)
     
             } 

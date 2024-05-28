@@ -3,7 +3,7 @@ import "./HomeScreen.css";
 import { GraphType } from "../types/Graph/GraphType";
 import { getGraphFromJSON } from "../primitives/GraphMethods";
 import ListGraph from "../components/graphs/ListGraph";
-import { CreateGraph, addGraphtest, deleteGraphTest, getGraphtest, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs, saveLocalStoragePersonnalData, setPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
+import { CreateGraph, addGraph, deleteGraph, getGraph, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs, saveLocalStoragePersonnalData, setPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
 import { AppContext } from "../context/AppContext";
 import HomeSideBar from "../components/SideBar/HomeSideBar";
 import CustomSearchBar from "../components/SearchBar/SearchBar";
@@ -14,6 +14,9 @@ import AddGraphModal from "../components/Modal/AddGraphModal";
 import { HugeText, MidTextBold, TitleText } from "../components/Text/CustomText";
 import { ValidationButton } from "../components/Buttons/Buttons";
 import { useNavigate } from "react-router-dom";
+import { HelpModalHome } from "../components/Modal/HelpModal";
+import { MdOutlineQuestionMark } from "react-icons/md";
+
 
 export enum HomeSideBarMenu {
     Graphs = "Graphs",
@@ -30,14 +33,14 @@ const BASICS_GRAPHS = [
 
 const HomeScreen = () => {
 
-    const { 
+    const {
         user,
-         personnalDataUser,
-         graphsUser,
-         setGraphsUser,
-         graphsPartage,
-         setGraphsPartage,
-         setPersonnalDataUser, setListUtilisateurs, setUser 
+        personnalDataUser,
+        graphsUser,
+        setGraphsUser,
+        graphsPartage,
+        setGraphsPartage,
+        setPersonnalDataUser, setListUtilisateurs, setUser
     } = useContext(AppContext);
     const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false)
     const [isConnected, setIsConnected] = useState(false)
@@ -51,6 +54,15 @@ const HomeScreen = () => {
 
     const [displayedUserGraphs, setDisplayedUserGraphs] = useState<GraphType[]>(graphsUser);
     const [displayedSharedUserGraphs, setDisplayedSharedUserGraphs] = useState<GraphType[]>(graphsPartage);
+
+
+    useEffect(() => {
+        setDisplayedUserGraphs(graphsUser)
+    }, [graphsUser])
+
+    useEffect(() => {
+        setDisplayedSharedUserGraphs(graphsPartage)
+    }, [graphsPartage])
 
     const navigation = useNavigate()
     // Partie Firestore
@@ -93,6 +105,8 @@ const HomeScreen = () => {
 
     const [menu, setMenu] = useState<HomeSideBarMenu>(HomeSideBarMenu.Graphs);
     const [searchValue, setSearchValue] = useState<string>("");
+    const [HelpVisibility, setHelpVisibility] = useState<boolean>(false)
+
 
 
 
@@ -102,6 +116,7 @@ const HomeScreen = () => {
         const newFavoritesGraphs: GraphType[] = [];
         const userGraphsIDs = graphsUser.map(graph => graph.id);
         const defaultGraphIDs = graphs.map(graph => graph.id);
+        const userGraphsPartageIDs = graphsPartage.map(graph => graph.id);
         favorites.forEach((graphID) => {
             if (userGraphsIDs.includes(graphID)) {
                 newFavoritesGraphs.push(graphsUser.find(graph => graph.id === graphID)!);
@@ -111,29 +126,33 @@ const HomeScreen = () => {
                 newFavoritesGraphs.push(graphs.find(graph => graph.id === graphID)!);
 
             }
+            if (userGraphsPartageIDs.includes(graphID)) {
+                newFavoritesGraphs.push(graphsPartage.find(graph => graph.id === graphID)!);
+
+            }
         });
         setFavoritesGraphs(newFavoritesGraphs);
 
-        
+
 
 
     }, [favorites, graphs, graphsUser]);
 
 
-    useEffect(()=>{
-        if(personnalDataUser.name !== "" && isConnected){
+    useEffect(() => {
+        if (personnalDataUser.name !== "" && isConnected) {
             console.log("personnal data : ", personnalDataUser)
-            saveLocalStoragePersonnalData({...personnalDataUser, favorites : favorites})
-            setPersonnalDataUser({...personnalDataUser, favorites : favorites})
-            setPersonnalData(user.uid, {...personnalDataUser, favorites : favorites})
+            saveLocalStoragePersonnalData({ ...personnalDataUser, favorites: favorites })
+            setPersonnalDataUser({ ...personnalDataUser, favorites: favorites })
+            setPersonnalData(user.uid, { ...personnalDataUser, favorites: favorites })
 
         }
-    },[favorites])
+    }, [favorites])
 
 
 
     const handleRefresh = async () => {
-        const graphCollection = await getGraphtest(user.uid);
+        const graphCollection = await getGraph(user.uid);
         let graphs1 = [] as GraphType[]
         let graphs2 = [] as GraphType[]
         graphCollection.forEach((e) => {
@@ -151,7 +170,7 @@ const HomeScreen = () => {
     }
 
     useEffect(() => {
-        if(menu === HomeSideBarMenu.Templates) {
+        if (menu === HomeSideBarMenu.Templates) {
             setTemplateDisplayedGraphs(graphs.filter(isGraphDisplayedForSearchValue))
         }
 
@@ -163,7 +182,7 @@ const HomeScreen = () => {
         else {
             setDisplayedFavoritesGraphs(favoritesGraphs.filter(isGraphDisplayedForSearchValue))
         }
-    
+
     }, [searchValue, menu])
 
     const openAddModal = () => {
@@ -171,11 +190,12 @@ const HomeScreen = () => {
 
     }
 
-    const handleAddGraph = (newGraph: GraphType) => {
-        addGraphtest(newGraph, user.uid, personnalDataUser)
+    const handleAddGraph = async (newGraph: GraphType) => {
+        const idgraph = await addGraph(newGraph, user.uid, personnalDataUser)
+
 
         setGraphsUser(prevUserGraphs => [
-            newGraph,
+            {...newGraph, "id" : idgraph},
             ...prevUserGraphs
         ])
     }
@@ -183,6 +203,7 @@ const HomeScreen = () => {
     const userGraphsEmpty = graphsUser.length + graphsPartage.length === 0
     return (
         <div style={{ display: "flex", flexDirection: "row", maxHeight: "100%", flex: 1, boxSizing: "border-box" }}>
+
             <HomeSideBar menu={menu} setMenu={setMenu} />
             <div className="homeScreenContainer">
                 <div className="homeScreenHeader">
@@ -193,7 +214,8 @@ const HomeScreen = () => {
                     <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                         <IconButton Icon={IoReload} onPress={handleRefresh} />
 
-                        <IconButton contrast Icon={IoAdd} onPress={isConnected? openAddModal : ()=>{}} />
+                        <IconButton contrast Icon={IoAdd} onPress={isConnected ? openAddModal : () => { }} />
+                        <IconButton contrast Icon={MdOutlineQuestionMark} onPress={()=>setHelpVisibility(true)} />
                     </div>
                 </div>
                 <div style={{
@@ -205,6 +227,8 @@ const HomeScreen = () => {
                     flexDirection: "column",
                     flex: 1
                 }}>
+                    {HelpVisibility?  <HelpModalHome onClose={() => { setHelpVisibility(false) }} /> : null}
+
                     {
                         menu === HomeSideBarMenu.Graphs ? (
                             <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -224,11 +248,11 @@ const HomeScreen = () => {
                                             alignItems: "center"
                                         }}>
                                             <HugeText text="Aucune carte !" style={{ fontSize: 40 }} />
-                                            
+
                                             <TitleText bold gray center color="" text={
                                                 isConnected ?
-                                                "Commencez à créer des cartes personnalisées dès maitenant" :
-                                                "Connectez-vous afin de créer des cartes personnalisées"
+                                                    "Commencez à créer des cartes personnalisées dès maitenant" :
+                                                    "Connectez-vous afin de créer des cartes personnalisées"
                                             } />
                                         </div>
                                         {isConnected ?
@@ -287,12 +311,12 @@ const HomeScreen = () => {
             {
                 isAddModalVisible &&
                 <AddGraphModal user={user} onClose={(newGraph?: GraphType) => {
-                    if(newGraph) {
+                    if (newGraph) {
                         handleAddGraph(newGraph)
                     }
 
                     setIsAddModalVisible(false)
-                    }}
+                }}
                 />
             }
 

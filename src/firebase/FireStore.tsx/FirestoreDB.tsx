@@ -3,7 +3,7 @@ import { getFirestore, addDoc, collection, getDocs, setDoc, doc, deleteDoc, getD
 import { firebaseConfig } from "../FireBaseConnexion"
 import { GraphType } from "../../types/Graph/GraphType";
 import { CustomUser, ListUtilisateurInterface, personnalDataUserInterface } from "../../context/AppContext";
-import { User, deleteUser, signOut } from "firebase/auth";
+import { User, deleteUser } from "firebase/auth";
 import { auth } from "../Authentification/Auth";
 
 
@@ -105,15 +105,6 @@ export function getLocalStorageUser() {
 }
 
 
-async function deleteGraph(userid: string, graphId: string) {
-    try {
-        const docRef = doc(db, "users", userid, "Graphs", graphId)
-        await deleteDoc(docRef);
-        console.log("Document supprimé")
-    } catch (error) {
-        console.log("erreur Suppression : ", error)
-    }
-}
 
 async function setPersonnalData(userid: string, data: any) {
     const docRef = doc(db, "users", userid)
@@ -177,37 +168,6 @@ export async function setListUtilisateur(Listdata: ListUtilisateurInterface) {
 }
 
 
-export async function getGraphPartageUser(ListGraph: DocumentReference[]): Promise<GraphType[]> {
-    try {
-        const graphPromises = ListGraph.map(async (item) => {
-            try {
-                console.log(item)
-                const docRef = item
-                const docSnapshot = await getDoc(docRef);
-
-
-                if (docSnapshot.exists()) {
-                    return docSnapshot.data() as GraphType;
-                } else {
-                    console.warn(`Le document avec ID '${item}' n'existe pas.`);
-                    return undefined;
-                }
-            } catch (error) {
-                console.error(`Erreur lors de l'accès au document avec ID '${item}':`, error);
-                return undefined;
-            }
-        });
-
-        const resolvedGraphs = await Promise.all(graphPromises);
-
-        const validGraphs = resolvedGraphs.filter((graph): graph is GraphType => graph !== undefined);
-        return validGraphs;
-    } catch (error) {
-        console.error('Erreur lors de la récupération des graphes partagés des utilisateurs :', error);
-        return []
-    }
-}
-
 
 interface listInterface {
     idgraph: string,
@@ -223,8 +183,9 @@ interface ListGraphsInterface {
  * 
  * @param graph le nouveau graphe
  * @param uid id de l'utilisateur qui ajoute le graph
+ * @param user personnalDataUserInterface
  */
-export async function addGraphtest(graph: GraphType, uid: string ,  user : personnalDataUserInterface) {
+export async function addGraph(graph: GraphType, uid: string ,  user : personnalDataUserInterface) {
     const collectionRef = collection(db, "Graphs")
     const docRef = doc(db, "Graphs", "ListGraphs")
 
@@ -240,10 +201,11 @@ export async function addGraphtest(graph: GraphType, uid: string ,  user : perso
     await setDoc(newGraphDocRef, { ...graph, id: newGraphId })
 
     await setDoc(docRef, ListGraphs, { merge: true })
+    return newGraphId
 
 }
 
-export async function setGraphtest(graph: GraphType, user : personnalDataUserInterface) {
+export async function setGraph(graph: GraphType, user : personnalDataUserInterface) {
     try {
         let docRef = doc(db, "Graphs", graph.id)
         await setDoc(docRef, graph, {merge : true})
@@ -266,7 +228,7 @@ export async function setGraphtest(graph: GraphType, user : personnalDataUserInt
  * @param uid uid de l'utilisater
  * @returns list de graphs
  */
-export async function getGraphtest(uid: string) {
+export async function getGraph(uid: string) {
     const docRef = doc(db, "Graphs", "ListGraphs")
     let listGraphs = (await getDoc(docRef)).data() as ListGraphsInterface
     let graphPromises = listGraphs.list
@@ -283,7 +245,7 @@ export async function getGraphtest(uid: string) {
 
 }
 
-export async function deleteGraphTest(graphid: string, uid: string) {
+export async function deleteGraph(graphid: string, uid: string) {
     const docRef = doc(db, "Graphs", "ListGraphs")
     let listGraphs = (await getDoc(docRef)).data() as ListGraphsInterface
     listGraphs.list.forEach((item: listInterface) => {
@@ -313,7 +275,8 @@ export async function addPartageOtherUser(graphid : string, uid : string){
     const docRef = doc(db, "Graphs", "ListGraphs")
     let listGraphs = (await getDoc(docRef)).data() as ListGraphsInterface
     listGraphs.list.forEach((e)=>{
-        if(e.idgraph === graphid) e.usersId.push(uid)
+        if(e.idgraph === graphid)
+            if(!e.usersId.includes(uid)) e.usersId.push(uid)
     })
     await setDoc(docRef, listGraphs, {merge : true})
 }
@@ -332,11 +295,11 @@ export async function deleteAllDataUser (uid : string){
     let ListGraphs = (await getDoc(ListGraphsDocRef)).data() as ListGraphsInterface
     ListGraphs.list.forEach((item: listInterface) => {
         if (item.usersId.includes(uid)) {
-            deleteGraphTest(item.idgraph, uid)
+            deleteGraph(item.idgraph, uid)
         }
     })
     deleteUser(user).then(()=>{
-        console.log("delete du compte réussi")
+        console.log("suppression du compte réussi")
     }).catch((error)=>{
         console.log(error)
     })
@@ -345,4 +308,4 @@ export async function deleteAllDataUser (uid : string){
 }
 
 export default db
-export { CreateGraph, getUserGraphs, setgraph, deleteGraph, setPersonnalData, getPersonnalData }
+export { CreateGraph, getUserGraphs, setgraph, setPersonnalData, getPersonnalData }

@@ -93,7 +93,7 @@ const AutomatingSideBar: FC<AutomatingSideBarProps> = ({isExpanded}) => {
             if(newEdges.length === 0) return false
             else {
                 for(const edge of newEdges) {
-                    if(!visited.find((current) => {current === edge}) && isCycle(currentEdge, edge.target,target,[...visited,edge])) {
+                    if(!(visited.find((current) => current === edge)) && isCycle(currentEdge, edge.target,target,[...visited,edge])) {
                         return true
                     }
                     
