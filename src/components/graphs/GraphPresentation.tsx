@@ -29,7 +29,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
     setFavorites
 }) => {
     const [isSelect, setIsSelect] = useState(false)
-    const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs, personnalDataUser, setPersonnalDataUser} = useContext(AppContext)
+    const { user, graphsUser, setGraphsUser, graphsPartage, setGraphsPartage, ListUtilisateurs, personnalDataUser, setPersonnalDataUser } = useContext(AppContext)
     const [showUserListModal, setShowUserListModal] = useState(false);
 
 
@@ -73,9 +73,9 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         if ((e.key === "p" && isSelect)) {
             handleClickPartage()
         }
-        if((e.key ==="t" && isSelect)){
+        if ((e.key === "t" && isSelect)) {
             ExportToJSON(graph)
-            
+
         }
     }
     const handleSelectClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -99,7 +99,8 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         setShowUserListModal(false);
     };
 
-    const handleClickOtherUser = (u : UtilisateurInterface) => {
+
+    const handleClickOtherUser = (u: UtilisateurInterface) => {
         addPartageOtherUser(graph.id, u.uid)
     }
 
@@ -157,23 +158,27 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
             {showUserListModal && (
                 //TODO améliorer le style
                 <div className="modal-overlay">
-                    <div className="modal-content" onClick={(e)=>{e.stopPropagation()}}>
+                    <div className="modal-content" onClick={(e) => { e.stopPropagation() }}>
                         <h3>Liste des utilisateurs</h3>
+
+
+
                         <div id="ListUsers">
+                            {ListUtilisateurs.List.map((u) => (
 
-                        {ListUtilisateurs.List.map((u) => (
+                                <div className="OtherUser" onClick={() => { handleClickOtherUser(u) }}>
+                                    <OtherUserProfile
+                                        key={u.uid}
+                                        name={u.name}
+                                        firstName={u.firstName}
+                                        uid={u.uid}
+                                    />
+                                </div>
 
-                            <div className="OtherUser" onClick={()=>{handleClickOtherUser(u)}}>
-                                <OtherUserProfile
-                                    key={u.uid}
-                                    name={u.name}
-                                    firstName={u.firstName}
-                                    uid={u.uid}
-                                />
-                            </div>
-
-                        ))}
+                            ))}
                         </div>
+
+
                         <UsualButton onPress={closeUserListModal} text="Fermer"></UsualButton>
                     </div>
                 </div>
