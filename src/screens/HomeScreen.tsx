@@ -3,7 +3,7 @@ import "./HomeScreen.css";
 import { GraphType } from "../types/Graph/GraphType";
 import { getGraphFromJSON } from "../primitives/GraphMethods";
 import ListGraph from "../components/graphs/ListGraph";
-import { CreateGraph, addGraphtest, deleteGraphTest, getGraphtest, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs, saveLocalStoragePersonnalData, setPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
+import { CreateGraph, addGraphtest, deleteGraph, getGraph, getListUtilisateur, getLocalStoragePersonnalData, getLocalStorageUser, getUserGraphs, saveLocalStoragePersonnalData, setPersonnalData } from "../firebase/FireStore.tsx/FirestoreDB";
 import { AppContext } from "../context/AppContext";
 import HomeSideBar from "../components/SideBar/HomeSideBar";
 import CustomSearchBar from "../components/SearchBar/SearchBar";
@@ -152,7 +152,7 @@ const HomeScreen = () => {
 
 
     const handleRefresh = async () => {
-        const graphCollection = await getGraphtest(user.uid);
+        const graphCollection = await getGraph(user.uid);
         let graphs1 = [] as GraphType[]
         let graphs2 = [] as GraphType[]
         graphCollection.forEach((e) => {

@@ -12,7 +12,7 @@ import { FiEye, FiEyeOff,FiItalic,FiTag } from "react-icons/fi";
 import { MdOutlineQuestionMark } from "react-icons/md";
 import HelpModal from "../Modal/HelpModal";
 import { GraphType } from "../../types/Graph/GraphType";
-import { setGraphtest } from "../../firebase/FireStore.tsx/FirestoreDB";
+import { setGraph } from "../../firebase/FireStore.tsx/FirestoreDB";
 import { GrUpgrade } from "react-icons/gr";
 import { TbFileExport } from "react-icons/tb";
 import { getRectOfNodes, getTransformForBounds, useReactFlow } from "reactflow";
@@ -68,7 +68,7 @@ const SideBar = () => {
             aggregation: agregationValue
         }
         
-        setGraphtest(newGraph, personnalDataUser)
+        setGraph(newGraph, personnalDataUser)
         console.log("sauvegarde effectué")
         setIsGraphModified(false)
     }

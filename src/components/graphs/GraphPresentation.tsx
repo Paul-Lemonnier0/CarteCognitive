@@ -2,7 +2,7 @@ import React, { Dispatch, FC, useContext, useEffect, useState } from "react"
 import "./GraphPresentation.css"
 import { Link } from "react-router-dom"
 import { GraphType } from "../../types/Graph/GraphType"
-import { addPartageOtherUser, deleteGraphTest } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { addPartageOtherUser, deleteGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext, UtilisateurInterface } from "../../context/AppContext"
 import { NormalText, TitleText } from "../Text/CustomText"
 import { IconButton, IconText } from "../Buttons/IconButtons"
@@ -37,7 +37,7 @@ const GraphPresentation: FC<GraphPresentationProps> = ({
         if (user?.uid === "")
             console.log("utilisateur introuvable")
         else {
-            deleteGraphTest(graph.id, user.uid)
+            deleteGraph(graph.id, user.uid)
             const updatedGraphsUser = graphsUser.filter((g) => g.id !== graph.id)
             const updatedGraphsUserPartage = graphsPartage.filter((g) => g.id !== graph.id)
             setGraphsUser(updatedGraphsUser)

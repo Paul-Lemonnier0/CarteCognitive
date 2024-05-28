@@ -17,7 +17,7 @@ import { RxText } from "react-icons/rx";
 import IconTextInput from "../TextInput/IconTextInput"
 import { CustomNodeData } from "../graphs/Nodes/CustomNode"
 import { baseColors } from "../../constantes/Colors"
-import { setGraphtest } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { setGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { GraphType } from "../../types/Graph/GraphType";
 import { CiCalculator2 } from "react-icons/ci";
 import { FaCalculator } from "react-icons/fa6";
@@ -75,7 +75,7 @@ const GraphDetailsSideBar = () => {
                 propagation: propagationValue,
                 aggregation: agregationValue
             }
-            setGraphtest(newGraph, personnalDataUser )
+            setGraph(newGraph, personnalDataUser )
             setIsGraphModified(false)
 
         } 
@@ -153,7 +153,7 @@ const GraphDetailsSideBar = () => {
             const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications");
             if (shouldSave) {
 
-                setGraphtest( newGraph, personnalDataUser)
+                setGraph( newGraph, personnalDataUser)
                 console.log("graphe modifiée")
             }
         }

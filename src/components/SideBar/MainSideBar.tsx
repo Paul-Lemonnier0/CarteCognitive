@@ -13,7 +13,7 @@ import AutomatingSideBar from "./AutomatingSideBar"
 import { SlCalculator } from "react-icons/sl"
 import { GraphContext } from "../../context/GraphContext"
 import { GraphType } from "../../types/Graph/GraphType"
-import { setGraphtest } from "../../firebase/FireStore.tsx/FirestoreDB"
+import { setGraph } from "../../firebase/FireStore.tsx/FirestoreDB"
 import { AppContext } from "../../context/AppContext"
 
 enum SideBarMenuType {
@@ -49,7 +49,7 @@ const MainSideBar = () => {
                  if (isGraphModified) {
                      const shouldSave = window.confirm("Voulez-vous sauvegarder les modifications ?");
                      if (shouldSave) {
-                         setGraphtest(newGraph, personnalDataUser)
+                         setGraph(newGraph, personnalDataUser)
                      }
                  }
         navigate(-1)
